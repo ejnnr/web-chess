@@ -1,4 +1,4 @@
-web-chess-server
+web-chess
 ================
 
-A server that can manage databases of chess games.
+A web implementation of a chess database program like Scid.
