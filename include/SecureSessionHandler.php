@@ -1,9 +1,9 @@
 <?php
 
-	/**********************
+	/********************
 	 * Gist from https://gist.github.com/eddmann/10262795
 	 * More information on http://eddmann.com/posts/securing-sessions-in-php/
-	 *********************/
+	 *******************/
 
 	class SecureSessionHandler extends SessionHandler {
 	 
