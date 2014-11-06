@@ -6,7 +6,7 @@
 	 * returns true if the username-password combination is correct and sets $_SESSION values
 	 *******************/
 	
-	function login($username, $password, $PDOHandle, $currentSession) {
+	function login ($username, $password, $PDOHandle, $currentSession) {
 		// query user information from database
 		$stm = $PDOHandle->prepare('SELECT id, username, password, salt FROM users WHERE username = :username LIMIT 1;');
 		$stm->bindParam(':username', $username);
