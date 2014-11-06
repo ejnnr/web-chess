@@ -23,7 +23,7 @@
 		
 		if ($password == $result[0]['password']) {
 			
-			// set user.sessionString (used as some kind of protections against hijacking)
+			// set user.sessionString (used as some kind of protection against hijacking)
 			$currentSession->put('user.sessionString', hash('sha512', $password . $_SERVER['HTTP_USER_AGENT']));
 			
 			// set user.id and user.name
@@ -36,7 +36,7 @@
 	
 	/********************
 	 * function isLoggedIn
-	 * returns true if some user is logged in
+	 * returns true if a user is logged in
 	 *******************/
 	 
 	 function isLoggedIn($PDOHandle, $currentSession) {
