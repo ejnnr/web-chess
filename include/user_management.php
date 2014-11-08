@@ -2,6 +2,27 @@
 	include_once 'SecureSessionHandler.php'
 	
 	/********************
+	 * function isLocked
+	 * returns true if the user is locked because of too many failed login attempts
+	 *******************/
+	
+	function isLocked($userId, $PDOHandle) {
+		$currentTime = time();
+		
+		$stm = $PDOHandle->prepare('SELECT id FROM login_attempts WHERE id = :id AND time > :time');
+		$stm->bindParam(':id', $userId);
+		$stm->bindParam(':time', $currentTime - (10 * 60)); // account is locked if there were five failed attempts in the last ten minutes
+		$stm->execute();
+		$result = $stm->fetchAll();
+		
+		if (count($result) >= 5) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/********************
 	 * function login
 	 * returns true if the username-password combination is correct and sets $_SESSION values
 	 *******************/
@@ -16,6 +37,10 @@
 		// check if the user exists
 		if (count($result) == 0) {
 			return false;
+		}
+		
+		if (isLocked($result[0]['id'], $PDOHandle)) {
+			return false; //account is locked because of too many failed login attempts
 		}
 		
 		// create the hash of password and salt
