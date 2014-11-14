@@ -1,6 +1,6 @@
 <?php
-	include_once 'SecureSessionHandler.php'
-	
+	include_once 'SecureSessionHandler.php';
+	include_once 'db_connect.php';
 	/********************
 	 * function isLocked
 	 * returns true if the user is locked because of too many failed login attempts
@@ -44,12 +44,12 @@
 		}
 		
 		// create the hash of password and salt
-		$password = hash('sha512', $password . $result[0]['salt']);
+		// $password = hash('sha512', $password . $result[0]['salt']);
 		
-		if ($password == $result[0]['password']) {
+		if (password_verify($password, $result[0]['password'])) {
 			
 			// set user.sessionString (used as some kind of protection against hijacking)
-			$currentSession->put('user.sessionString', hash('sha512', $password . $_SERVER['HTTP_USER_AGENT']));
+			$currentSession->put('user.sessionString', hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']));
 			
 			// set user.id and user.name
 			$currentSession->put('user.id', $result[0]['id']);
@@ -81,5 +81,21 @@
 				return true;
 			}
 		 }
+	 }
+	 
+	 
+	/********************
+	 * function createUser
+	 * returns true if successful
+	 *******************/
+	 
+	 function createUser($PDOHandle, $username, $password, $email = '') {
+		 $stm = $PDOHandle->prepare("INSERT INTO `:database`.`users` (`id`, `username`, `email`, `password`) VALUES (NULL, ':username', ':email', ':password');");
+		 $stm->bindParam(':database', DATABASE);
+		 $stm->bindParam(':username', preg_replace('/[^a-zA-Z0-9-_]/', '', $username));
+		 $stm->bindParam(':email', $email); //TODO: test if email address is valid
+		 $stm->bindParam(':password', password_hash($password, PASSWORD_DEFAULT));
+		 $stm->execute();
+		 return true;
 	 }
 ?>
