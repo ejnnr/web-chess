@@ -30,3 +30,5 @@ Changes after commit https://github.com/jupiter24/web-chess/commit/f3b6f7e8e3a69
 
 In the commit just mentioned, the column 'salt' in the table 'users' isn't used anymore.
 You have to delete this column in order for your web-chess instance to work properly if you are using the latest code.
+The SQl code do do so should look like this:  
+ALTER TABLE `users` DROP `salt`;
