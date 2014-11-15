@@ -10,8 +10,8 @@
 		$currentTime = time();
 		
 		$stm = $PDOHandle->prepare('SELECT id FROM login_attempts WHERE id = :id AND time > :time');
-		$stm->bindParam(':id', $userId);
-		$stm->bindParam(':time', $currentTime - (10 * 60)); // account is locked if there were five failed attempts in the last ten minutes
+		$stm->bindValue(':id', $userId);
+		$stm->bindValue(':time', ($currentTime - (10 * 60))); // account is locked if there were five failed attempts in the last ten minutes
 		$stm->execute();
 		$result = $stm->fetchAll();
 		
@@ -29,8 +29,8 @@
 	
 	function login ($username, $password, $PDOHandle, $currentSession) {
 		// query user information from database
-		$stm = $PDOHandle->prepare('SELECT id, username, password, salt FROM users WHERE username = :username LIMIT 1;');
-		$stm->bindParam(':username', $username);
+		$stm = $PDOHandle->prepare('SELECT id, username, password FROM users WHERE username = :username LIMIT 1;');
+		$stm->bindValue(':username', $username);
 		$stm->execute();
 		$result = $stm->fetchAll();
 		
@@ -56,6 +56,9 @@
 			$currentSession->put('user.name', $result[0]['username']);
 			
 			return true;
+			
+		} else {
+			return false;
 		}
 	}
 	
@@ -65,10 +68,10 @@
 	 *******************/
 	 
 	 function isLoggedIn($PDOHandle, $currentSession) {
-		 if (!empty($currentSession->get('user.id'), $currentSession->get('user.name'), $currentSession->get('user.sessionString'))) {
+		 if (!empty($currentSession->get('user.id')) && !empty($currentSession->get('user.name')) && !empty($currentSession->get('user.sessionString'))) {
 			// query password hash from database
 			$stm = $PDOHandle->prepare('SELECT password FROM users WHERE id = :id LIMIT 1;');
-			$stm->bindParam(':id', $currentSession->get('user.id'));
+			$stm->bindValue(':id', $currentSession->get('user.id'));
 			$stm->execute();
 			$result = $stm->fetchAll();
 			
@@ -80,7 +83,9 @@
 			if (hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']) == $currentSession->get('user.sessionString')) {
 				return true;
 			}
+			return false;
 		 }
+		 return false;
 	 }
 	 
 	 
@@ -90,12 +95,17 @@
 	 *******************/
 	 
 	 function createUser($PDOHandle, $username, $password, $email = '') {
-		 $stm = $PDOHandle->prepare("INSERT INTO `:database`.`users` (`id`, `username`, `email`, `password`) VALUES (NULL, ':username', ':email', ':password');");
-		 $stm->bindParam(':database', DATABASE);
-		 $stm->bindParam(':username', preg_replace('/[^a-zA-Z0-9-_]/', '', $username));
-		 $stm->bindParam(':email', $email); //TODO: test if email address is valid
-		 $stm->bindParam(':password', password_hash($password, PASSWORD_DEFAULT));
-		 $stm->execute();
+		 try {
+			 $stm = $PDOHandle->prepare("INSERT INTO users (`id`, `username`, `email`, `password`) VALUES (NULL, :username, :email, :password);");
+			 $stm->bindValue(':username', preg_replace('/[^a-zA-Z0-9-_]/', '', $username));
+			 $stm->bindValue(':email', $email); //TODO: test if email address is valid
+			 $stm->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
+			 $stm->execute();
+		 }
+		 catch (PDOException $e) {
+			 
+		 }
+		 
 		 return true;
 	 }
 ?>
