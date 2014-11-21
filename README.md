@@ -10,7 +10,7 @@ You should have Apache, PHP and MySQL installed and running.
 
 1. Clone the repository
 2. Create a MySQL database called webchess (notice: You can change all of these names, but you also have to change them in include/config.php accordingly if you do so)
-3. Create a user called webchess and give it acces to the database you just created (this is only for security reasons, you can aslo use root)
+3. Create a user called webchess and give it acces to the database you just created (this is only for security reasons, you can also use root)
 4. Enter the users password into include/config.php or take the example password from there for your user (NOT RECOMMENDED!!!)
 5. If you are using phpMyadmin, you can simply go into the newly created database, select "Import" and select webchess.sql from the reporitory to set up the tables in the database. If you use another interface, just look into the webchess.sql file to see, which tables you have to create.
 
