@@ -261,10 +261,28 @@
 			$start = array();
 			$target = array();
 			
-			switch (substr($move, 0, 1))
+			$moveTemp = preg_replace("/[=][QRBN]/", "", $move); /* remove promotion */
+			
+			$moveTemp = str_replace(array("?", "!"), array("", ""), $moveTemp); /* remove annotations like ?? or !? */
+			
+			$moveTemp = preg_replace("/[$][1-9]+/", "", $moveTemp); /* remove annotation like $ 34 (spaces have already been removed earlier) */
+			
+			/* extract the piece */
+			switch (substr($moveTemp, 0, 1))
 			{
 				case "O": /* castling */
 					$piece = ($this->turn == "w") ? "K" : "k";
+					if ($moveTemp == 'O-O')
+					{
+						$startSquare = ($this->turn == "w") ? parseSquare('e1') : parseSquare('e8');
+						$targetSquare = ($this->turn == "w") ? parseSquare('g1') : parseSquare('g8');
+					}
+					if ($moveTemp == 'O-O-O')
+					{
+						$startSquare = ($this->turn == "w") ? parseSquare('e1') : parseSquare('e8');
+						$targetSquare = ($this->turn == "w") ? parseSquare('c1') : parseSquare('c8');
+					}
+					goto castling;
 					break; /* TODO: Not ready yet! */
 				case "K":
 					$piece = ($this->turn == "w") ? "K" : "k";
@@ -288,16 +306,10 @@
 					throw new ChessGameException("function parseAlgebraicMove: move has no valid syntax: " . substr($move, 0, 1) . " isn't an allowed char at the beginning of move.", 4);
 			}
 			
-			$moveTemp = preg_replace("/[=][QRBN]/", "", $move); /* remove promotion */
-			
 			if ($piece != "P" && $piece != "p") /* remove piece letter */
 			{
 				$moveTemp = substr($moveTemp, 1);
 			}
-			
-			$moveTemp = str_replace(array("?", "!"), array("", ""), $moveTemp); /* remove annotations like ?? or !? */
-			
-			$moveTemp = preg_replace("/[$][1-9]+/", "", $moveTemp); /* remove annotation like $ 34 (spaces have already been removed earlier) */
 			
 			/* now $moveTemp looks like this: maybe the start file or rank or both and then the target square */
 			
@@ -411,6 +423,8 @@
 					}
 				}
 			}
+			
+			castling:
 			
 			/* only for testing */
 			var_dump($start);
