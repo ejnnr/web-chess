@@ -37,7 +37,7 @@
 			}
 			else
 			{
-				throw new CessGameException("__construct: fen may not be null", 2);
+				throw new ChessGameException("__construct: fen may not be null", 2);
 			}
 			
 			if (!empty($pgn))
