@@ -52,7 +52,7 @@
 		* converts "e4" into 54
 		*/
 		
-		private function parseSquare($square)
+		function parseSquare($square)
 		{
 			if (strlen((string)$square) == 2)
 		    {
@@ -274,14 +274,16 @@
 					$piece = ($this->turn == "w") ? "K" : "k";
 					if ($moveTemp == 'O-O')
 					{
-						$startSquare = ($this->turn == "w") ? parseSquare('e1') : parseSquare('e8');
-						$targetSquare = ($this->turn == "w") ? parseSquare('g1') : parseSquare('g8');
+						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
+						$targetSquare = ($this->turn == "w") ? $this->parseSquare('g1') : $this->parseSquare('g8');
 					}
 					if ($moveTemp == 'O-O-O')
 					{
-						$startSquare = ($this->turn == "w") ? parseSquare('e1') : parseSquare('e8');
-						$targetSquare = ($this->turn == "w") ? parseSquare('c1') : parseSquare('c8');
+						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
+						$targetSquare = ($this->turn == "w") ? $this->parseSquare('c1') : $this->parseSquare('c8');
 					}
+					$start = array((int)substr($startSquare, 0, 1) - 1, (int)substr($startSquare, 1, 1) - 1);
+					$target = array((int)substr($targetSquare, 0, 1) - 1, (int)substr($targetSquare, 1, 1) - 1);
 					goto castling;
 					break; /* TODO: Not ready yet! */
 				case "K":
