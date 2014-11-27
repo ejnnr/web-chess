@@ -253,7 +253,6 @@
 			if (empty($move))
 			{
 				throw new ChessGameException("Function parseAlgebraicMove: Argument move must not be empty", 2);
-				return array();
 			}
 			
 			$move = str_replace(array("+", "#", "x", " "), array("", "", "", ""), $move); /* remove +, #, x and space */
@@ -267,6 +266,11 @@
 			
 			$moveTemp = preg_replace("/[$][1-9]+/", "", $moveTemp); /* remove annotation like $ 34 (spaces have already been removed earlier) */
 			
+			if (!preg_match('[KQRBN]?[a-h]?[1-8]?[a-h][1-8]', $moveTemp) && $moveTemp != 'O-O' && $moveTemp != 'O-O-O')
+			{
+				throw new ChessGameException("Function parseAlgebraicMove: move has no valid Syntax: " . $moveTemp, 4);
+			}
+			
 			/* extract the piece */
 			switch (substr($moveTemp, 0, 1))
 			{
@@ -277,15 +281,26 @@
 						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
 						$targetSquare = ($this->turn == "w") ? $this->parseSquare('g1') : $this->parseSquare('g8');
 					}
-					if ($moveTemp == 'O-O-O')
+					elseif ($moveTemp == 'O-O-O')
 					{
 						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
 						$targetSquare = ($this->turn == "w") ? $this->parseSquare('c1') : $this->parseSquare('c8');
 					}
+					else
+					{
+						throw new ChessGameException("Function parseAlgebraicMove: " . $moveTemp . " is no valid move", 4);
+					}
+					
+					if (!$this->isValidMove($startSquare, $targetSquare, $this->board))
+					{
+						throw new ChessGameException("Function parseAlgebraicMove: " . $moveTemp . " is no legal move", 4);
+					}
+					
 					$start = array((int)substr($startSquare, 0, 1) - 1, (int)substr($startSquare, 1, 1) - 1);
 					$target = array((int)substr($targetSquare, 0, 1) - 1, (int)substr($targetSquare, 1, 1) - 1);
+					
 					goto castling;
-					break; /* TODO: Not ready yet! */
+					break;
 				case "K":
 					$piece = ($this->turn == "w") ? "K" : "k";
 					break;
