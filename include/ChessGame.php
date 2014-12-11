@@ -245,7 +245,7 @@
 		/**
 		* array parseAlgebraicMove (string move)
 		*
-		* returns an array: array(string start, string target), e.g.: array("52"; "54")
+		* returns an array: array(array(startFileNumber, startRankNumber), array(targetFileNumber, targetRankNumber)), e.g.: array(array(2, 3), array(3, 4)) for the move "c4d5"
 		*/
 		
 		function parseAlgebraicMove($move)
@@ -441,14 +441,15 @@
 				}
 			}
 			
+			/* throw exception if no legal move could be found */
+			if (empty($start[0]) || empty($start[1]))
+			{
+				throw new ChessGameException("function parseAlgebraicMove: The move is no legal move.", 4);
+			}
+			
 			castling:
 			
-			/* only for testing */
-			var_dump($start);
-			echo "<br>";
-			var_dump($target);
-			echo "<br>";
-			var_dump($piece);
+			return array($start, $target);
 		}
 		
 		/**
