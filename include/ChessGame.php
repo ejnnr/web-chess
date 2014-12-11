@@ -266,7 +266,7 @@
 			
 			$moveTemp = preg_replace("/[$][1-9]+/", "", $moveTemp); /* remove annotation like $ 34 (spaces have already been removed earlier) */
 			
-			if (!preg_match('[KQRBN]?[a-h]?[1-8]?[a-h][1-8]', $moveTemp) && $moveTemp != 'O-O' && $moveTemp != 'O-O-O')
+			if (!preg_match('/[KQRBN]{0,1}[a-h]{0,1}[1-8]{0,1}[a-h][1-8]/', $moveTemp) && $moveTemp != 'O-O' && $moveTemp != 'O-O-O')
 			{
 				throw new ChessGameException("Function parseAlgebraicMove: move has no valid Syntax: " . $moveTemp, 4);
 			}
