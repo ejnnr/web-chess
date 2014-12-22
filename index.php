@@ -4,20 +4,28 @@
 		<title>WebChess</title>
 		<meta charset="UTF8">
 		<link type="text/css" rel="stylesheet" href="chessboardjs/css/chessboard-0.3.0.css">
+		<link type="text/css" rel="stylesheet" href="css/main.css">
 		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
 		<script src="jquery/jquery-2.1.3.min.js"></script>
 		<script src="chessjs/chess.js"></script>
 	</head>
 	<body>
 		<div id="mainNav">
-		
+			<ul>
+				<li>Open database</li>
+				<li>Create new database</li>
+				<li>New game</li>
+				<li>Save game</li>
+			</ul>
 		</div>
-		<div id="modNav">
-		
+		<div id="modeNav">
+			<ul>
+				<li>Mode 1</li>
+				<li>Mode 2</li>
+				<li>Mode 3</li>
+			</ul>
 		</div>
-		<div id="chessboard" style="width: 400px;">
-		
-		</div>
+		<div id="chessboard" style="width: 400px;"></div>
 		
 		<p>Status: <span id="status"></span></p>
 		<p>FEN: <span id="fen"></span></p>
