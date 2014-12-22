@@ -1,0 +1,41 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#mainNav {
+	background-color: grey;
+	height: 50px;
+	margin-bottom: 10px;
+}
+
+#mainNav > ul > li {
+	float: left;
+	list-style-type: none;
+	padding: 8px;
+}
+
+#modeNav {
+	width: 80px;
+	position: absolute;
+	top: 60px;
+	right: 0;
+	width: 20px;
+	overflow-x: hidden;
+}
+
+#modeNav > ul > li {
+	list-style-type: none;
+	width: 80px;
+	padding: 8px;
+	background-color: lightblue;
+	margin: 8px;
+}
+
+#modeNav > ul > li:hover {
+	background-color: yellow;
+}
+
+#modeNav:hover {
+	width: 100px;
+}
