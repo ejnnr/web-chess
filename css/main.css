@@ -1,11 +1,35 @@
+/* reset */
+
 * {
 	margin: 0;
 	padding: 0;
 }
 
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+/* some useful classes */
+
+.clear {
+	clear:both;
+}
+
+.dialog {
+	display: none;
+	border: 1px solid black;
+	background-color: #ffffff;
+}
+
+.dialog.visible {
+	display: block;
+}
+
+/* main part */
+
 #mainNav {
 	background-color: grey;
-	height: 50px;
 	margin-bottom: 10px;
 }
 
@@ -13,6 +37,10 @@
 	float: left;
 	list-style-type: none;
 	padding: 8px;
+}
+
+#mainNav > ul > li:hover {
+	background-color: #b0b0b0;
 }
 
 #modeNav {

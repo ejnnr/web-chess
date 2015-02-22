@@ -5,18 +5,20 @@
 		<meta charset="UTF8">
 		<link type="text/css" rel="stylesheet" href="chessboardjs/css/chessboard-0.3.0.css">
 		<link type="text/css" rel="stylesheet" href="css/main.css">
-		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
 		<script src="jquery/jquery-2.1.3.min.js"></script>
+		<script src="jquery-ui/jquery-ui.min.js"></script>
+		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
 		<script src="chessjs/chess.js"></script>
 	</head>
 	<body>
 		<div id="mainNav">
 			<ul>
-				<li>Open database</li>
+				<li id="openDatabaseButton">Open Database</li>
 				<li>Create new database</li>
 				<li>New game</li>
 				<li>Save game</li>
 			</ul>
+			<div class="clear"></div>
 		</div>
 		<div id="modeNav">
 			<ul>
@@ -112,5 +114,11 @@
 
 			updateStatus();
 		</script>
+		
+		<div class="dialog" id="openDatabaseDialog" style="width: 500px;">
+			List of Databases:
+		</div>
+		
+		<script src="js/ui.js"></script>
 	</body>
 </html>
