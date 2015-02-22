@@ -116,7 +116,11 @@
 		</script>
 		
 		<div class="dialog" id="openDatabaseDialog" style="width: 500px;">
+			<div class="closeDialog"></div>
 			List of Databases:
+			<ul id="databaseList">
+				
+			</ul>
 		</div>
 		
 		<script src="js/ui.js"></script>
