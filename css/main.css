@@ -17,9 +17,11 @@ html, body {
 }
 
 .dialog {
+	/* dialogs are hidden by default. To show them, the class visible must be added */
 	display: none;
 	border: 1px solid black;
 	background-color: #ffffff;
+	/* centering dialogs horizontally */
 	margin: auto;
 }
 
@@ -28,6 +30,7 @@ html, body {
 }
 
 .dialog .closeDialog {
+	/* Automatically place a close button in the top-right corner and set the background-image */
 	float: right;
 	height: 16px;
 	width: 16px;
@@ -37,6 +40,7 @@ html, body {
 
 /* main part */
 
+/* The main navigation bar (with options like opening and creating databases, ...) */
 #mainNav {
 	background-color: #909090;
 	margin-bottom: 10px;
@@ -51,6 +55,8 @@ html, body {
 #mainNav > ul > li:hover {
 	background-color: #b0b0b0;
 }
+
+/* The navigation bar at the right side, where modes can be selected */
 
 #modeNav {
 	width: 80px;
