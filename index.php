@@ -13,7 +13,7 @@
 	<body>
 		<div id="mainNav">
 			<ul>
-				<li id="openDatabaseButton">Open Database</li>
+				<li id="mainNav-openDatabaseButton">Open Database</li>
 				<li>Create new database</li>
 				<li>New game</li>
 				<li>Save game</li>
@@ -118,7 +118,7 @@
 		<div class="dialog" id="openDatabaseDialog" style="width: 500px;">
 			<div class="closeDialog"></div>
 			List of Databases:
-			<ul id="databaseList">
+			<ul id="openDatabaseDialog-databaseList">
 				
 			</ul>
 		</div>
