@@ -4,7 +4,7 @@ $(document).ready(function() {
 		$(".dialog").removeClass("visible");
 	});
 		
-	$("#openDatabaseButton").click(function(event) {
+	$("#mainNav-openDatabaseButton").click(function(event) {
 		$("#openDatabaseDialog").addClass("visible");
 	});
 });
