@@ -9,15 +9,20 @@
 	function isLocked($userId, $PDOHandle) {
 		$currentTime = time();
 		
-		$stm = $PDOHandle->prepare('SELECT id FROM login_attempts WHERE id = :id AND time > :time');
-		$stm->bindValue(':id', $userId);
-		$stm->bindValue(':time', ($currentTime - (10 * 60))); // account is locked if there were five failed attempts in the last ten minutes
-		$stm->execute();
-		$result = $stm->fetchAll();
+		try {
+		    $stm = $PDOHandle->prepare('SELECT id FROM login_attempts WHERE id = :id AND time > :time');
+		    $stm->bindValue(':id', $userId);
+		    $stm->bindValue(':time', ($currentTime - (10 * 60))); // account is locked if there were five failed attempts in the last ten minutes
+		    $stm->execute();
+		    $result = $stm->fetchAll();
 		
-		if (count($result) >= 5) {
-			return true;
+    		if (count($result) >= 5) {
+    			return true;
+    		}
+		} catch (PDOException $e) {
+		    writePDOException($e);
 		}
+		
 		
 		return false;
 	}
