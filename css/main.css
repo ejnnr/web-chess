@@ -81,12 +81,12 @@ html, body {
 	list-style-type: none;
 	width: 80px;
 	padding: 8px;
-	background-color: lightblue;
+	background-color: #F2AE38;
 	margin: 8px;
 }
 
 #modeNav > ul > li:hover {
-	background-color: yellow;
+	background-color: #F2CF41;
 }
 
 #modeNav:hover {
