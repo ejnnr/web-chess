@@ -9,4 +9,12 @@ $(document).ready(function() {
 	});
 	
 	$('#flipOrientationButton').on('click', board.flip);
+	
+	$.get("ajax/getDatabases.php", function(response) {
+        var list = response.split(";");
+        list.forEach(function(game) {
+            var fields = game.split("|");
+            $('#openDatabaseDialog-databaseList').html($('#openDatabaseDialog-databaseList').html() + "<li>" + fields[0] + "</li>");
+        });
+	});
 });
