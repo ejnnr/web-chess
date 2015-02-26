@@ -22,8 +22,6 @@
 		} catch (PDOException $e) {
 		    writePDOException($e);
 		}
-		
-		
 		return false;
 	}
 	
@@ -34,37 +32,45 @@
 	
 	function login ($username, $password, $PDOHandle, $currentSession) {
 		// query user information from database
-		$stm = $PDOHandle->prepare('SELECT id, username, password FROM users WHERE username = :username LIMIT 1;');
-		$stm->bindValue(':username', $username);
-		$stm->execute();
-		$result = $stm->fetchAll();
-		
-		// check if the user exists
-		if (count($result) == 0) {
-			return false;
+		try
+		{
+		    $stm = $PDOHandle->prepare('SELECT id, username, password FROM users WHERE username = :username LIMIT 1;');
+    		$stm->bindValue(':username', $username);
+    		$stm->execute();
+    		$result = $stm->fetchAll();
+    		
+    		// check if the user exists
+    		if (count($result) == 0) {
+    			return false;
+    		}
+    		
+    		if (isLocked($result[0]['id'], $PDOHandle)) {
+    			return false; //account is locked because of too many failed login attempts
+    		}
+    		
+    		// create the hash of password and salt
+    		// $password = hash('sha512', $password . $result[0]['salt']);
+    		
+    		if (password_verify($password, $result[0]['password'])) {
+    			
+    			// set user.sessionString (used as some kind of protection against hijacking)
+    			$currentSession->put('user.sessionString', hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']));
+    			
+    			// set user.id and user.name
+    			$currentSession->put('user.id', $result[0]['id']);
+    			$currentSession->put('user.name', $result[0]['username']);
+    			
+    			return true;
+    			
+    		} else {
+    			return false;
+    		} 
 		}
-		
-		if (isLocked($result[0]['id'], $PDOHandle)) {
-			return false; //account is locked because of too many failed login attempts
+		catch (PDOException $e)
+		{
+		    writePDOException($e);
 		}
-		
-		// create the hash of password and salt
-		// $password = hash('sha512', $password . $result[0]['salt']);
-		
-		if (password_verify($password, $result[0]['password'])) {
-			
-			// set user.sessionString (used as some kind of protection against hijacking)
-			$currentSession->put('user.sessionString', hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']));
-			
-			// set user.id and user.name
-			$currentSession->put('user.id', $result[0]['id']);
-			$currentSession->put('user.name', $result[0]['username']);
-			
-			return true;
-			
-		} else {
-			return false;
-		}
+		return false;
 	}
 	
 	/********************
@@ -73,23 +79,32 @@
 	 *******************/
 	 
 	 function isLoggedIn($PDOHandle, $currentSession) {
-		 if (!empty($currentSession->get('user.id')) && !empty($currentSession->get('user.name')) && !empty($currentSession->get('user.sessionString'))) {
-			// query password hash from database
-			$stm = $PDOHandle->prepare('SELECT password FROM users WHERE id = :id LIMIT 1;');
-			$stm->bindValue(':id', $currentSession->get('user.id'));
-			$stm->execute();
-			$result = $stm->fetchAll();
-			
-			// check if the user exists
-			if (count($result) == 0) {
-				return false;
-			}
-			
-			if (hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']) == $currentSession->get('user.sessionString')) {
-				return true;
-			}
-			return false;
-		 }
+	     try
+	     {
+	        if (!empty($currentSession->get('user.id')) && !empty($currentSession->get('user.name')) && !empty($currentSession->get('user.sessionString'))) {
+    			// query password hash from database
+    			$stm = $PDOHandle->prepare('SELECT password FROM users WHERE id = :id LIMIT 1;');
+    			$stm->bindValue(':id', $currentSession->get('user.id'));
+    			$stm->execute();
+    			$result = $stm->fetchAll();
+    			
+    			// check if the user exists
+    			if (count($result) == 0) {
+    				return false;
+    			}
+    			
+    			if (hash('sha512', $result[0]['password'] . $_SERVER['HTTP_USER_AGENT']) == $currentSession->get('user.sessionString')) {
+    				return true;
+    			}
+    			return false;
+    		 }
+    		 return false; 
+	     }
+	     catch (PDOException $e)
+	     {
+	         writePDOException($e);
+	     }
+		 
 		 return false;
 	 }
 	 
@@ -106,11 +121,12 @@
 			 $stm->bindValue(':email', $email); //TODO: test if email address is valid
 			 $stm->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
 			 $stm->execute();
+			 return true;
 		 }
 		 catch (PDOException $e) {
-			 
+			 writePDoException($e);
 		 }
 		 
-		 return true;
+		 return false;
 	 }
 ?>
