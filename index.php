@@ -30,7 +30,7 @@
 		</div>
 		<div id="chessboard" style="width: 400px;"></div>
 		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
-		<input type="button" id="" class="button" value=""
+		<input type="button" id="undoButton" class="button" value="Undo last move">
 		
 		<p>Status: <span id="status"></span></p>
 		<p>FEN: <span id="fen"></span></p>

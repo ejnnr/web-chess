@@ -17,4 +17,5 @@ $(document).ready(function() {
             $('#openDatabaseDialog-databaseList').html($('#openDatabaseDialog-databaseList').html() + "<li>" + fields[0] + "</li>");
         });
 	});
+	$('undoButton').on('click', undo);
 });
