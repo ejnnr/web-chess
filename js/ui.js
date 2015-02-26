@@ -7,5 +7,6 @@ $(document).ready(function() {
 	$("#mainNav-openDatabaseButton").click(function(event) {
 		$("#openDatabaseDialog").addClass("visible");
 	});
-});
+	
 	$('#flipOrientationButton').on('click', board.flip);
+});
