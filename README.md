@@ -25,14 +25,6 @@ The test directory
 The .gitignore file tells git to ignore everything inside test/ .
 So if you want to test some of the PHP functions in include/, but the frontend to do so isn't implemented yet, please use this directory (of course only if your test file is something temporary, which you are going to delete after performing the test).
 
-Changes after commit https://github.com/jupiter24/web-chess/commit/f3b6f7e8e3a69057af2abad2e80e165d5ced0f90
-===================================================================================================================
-
-In the commit just mentioned, the column 'salt' in the table 'users' isn't used anymore.
-You have to delete this column in order for your web-chess instance to work properly if you are using the latest code.
-The SQl code to do so should look like this:  
-ALTER TABLE `users` DROP `salt`;
-
 UI Concepts
 ==============
 Modes: A mode is a set of options which determine e.g. which windows are shown, whether the next move and other information is hidden (useful for tactics/Guess the Move) and even which database is opened.
