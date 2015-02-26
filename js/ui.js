@@ -17,5 +17,15 @@ $(document).ready(function() {
             $('#openDatabaseDialog-databaseList').html($('#openDatabaseDialog-databaseList').html() + "<li>" + fields[0] + "</li>");
         });
 	});
+
 	$('undoButton').on('click', undo);
+
+	$("#chessboard").resizable({
+	    minHeight: 200,
+	    minWidth: 200,
+	    maxHeight: 700,
+	    maxWidth: 700,
+	    aspectRatio: 1
+	});
+
 });
