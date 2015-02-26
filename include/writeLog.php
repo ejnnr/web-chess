@@ -3,6 +3,7 @@
     
     function writeLog ($message)
     {
+        $message = '## ' . date('Y-m-d H:i:s') . '\n' . $message;
         file_put_contents(LOGFILE, $message);
     }
     
