@@ -63,6 +63,19 @@
     			return true;
     			
     		} else {
+    		    // store failed login attempt to prevent brute force attacks
+    		    try 
+    		    {
+        			 $stm = $PDOHandle->prepare("INSERT INTO login_attempts (`user_id`, `time`) VALUES (:userid, :time);");
+        			 $stm->bindValue(':userid', $result[0]['id']);
+        			 $stm->bindValue(':time', time());
+        			 $stm->execute();
+        			 return true;
+        		 }
+        		 catch (PDOException $e) {
+        			 writePDoException($e);
+        		 }
+    		    
     			return false;
     		} 
 		}
