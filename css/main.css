@@ -40,6 +40,14 @@ html, body {
 	background-position: -80px -128px;
 }
 
+.button {
+    display: block;
+    margin: 4px;
+    padding: 6px;
+    background-color: #8080b0;
+    border: none;
+}
+
 /* main part */
 
 /* The main navigation bar (with options like opening and creating databases, ...) */
@@ -83,8 +91,4 @@ html, body {
 
 #modeNav:hover {
 	width: 100px;
-}
-#chessboard{
-	margin: auto auto;
-	
 }

@@ -29,7 +29,7 @@
 			</ul>
 		</div>
 		<div id="chessboard" style="width: 400px;"></div>
-		<input type="button" id="flipOrientationButton" value="Flip orientation" />
+		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
 		
 		<p>Status: <span id="status"></span></p>
 		<p>FEN: <span id="fen"></span></p>
