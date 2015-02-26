@@ -120,7 +120,7 @@
 		
 		<div class="dialog" id="openDatabaseDialog" style="width: 500px;">
 			<div class="closeDialog"></div>
-			List of Databases:
+			<p style="background-color: #909090;">List of Databases:</p>
 			<ul id="openDatabaseDialog-databaseList">
 				
 			</ul>

@@ -8,14 +8,14 @@
 html, body {
 	height: 100%;
 	width: 100%;
-	overflow:hidden;
-	font-family:Arial,Verdana,sans-serif;
+	overflow: hidden;
+	font-family: Arial,Verdana,sans-serif;
 }
 
 /* some useful classes */
 
 .clear {
-	clear:both;
+	clear: both;
 }
 
 .dialog {
@@ -91,4 +91,8 @@ html, body {
 
 #modeNav:hover {
 	width: 100px;
+}
+
+#openDatabaseDialog-databaseList > li {
+    list-style-type: none;
 }
