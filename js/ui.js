@@ -8,3 +8,4 @@ $(document).ready(function() {
 		$("#openDatabaseDialog").addClass("visible");
 	});
 });
+	$('#flipOrientationButton').on('click', board.flip);

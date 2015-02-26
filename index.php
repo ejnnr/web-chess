@@ -20,6 +20,7 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
+
 		<div id="modeNav">
 			<ul>
 				<li>Mode 1</li>
@@ -28,6 +29,7 @@
 			</ul>
 		</div>
 		<div id="chessboard" style="width: 400px;"></div>
+		<input type="button" id="flipOrientationButton" value="Flip orientation" />
 		
 		<p>Status: <span id="status"></span></p>
 		<p>FEN: <span id="fen"></span></p>
@@ -122,7 +124,6 @@
 				
 			</ul>
 		</div>
-		
 		<script src="js/ui.js"></script>
 	</body>
 </html>
