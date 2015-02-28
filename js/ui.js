@@ -18,7 +18,10 @@ $(document).ready(function() {
         });
 	});
 
-	$('undoButton').on('click', undo);
+	$('#undoButton').on('click', function() {
+		game.undo();
+		board.position(game.fen());
+	});
 
 	$("#chessboard").resizable({
 	    minHeight: 200,
