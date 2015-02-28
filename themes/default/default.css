@@ -1,0 +1,38 @@
+html {
+	font-family: Arial,Verdana,sans-serif;
+}
+
+.dialog {
+	border: 1px solid black;
+	background-color: #ffffff;
+}
+
+.dialog .closeDialog {
+	background-image: url("img/ui-icons_222222_256x240.png");
+	background-position: -80px -128px;
+}
+
+.button {
+	background-color: #8080b0;
+    border: none;
+}
+
+#mainNav {
+	background-color: #909090;
+}
+
+#mainNav > ul > li:hover {
+	background-color: #b0b0b0;
+}
+
+#modeNav > ul > li {
+	background-color: #F2AE38;
+}
+
+#modeNav > ul > li:hover {
+	background-color: #F2CF41;
+}
+
+#openDatabaseDialog > p {
+	background-color: #909090;
+}
