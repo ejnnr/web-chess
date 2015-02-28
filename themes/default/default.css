@@ -13,26 +13,31 @@ html {
 }
 
 .button {
-	background-color: #8080b0;
+	background-color: #009BB5;
     border: none;
 }
 
+.button:hover {
+	background-color: #00DBFF;
+}
+
 #mainNav {
-	background-color: #909090;
+	background-color: #FF943C;
 }
 
 #mainNav > ul > li:hover {
-	background-color: #b0b0b0;
+	background-color: #FF7200;
 }
 
 #modeNav > ul > li {
-	background-color: #F2AE38;
+	background-color: #BF5600;
+	color: #FFFFFF;
 }
 
 #modeNav > ul > li:hover {
-	background-color: #F2CF41;
+	background-color: #FF7200;
 }
 
 #openDatabaseDialog > p {
-	background-color: #909090;
+	background-color: #FF943C;
 }
