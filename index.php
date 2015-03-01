@@ -30,11 +30,8 @@
 				<li>Mode 3</li>
 			</ul>
 		</div>
-		<!--<div id="chessboardWrapper" style="width: 400px; height: 400px; border: 1px solid black;">-->
-			<div id="chessboard" style="width: 400px;"></div>
-<!--
-		</div>
--->
+		
+		<div id="chessboard" style="width: 400px;"></div>
 		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
 		<input type="button" id="undoButton" class="button" value="Undo last move">
 		
