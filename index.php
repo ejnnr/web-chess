@@ -5,6 +5,8 @@
 		<meta charset="UTF8">
 		<link type="text/css" rel="stylesheet" href="chessboardjs/css/chessboard-0.3.0.css">
 		<link type="text/css" rel="stylesheet" href="css/main.css">
+		<link type="text/css" rel="stylesheet" href="themes/default/default.css">
+		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
 		<script src="jquery/jquery-2.1.3.min.js"></script>
 		<script src="jquery-ui/jquery-ui.min.js"></script>
 		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
@@ -28,6 +30,7 @@
 				<li>Mode 3</li>
 			</ul>
 		</div>
+		
 		<div id="chessboard" style="width: 400px;"></div>
 		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
 		<input type="button" id="undoButton" class="button" value="Undo last move">
@@ -118,9 +121,9 @@
 			updateStatus();
 		</script>
 		
-		<div class="dialog" id="openDatabaseDialog" style="width: 500px;">
+		<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
 			<div class="closeDialog"></div>
-			<p style="background-color: #909090;">List of Databases:</p>
+			<p>List of Databases:</p>
 			<ul id="openDatabaseDialog-databaseList">
 				
 			</ul>

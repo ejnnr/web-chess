@@ -1,0 +1,43 @@
+html {
+	font-family: Arial,Verdana,sans-serif;
+}
+
+.dialog {
+	border: 1px solid black;
+	background-color: #ffffff;
+}
+
+.dialog .closeDialog {
+	background-image: url("img/ui-icons_222222_256x240.png");
+	background-position: -80px -128px;
+}
+
+.button {
+	background-color: #009BB5;
+    border: none;
+}
+
+.button:hover {
+	background-color: #00DBFF;
+}
+
+#mainNav {
+	background-color: #FF943C;
+}
+
+#mainNav > ul > li:hover {
+	background-color: #FF7200;
+}
+
+#modeNav > ul > li {
+	background-color: #BF5600;
+	color: #FFFFFF;
+}
+
+#modeNav > ul > li:hover {
+	background-color: #FF7200;
+}
+
+#openDatabaseDialog > p {
+	background-color: #FF943C;
+}
