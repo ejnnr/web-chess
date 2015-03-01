@@ -6,6 +6,7 @@
 		<link type="text/css" rel="stylesheet" href="chessboardjs/css/chessboard-0.3.0.css">
 		<link type="text/css" rel="stylesheet" href="css/main.css">
 		<link type="text/css" rel="stylesheet" href="themes/default/default.css">
+		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
 		<script src="jquery/jquery-2.1.3.min.js"></script>
 		<script src="jquery-ui/jquery-ui.min.js"></script>
 		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
@@ -29,7 +30,11 @@
 				<li>Mode 3</li>
 			</ul>
 		</div>
-		<div id="chessboard" style="width: 400px;"></div>
+		<!--<div id="chessboardWrapper" style="width: 400px; height: 400px; border: 1px solid black;">-->
+			<div id="chessboard" style="width: 400px;"></div>
+<!--
+		</div>
+-->
 		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
 		<input type="button" id="undoButton" class="button" value="Undo last move">
 		

@@ -24,11 +24,14 @@ $(document).ready(function() {
 	});
 
 	$("#chessboard").resizable({
+		maxHeight: 700,
+	    maxWidth: 700,
 	    minHeight: 200,
 	    minWidth: 200,
-	    maxHeight: 700,
-	    maxWidth: 700,
-	    aspectRatio: 1
+	    aspectRatio: 1,
+	    resize: function (event, ui) {
+			board.resize();
+		}
 	});
 
 });
