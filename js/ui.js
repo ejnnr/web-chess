@@ -18,14 +18,12 @@ $(document).ready(function() {
         });
 	});
 
-<<<<<<< HEAD
-	$('undoButton').on('click', undo());
-=======
+
 	$('#undoButton').on('click', function() {
 		game.undo();
 		board.position(game.fen());
 	});
->>>>>>> 13fdddd8fea0dc986ecd83116506f82524d36df5
+
 
 	$("#chessboard").resizable({
 		maxHeight: 700,
