@@ -63,6 +63,10 @@ html, body {
 	right: 0;
 	width: 20px;
 	overflow-x: hidden;
+	-webkit-transition: width 0.3s ease; 
+	-moz-transition: width 0.3s ease; 
+	-o-transition: width 0.3s ease;
+	transition: width 0.3s ease; 
 }
 
 #modeNav > ul > li {
@@ -74,6 +78,10 @@ html, body {
 
 #modeNav:hover {
 	width: 100px;
+	-webkit-transition: width 0.3s ease; 
+	-moz-transition: width 0.3s ease; 
+	-o-transition: width 0.3s ease;
+	transition: width 0.3s ease; 
 }
 
 #openDatabaseDialog-databaseList > li {
