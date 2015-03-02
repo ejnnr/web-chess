@@ -7,7 +7,6 @@
 		<link type="text/css" rel="stylesheet" href="css/main.css">
 		<link type="text/css" rel="stylesheet" href="themes/default/default.css">
 		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
-		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.theme.min.css">
 		<script src="jquery/jquery-2.1.3.min.js"></script>
 		<script src="jquery-ui/jquery-ui.min.js"></script>
 		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
