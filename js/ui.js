@@ -36,6 +36,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#windows").tabs();
+	$("#main-windows").tabs();
 
 });

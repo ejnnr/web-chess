@@ -89,11 +89,16 @@ html, body {
     list-style-type: none;
 }
 
-#chessboardWrapper {
-	float: left;
+#main {
+	margin: 0 20px 0 10px;
 }
 
-#windows {
+#main-chessboardWrapper {
+	float: left;
+	width: 50%;
+}
+
+#main-windows {
 	float: right;
-	margin: 10px 20px 0 0;
+	width: 45%;
 }

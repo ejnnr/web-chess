@@ -31,38 +31,40 @@
 			</ul>
 		</div>
 		
-		<div id="chessboardWrapper">
-			<div id="chessboard" style="width: 400px;"></div>
-			<input type="button" id="flipOrientationButton" class="button" value="Flip orientation">
-			<input type="button" id="undoButton" class="button" value="Undo last move">
-			
-			<p>Status: <span id="status"></span></p>
-			<p>FEN: <span id="fen"></span></p>
-		</div>
-		
-		<div id="windows">
-			<ul>
-				<li><a href="#windows-1">PGN</a></li>
-				<li><a href="#windows-2">Games</a></li>
-				<li><a href="#windows-3">Analysis Engine</a></li>
-			</ul>
-			<div id="windows-1">
-				<p>PGN: <span id="pgn"></span></p>
-			</div>
-			<div id="windows-2">
-			
-			</div>
-			<div id="windows-3">
-			
-			</div>
-		</div>
-		
-		<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
-			<div class="closeDialog"></div>
-			<p>List of Databases:</p>
-			<ul id="openDatabaseDialog-databaseList">
+		<div id="main">
+			<div id="main-chessboardWrapper">
+				<div id="chessboard" style="width: 400px;"></div>
+				<input type="button" id="flipOrientationButton" class="button" value="Flip orientation">
+				<input type="button" id="undoButton" class="button" value="Undo last move">
 				
-			</ul>
+				<p>Status: <span id="status"></span></p>
+				<p>FEN: <span id="fen"></span></p>
+			</div>
+			
+			<div id="main-windows">
+				<ul>
+					<li><a href="#main-windows-1">PGN</a></li>
+					<li><a href="#main-windows-2">Games</a></li>
+					<li><a href="#main-windows-3">Analysis Engine</a></li>
+				</ul>
+				<div id="main-windows-1">
+					<p>PGN: <span id="pgn"></span></p>
+				</div>
+				<div id="main-windows-2">
+				
+				</div>
+				<div id="main-windows-3">
+
+				</div>
+			</div>
+			
+			<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p>List of Databases:</p>
+				<ul id="openDatabaseDialog-databaseList">
+					
+				</ul>
+			</div>
 		</div>
 		
 		<script>
