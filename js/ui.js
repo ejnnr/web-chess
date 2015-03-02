@@ -36,6 +36,11 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#main-windows").tabs();
-
+	var tabs = $("#main-windows").tabs();
+	tabs.find(".ui-tabs-nav").sortable({
+		axis: "x",
+		stop: function() {
+			tabs.tabs("refresh");
+		}
+	});
 });
