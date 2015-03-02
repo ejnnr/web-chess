@@ -22,6 +22,8 @@ $(document).ready(function() {
 	$('#undoButton').on('click', function() {
 		game.undo();
 		board.position(game.fen());
+		// update Status elements (FEN, PGN)
+		updateStatus();
 	});
 
 
