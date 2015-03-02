@@ -35,5 +35,7 @@ $(document).ready(function() {
 			board.resize();
 		}
 	});
+	
+	$("#windows").tabs();
 
 });

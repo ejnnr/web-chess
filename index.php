@@ -31,13 +31,39 @@
 			</ul>
 		</div>
 		
-		<div id="chessboard" style="width: 400px;"></div>
-		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
-		<input type="button" id="undoButton" class="button" value="Undo last move">
+		<div id="chessboardWrapper">
+			<div id="chessboard" style="width: 400px;"></div>
+			<input type="button" id="flipOrientationButton" class="button" value="Flip orientation">
+			<input type="button" id="undoButton" class="button" value="Undo last move">
+			
+			<p>Status: <span id="status"></span></p>
+			<p>FEN: <span id="fen"></span></p>
+		</div>
 		
-		<p>Status: <span id="status"></span></p>
-		<p>FEN: <span id="fen"></span></p>
-		<p>PGN: <span id="pgn"></span></p>
+		<div id="windows">
+			<ul>
+				<li><a href="#windows-1">PGN</a></li>
+				<li><a href="#windows-2">Games</a></li>
+				<li><a href="#windows-3">Analysis Engine</a></li>
+			</ul>
+			<div id="windows-1">
+				<p>PGN: <span id="pgn"></span></p>
+			</div>
+			<div id="windows-2">
+			
+			</div>
+			<div id="windows-3">
+			
+			</div>
+		</div>
+		
+		<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
+			<div class="closeDialog"></div>
+			<p>List of Databases:</p>
+			<ul id="openDatabaseDialog-databaseList">
+				
+			</ul>
+		</div>
 		
 		<script>
 			var board,
@@ -120,14 +146,6 @@
 
 			updateStatus();
 		</script>
-		
-		<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
-			<div class="closeDialog"></div>
-			<p>List of Databases:</p>
-			<ul id="openDatabaseDialog-databaseList">
-				
-			</ul>
-		</div>
 		<script src="js/ui.js"></script>
 	</body>
 </html>
