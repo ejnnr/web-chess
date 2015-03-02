@@ -31,18 +31,46 @@
 			</ul>
 		</div>
 		
-		<div id="chessboard" style="width: 400px;"></div>
-		<input type="button" id="flipOrientationButton" class="button" value="Flip orientation" />
-		<input type="button" id="undoButton" class="button" value="Undo last move">
-		
-		<p>Status: <span id="status"></span></p>
-		<p>FEN: <span id="fen"></span></p>
-		<p>PGN: <span id="pgn"></span></p>
+		<div id="main">
+			<div id="main-chessboardWrapper">
+				<ul id="main-chessboardWrapper-buttons">
+					<li><input type="button" id="flipOrientationButton" class="button" value="Flip orientation"></li>
+					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
+				</ul>
+				<div class="clear"></div>
+				<div id="chessboard" style="width: 400px;"></div>	
+			</div>
+			
+			<div id="main-windows">
+				<ul>
+					<li><a href="#main-windows-1">PGN</a></li>
+					<li><a href="#main-windows-2">Games</a></li>
+					<li><a href="#main-windows-3">Analysis Engine</a></li>
+				</ul>
+				<div id="main-windows-1">
+					<p>FEN: <span id="fen"></span></p>
+					<p>PGN: <span id="pgn"></span></p>
+				</div>
+				<div id="main-windows-2">
+				
+				</div>
+				<div id="main-windows-3">
+
+				</div>
+			</div>
+			
+			<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p>List of Databases:</p>
+				<ul id="openDatabaseDialog-databaseList">
+					
+				</ul>
+			</div>
+		</div>
 		
 		<script>
 			var board,
 			  game = new Chess(),
-			  statusEl = $('#status'),
 			  fenEl = $('#fen'),
 			  pgnEl = $('#pgn');
 
@@ -77,34 +105,6 @@
 			};
 
 			var updateStatus = function() {
-			  var status = '';
-
-			  var moveColor = 'White';
-			  if (game.turn() === 'b') {
-				moveColor = 'Black';
-			  }
-
-			  // checkmate?
-			  if (game.in_checkmate() === true) {
-				status = 'Game over, ' + moveColor + ' is in checkmate.';
-			  }
-
-			  // draw?
-			  else if (game.in_draw() === true) {
-				status = 'Game over, drawn position';
-			  }
-
-			  // game still on
-			  else {
-				status = moveColor + ' to move';
-
-				// check?
-				if (game.in_check() === true) {
-				  status += ', ' + moveColor + ' is in check';
-				}
-			  }
-
-			  statusEl.html(status);
 			  fenEl.html(game.fen());
 			  pgnEl.html(game.pgn());
 			};
@@ -120,14 +120,6 @@
 
 			updateStatus();
 		</script>
-		
-		<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
-			<div class="closeDialog"></div>
-			<p>List of Databases:</p>
-			<ul id="openDatabaseDialog-databaseList">
-				
-			</ul>
-		</div>
 		<script src="js/ui.js"></script>
 	</body>
 </html>

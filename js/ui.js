@@ -32,10 +32,18 @@ $(document).ready(function() {
 	    maxWidth: 700,
 	    minHeight: 200,
 	    minWidth: 200,
+	    containment: "#main-chessboardWrapper",
 	    aspectRatio: 1,
 	    resize: function (event, ui) {
 			board.resize();
 		}
 	});
-
+	
+	var tabs = $("#main-windows").tabs();
+	tabs.find(".ui-tabs-nav").sortable({
+		axis: "x",
+		stop: function() {
+			tabs.tabs("refresh");
+		}
+	});
 });
