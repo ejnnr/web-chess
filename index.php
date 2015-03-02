@@ -33,12 +33,12 @@
 		
 		<div id="main">
 			<div id="main-chessboardWrapper">
-				<div id="chessboard" style="width: 400px;"></div>
-				<input type="button" id="flipOrientationButton" class="button" value="Flip orientation">
-				<input type="button" id="undoButton" class="button" value="Undo last move">
-				
-				<p>Status: <span id="status"></span></p>
-				<p>FEN: <span id="fen"></span></p>
+				<ul id="main-chessboardWrapper-buttons">
+					<li><input type="button" id="flipOrientationButton" class="button" value="Flip orientation"></li>
+					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
+				</ul>
+				<div class="clear"></div>
+				<div id="chessboard" style="width: 400px;"></div>	
 			</div>
 			
 			<div id="main-windows">
@@ -48,6 +48,7 @@
 					<li><a href="#main-windows-3">Analysis Engine</a></li>
 				</ul>
 				<div id="main-windows-1">
+					<p>FEN: <span id="fen"></span></p>
 					<p>PGN: <span id="pgn"></span></p>
 				</div>
 				<div id="main-windows-2">
@@ -70,7 +71,6 @@
 		<script>
 			var board,
 			  game = new Chess(),
-			  statusEl = $('#status'),
 			  fenEl = $('#fen'),
 			  pgnEl = $('#pgn');
 
@@ -105,34 +105,6 @@
 			};
 
 			var updateStatus = function() {
-			  var status = '';
-
-			  var moveColor = 'White';
-			  if (game.turn() === 'b') {
-				moveColor = 'Black';
-			  }
-
-			  // checkmate?
-			  if (game.in_checkmate() === true) {
-				status = 'Game over, ' + moveColor + ' is in checkmate.';
-			  }
-
-			  // draw?
-			  else if (game.in_draw() === true) {
-				status = 'Game over, drawn position';
-			  }
-
-			  // game still on
-			  else {
-				status = moveColor + ' to move';
-
-				// check?
-				if (game.in_check() === true) {
-				  status += ', ' + moveColor + ' is in check';
-				}
-			  }
-
-			  statusEl.html(status);
 			  fenEl.html(game.fen());
 			  pgnEl.html(game.pgn());
 			};

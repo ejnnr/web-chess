@@ -91,11 +91,18 @@ html, body {
 
 #main {
 	margin: 0 20px 0 10px;
+	height: calc(100% - 42px);
 }
 
 #main-chessboardWrapper {
 	float: left;
 	width: 50%;
+	height: 100%;
+}
+
+#main-chessboardWrapper-buttons > li {
+	list-style-type: none;
+	float: left;
 }
 
 #main-windows {
