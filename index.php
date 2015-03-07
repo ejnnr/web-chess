@@ -9,6 +9,7 @@
 		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
 		<script src="jquery/jquery-2.1.3.min.js"></script>
 		<script src="jquery-ui/jquery-ui.min.js"></script>
+		<script src="colResizable-1.5/colResizable-1.5.min.js"></script>
 		<script src="chessboardjs/js/chessboard-0.3.0.js"></script>
 		<script src="chessjs/chess.js"></script>
 	</head>
@@ -44,15 +45,26 @@
 			<div id="main-windows">
 				<ul>
 					<li><a href="#main-windows-1">PGN</a></li>
-					<li><a href="#main-windows-2">Games</a></li>
+					<li><a href="#main-windows-games">Games</a></li>
 					<li><a href="#main-windows-3">Analysis Engine</a></li>
 				</ul>
 				<div id="main-windows-1">
 					<p>FEN: <span id="fen"></span></p>
 					<p>PGN: <span id="pgn"></span></p>
 				</div>
-				<div id="main-windows-2">
-				
+				<div id="main-windows-games">
+					<table id="main-windows-games-gameList" width="100%">
+							<th>White</th>
+							<th>Black</th>
+							<th>Result</th>
+							<th>ECO</th>
+							<th>Site</th>
+							<th>Event</th>
+							<th>Round</th>
+							<th>Date</th>
+							<th>Tags</th>
+						</tr>
+					</table>
 				</div>
 				<div id="main-windows-3">
 

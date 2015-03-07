@@ -46,4 +46,17 @@ $(document).ready(function() {
 			tabs.tabs("refresh");
 		}
 	});
+	
+	$.get("ajax/getGames.php", function(response) {
+        var list = response.split(";");
+        list.forEach(function(game) {
+            var fields = game.split("|");
+            $('#main-windows-games-gameList').html($('#main-windows-games-gameList').html() + "<tr><td>" + fields[6] + " (" + fields[9] + ")" + "</td><td>" + fields[7] + " (" + fields[10] + ")" + "</td><td>" + fields[8] + "</td><td>" + fields[11] + "</td><td>" + fields[1] + "</td><td>" + fields[2] + "</td><td>" + fields[3] + "</td><td>" + fields[4] + "</td><td>" + fields[14] + "</td></tr>");
+        });
+        $("#main-windows-games-gameList").colResizable({
+			liveDrag: true,
+			partialRefresh: true,
+			postbackSafe: true
+		});
+	});
 });

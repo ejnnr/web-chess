@@ -12,5 +12,5 @@
 	 * tags(may be empty, single tags are seperated by spaces); 
 	 * <next game> */
 	 
-	echo "1|Wjik aan Zee|Tata Steel|3|43|Morphy, P.|Kasparov, G.|0|3462|5466|A00|1424610296|1424603719|not-a-real-game";
+	echo "1|Wjik aan Zee|Tata Steel|3|2156-02-30|43|Morphy, P.|Kasparov, G.|0|3462|5466|A00|1424610296|1424603719|not-a-real-game";
 ?>

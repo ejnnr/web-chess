@@ -96,7 +96,7 @@ html, body {
 
 #main-chessboardWrapper {
 	float: left;
-	width: 50%;
+	width: 45%;
 	height: 100%;
 }
 
@@ -107,5 +107,18 @@ html, body {
 
 #main-windows {
 	float: right;
-	width: 45%;
+	width: 50%;
 }
+
+#main-windows-games {
+	font-size: 14px;
+}
+
+#main-windows-games-gameList td {
+	padding: 4px;
+}
+
+#main-windows-games-gameList th {
+	padding: 4px;
+}
+
