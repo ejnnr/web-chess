@@ -27,7 +27,7 @@ $(document).ready(function() {
 	});
 
 
-	$("#chessboard").resizable({
+	$("#main-chessboard-Wrapper-chessboard").resizable({
 		maxHeight: 700,
 	    maxWidth: 700,
 	    minHeight: 200,

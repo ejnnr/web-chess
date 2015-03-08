@@ -39,7 +39,7 @@
 					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
 				</ul>
 				<div class="clear"></div>
-				<div id="chessboard" style="width: 400px;"></div>	
+				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div>
 			</div>
 			
 			<div id="main-windows">
@@ -128,7 +128,7 @@
 			  onDrop: onDrop,
 			  onSnapEnd: onSnapEnd
 			};
-			board = new ChessBoard('chessboard', cfg);
+			board = new ChessBoard('main-chessboardWrapper-chessboard', cfg);
 
 			updateStatus();
 		</script>
