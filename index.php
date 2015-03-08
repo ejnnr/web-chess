@@ -14,17 +14,17 @@
 		<script src="chessjs/chess.js"></script>
 	</head>
 	<body>
-		<div id="mainNav">
+		<div id="mainNav"><!-- #mainNav: the navigation bar at the top with various commands such as 'New game', ... -->
 			<ul>
 				<li id="mainNav-openDatabaseButton">Open Database</li>
 				<li>Create new database</li>
 				<li>New game</li>
 				<li>Save game</li>
 			</ul>
-			<div class="clear"></div>
+			<div class="clear"></div><!-- necessary because the list elements of #mainNav>ul are floated with css -->
 		</div>
 
-		<div id="modeNav">
+		<div id="modeNav"><!-- #modeNav: navigation bar at the right edge of the screen, used for changing between different modes -->
 			<ul>
 				<li>Mode 1</li>
 				<li>Mode 2</li>
@@ -32,28 +32,30 @@
 			</ul>
 		</div>
 		
-		<div id="main">
-			<div id="main-chessboardWrapper">
+		<div id="main"><!-- #main: the container for the largest part of the page. Necessary to have a consistent padding for chessboard and windows -->
+			<div id="main-chessboardWrapper"><!-- a wrapper for the chessboard and some buttons -->
 				<ul id="main-chessboardWrapper-buttons">
 					<li><input type="button" id="flipOrientationButton" class="button" value="Flip orientation"></li>
 					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
 				</ul>
-				<div class="clear"></div>
-				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div>
+				<div class="clear"></div><!-- Necessary because the buttons are floated via css -->
+				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div><!-- the actual chessboard (displayed using chessboard.js) -->
 			</div>
 			
-			<div id="main-windows">
+			<div id="main-windows"><!-- #main-windows: conatains all windows like game list, PGN, ...; windows are displayed as tabs using jquery-ui -->
 				<ul>
-					<li><a href="#main-windows-1">PGN</a></li>
+					<!-- the order the windows are appearing in can be changed here. The first list item will be visible when you load the page -->
+					<li><a href="#main-windows-pgn">PGN</a></li>
 					<li><a href="#main-windows-games">Games</a></li>
-					<li><a href="#main-windows-3">Analysis Engine</a></li>
+					<li><a href="#main-windows-analysis">Analysis Engine</a></li>
 				</ul>
-				<div id="main-windows-1">
+				<div id="main-windows-pgn">
 					<p>FEN: <span id="fen"></span></p>
 					<p>PGN: <span id="pgn"></span></p>
 				</div>
 				<div id="main-windows-games">
-					<table id="main-windows-games-gameList" width="100%">
+					<table id="main-windows-games-gameList" width="100%"><!-- this table is filled with ajax and its columns are resizable -->
+						<tr>
 							<th>White</th>
 							<th>Black</th>
 							<th>Result</th>
@@ -66,7 +68,7 @@
 						</tr>
 					</table>
 				</div>
-				<div id="main-windows-3">
+				<div id="main-windows-analysis">
 
 				</div>
 			</div>
@@ -75,7 +77,7 @@
 				<div class="closeDialog"></div>
 				<p>List of Databases:</p>
 				<ul id="openDatabaseDialog-databaseList">
-					
+					<!-- this list is filled via Ajax -->
 				</ul>
 			</div>
 		</div>
