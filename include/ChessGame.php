@@ -265,28 +265,29 @@
 			$moveTemp = str_replace(array("?", "!"), array("", ""), $moveTemp); /* remove annotations like ?? or !? */
 			
 			$moveTemp = preg_replace("/[$][1-9]+/", "", $moveTemp); /* remove annotation like $ 34 (spaces have already been removed earlier) */
-			
+
+			/* Check whether the move has a legal syntax */
 			if (!preg_match('/[KQRBN]{0,1}[a-h]{0,1}[1-8]{0,1}[a-h][1-8]/', $moveTemp) && $moveTemp != 'O-O' && $moveTemp != 'O-O-O')
 			{
-				throw new ChessGameException("Function parseAlgebraicMove: move has no valid Syntax: " . $moveTemp, 4);
+				throw new ChessGameException("Function parseAlgebraicMove: move has no valid syntax: " . $moveTemp, 4);
 			}
 			
 			/* extract the piece */
 			switch (substr($moveTemp, 0, 1))
 			{
-				case "O": /* castling */
-					$piece = ($this->turn == "w") ? "K" : "k";
-					if ($moveTemp == 'O-O')
+				case "O": // castling; note that in PGN castling is writtern as O-O/O-O-O, not as 0-0/0-0-0
+					$piece = ($this->turn == "w") ? "K" : "k"; // set the piece to 'K' (white king) or 'k' (black king) depending on whose move it is
+					if ($moveTemp == 'O-O') // kingside castling
 					{
 						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
 						$targetSquare = ($this->turn == "w") ? $this->parseSquare('g1') : $this->parseSquare('g8');
 					}
-					elseif ($moveTemp == 'O-O-O')
+					elseif ($moveTemp == 'O-O-O') // queenside castling
 					{
 						$startSquare = ($this->turn == "w") ? $this->parseSquare('e1') : $this->parseSquare('e8');
 						$targetSquare = ($this->turn == "w") ? $this->parseSquare('c1') : $this->parseSquare('c8');
 					}
-					else
+					else // move starts with O but is neither O-O nor O-O-O
 					{
 						throw new ChessGameException("Function parseAlgebraicMove: " . $moveTemp . " is no valid move", 4);
 					}
@@ -320,7 +321,7 @@
 					$piece = ($this->turn == "w") ? "P" : "p";
 					break;
 				default:
-					throw new ChessGameException("function parseAlgebraicMove: move has no valid syntax: " . substr($move, 0, 1) . " isn't an allowed char at the beginning of move.", 4);
+					throw new ChessGameException("function parseAlgebraicMove: move has no valid syntax: " . substr($move, 0, 1) . " isn't an allowed char at the beginning of a move.", 4);
 			}
 			
 			if ($piece != "P" && $piece != "p") /* remove piece letter */
@@ -338,12 +339,12 @@
 			
 			$moveTemp = substr($moveTemp, 0, strlen($moveTemp) - 2); /* removing the target square */
 			
-			switch (strlen($moveTemp))
+			switch (strlen($moveTemp)) // find out which information is left in the string: the departure file, rank or both
 			{
-				case 0:
+				case 0: // no information left
 					break;
 				case 1:
-					if (preg_match("/[a-h]/", $moveTemp)) /* file */
+					if (preg_match("/[a-h]/", $moveTemp)) // file
 					{
 						switch ($moveTemp)
 						{
@@ -381,19 +382,24 @@
 					{
 						throw new ChessGameException("function parseAlgebraicMove: move hasn't got a valid syntax.", 4);
 					}
+				
 					break;
-				case 2:
+				
+				case 2: // both file and rank, i.e. the complete square
 					$startSquare = parseSquare($moveTemp);
 					$start = array((int)substr($startSquare, 0, 1) - 1, ((int)substr($startSquare, 1, 1)) - 1);
 					break;
 				default:
 					throw new ChessGameException("function parseAlgebraicMove: move hasn't got a valid syntax", 4);
 			}
+
+			$foundValidMove = false; // used to check if the algebraic move is distinct
 			
 			foreach ($this->board as $rankNumber => $rank) /* iterate through the whole board */
 			{
 				foreach ($rank as $fileNumber => $square)
 				{
+
 					/* Compare the current square to the information in $start */
 					
 					if (!empty($start[0]))
@@ -403,7 +409,7 @@
 							continue;
 						}
 					}
-					
+
 					if (!empty($start[1]))
 					{
 						if ($start[1] != $rankNumber)
@@ -411,7 +417,7 @@
 							continue;
 						}
 					}
-					
+
 					if ($this->turn == "w")
 					{
 						if (in_array($square, $this->whitePieces)) /* test if there's a white piece on the square */
@@ -420,7 +426,12 @@
 							{
 								if ($this->isValidMove(($fileNumber + 1) . ($rankNumber + 1), ($target[0] + 1) . ($target[1] + 1), $this->board))
 								{
-									$start = array($fileNumber, $rankNumber);
+									if ($foundValidMove)
+									{
+										throw new ChessGameException("function parseAlgebraicMove: move is not distinct. Square of departue could be " . ($fileNumber + 1) . ($rankNumber + 1) . " or " . ($startTemp[0] + 1) . ($startTemp[1] + 1), 4);
+									}
+									$startTemp = array($fileNumber, $rankNumber);
+									$foundValidMove = true;
 								}
 							}
 						}
@@ -433,17 +444,25 @@
 							{
 								if ($this->isValidMove(($fileNumber + 1) . ($rankNumber + 1), ($target[0] + 1) . ($target[1] + 1), $this->board))
 								{
-									$start = array($fileNumber, $rankNumber);
+									if ($foundValidMove) // check if another valid move has already been found, which would mean that the move wasn't distinctive
+									{
+										throw new ChessGameException("function parseAlgebraicMove: move is not distinct", 4);
+									}
+									$startTemp = array($fileNumber, $rankNumber);
+									$foundValidMove = true;
 								}
 							}		
 						}
 					}
 				}
 			}
+
+			$start = $startTemp;
 			
 			/* throw exception if no legal move could be found */
-			if (empty($start[0]) || empty($start[1]))
+			if (!isset($start[0]) || !isset($start[1]))
 			{
+				var_dump($start);
 				throw new ChessGameException("function parseAlgebraicMove: The move is no legal move.", 4);
 			}
 			
@@ -714,7 +733,7 @@
 					return FALSE;
 					
 				case "P": /* white pawn */
-					if ($target[1] - $start[1] == 1 && $this->board[$target[1]][$target[0]] == "")
+					if ($target[1] - $start[1] == 1 && $target[0] - $start[0] == 0 && $this->board[$target[1]][$target[0]] == "")
 					{
 						return TRUE;	
 					}
@@ -733,7 +752,7 @@
 					return FALSE;
 					
 				case "p": /* black pawn */
-					if ($target[1] - $start[1] == -1  && $this->board[$target[1]][$target[0]] == "")
+					if ($target[1] - $start[1] == -1 && $target[0] - $start[0] == 0 && $this->board[$target[1]][$target[0]] == "")
 					{
 						return TRUE;	
 					}
