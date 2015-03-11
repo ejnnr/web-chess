@@ -7,8 +7,15 @@ $(document).ready(function() {
 	});
 		
 	$("#mainNav-openDatabaseButton").click(function(event) {
-		$("#openDatabaseDialog").addClass("visible"); // open the dialog for opening databases
+		$(".dialog").removeClass("visible");//closes other dialogs
+		$("#openDatabaseDialog").addClass("visible");// open the dialog for opening databases
 	});
+	
+	$("#mainNav-createGameButton").click(function(event) {
+		$(".dialog").removeClass("visible");//closes other dialogs
+		$("#createGameDialog").addClass("visible"); // open the dialog for opening databases
+	});
+	
 	
 	$('#flipOrientationButton').on('click', board.flip); // board is the variable the chessboard is stored in. flip is a function provided by chessboard.js
 	

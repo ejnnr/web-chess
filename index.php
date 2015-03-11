@@ -18,7 +18,7 @@
 			<ul>
 				<li id="mainNav-openDatabaseButton">Open Database</li>
 				<li>Create new database</li>
-				<li>New game</li>
+				<li id="mainNav-createGameButton">New game</li>
 				<li>Save game</li>
 			</ul>
 			<div class="clear"></div><!-- necessary because the list elements of #mainNav>ul are floated with css -->
@@ -80,6 +80,22 @@
 					<!-- this list is filled via Ajax -->
 				</ul>
 			</div>
+			<div class = "dialog" id="createGameDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p>Create Game</p>
+				<form method=post>
+					<i>White Player</i><input type="text" name="White" value=""><br>
+					<i>Black Player</i><input type="text" name="Black" value=""><br>
+					<i>Result</i><input type="text" name="Result" value=""><br>
+					<i>Eco</i><input type="text" name="Eco" value=""><br>
+					<i>Site</i><input type="text" name="Site" value=""><br>
+					<i>Event</i><input type="text" name="Event" value=""><br>
+					<i>Round</i><input type="text" name="Round" value=""><br>
+					<i>Date</i><input type="text" name="Date" value=""><br>
+					<i>Tags</i><input type="text" name="Tags" value=""><br>
+					<input type = "button" name="dialog-createGameButton" value="Create" id="dialog-createGameButton">
+				</form>
+			</div>
 		</div>
 		
 		<script>
@@ -134,6 +150,7 @@
 
 			updateStatus();
 		</script>
+
 		<script src="js/ui.js"></script>
 	</body>
 </html>
