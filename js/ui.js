@@ -7,12 +7,10 @@ $(document).ready(function() {
 	});
 		
 	$("#mainNav-openDatabaseButton").click(function(event) {
-		$(".dialog").removeClass("visible");//closes other dialogs
 		$("#openDatabaseDialog").addClass("visible");// open the dialog for opening databases
 	});
 	
 	$("#mainNav-createGameButton").click(function(event) {
-		$(".dialog").removeClass("visible");//closes other dialogs
 		$("#createGameDialog").addClass("visible"); // open the dialog for opening databases
 	});
 	
@@ -23,6 +21,7 @@ $(document).ready(function() {
 		var list = response.split(";"); // split the response into single databases
 		list.forEach(function(database) {
 			var fields = database.split("|");
+
 			$('#openDatabaseDialog-databaseList').html($('#openDatabaseDialog-databaseList').html() + "<li>" + fields[0] + "</li>"); // fill the list in the dialog for opening databases
 		});
 	});
@@ -59,7 +58,22 @@ $(document).ready(function() {
 		var list = response.split(";");
 		list.forEach(function(game) {
 			var fields = game.split("|");
-			$('#main-windows-games-gameList').html($('#main-windows-games-gameList').html() + "<tr><td>" + fields[6] + " (" + fields[9] + ")" + "</td><td>" + fields[7] + " (" + fields[10] + ")" + "</td><td>" + fields[8] + "</td><td>" + fields[11] + "</td><td>" + fields[1] + "</td><td>" + fields[2] + "</td><td>" + fields[3] + "</td><td>" + fields[4] + "</td><td>" + fields[14] + "</td></tr>"); // fill the list in #main-windows-games
+			var changeResult = function(dbresult){
+				switch(dbresult){
+					case "0":
+						var result = "0-1";
+					 break;
+					case "0.5":
+						var result = "0.5-0.5";
+						break;
+					case "1":
+						var result = "1-0";
+						break;
+					
+				}
+			return result;
+			};
+			$('#main-windows-games-gameList').html($('#main-windows-games-gameList').html() + "<tr><td>" + fields[6] + " (" + fields[9] + ")" + "</td><td>" + fields[7] + " (" + fields[10] + ")" + "</td><td>" + changeResult(fields[8]) + "</td><td>" + fields[11] + "</td><td>" + fields[1] + "</td><td>" + fields[2] + "</td><td>" + fields[3] + "</td><td>" + fields[4] + "</td><td>" + fields[14] + "</td></tr>"); // fill the list in #main-windows-games
 		});
 		$("#main-windows-games-gameList").colResizable({ // make columns resizable
 				liveDrag: true, // just looks better
