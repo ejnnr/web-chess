@@ -35,8 +35,8 @@
 		<div id="main"><!-- #main: the container for the largest part of the page. Necessary to have a consistent padding for chessboard and windows -->
 			<div id="main-chessboardWrapper"><!-- a wrapper for the chessboard and some buttons -->
 				<ul id="main-chessboardWrapper-buttons">
-					<li><input type="button" id="flipOrientationButton" class="button" value="Flip orientation"></li>
-					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
+					<li><div style="cursor:pointer" id= "flipOrientationButton"><img src ="themes/default/img/Rotatebutton.png" style = "height:50px; margin:10px"></div></li>
+					<li><div style="cursor:pointer" id= "undoButton"><img src ="themes/default/img/Undobutton.png" style = "height:50px; margin:10px"></div></li>
 				</ul>
 				<div class="clear"></div><!-- Necessary because the buttons are floated via css -->
 				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div><!-- the actual chessboard (displayed using chessboard.js) -->

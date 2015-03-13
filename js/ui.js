@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$(".dialog").draggable({ containment: "body", scroll: false}); // all dialogs can be dragged around but not outside of the viewport
 
 	$(".dialog .closeDialog").click(function(event) {
-		$(".dialog").removeClass("visible"); // make dialogs invisible when clicking the close button
+		$(this).parent('div').removeClass("visible"); // make dialogs invisible when clicking the close button
 	});
 		
 	$("#mainNav-openDatabaseButton").click(function(event) {
@@ -69,7 +69,6 @@ $(document).ready(function() {
 					case "1":
 						var result = "1-0";
 						break;
-					
 				}
 			return result;
 			};
