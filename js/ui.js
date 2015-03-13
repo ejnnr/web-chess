@@ -61,17 +61,12 @@ $(document).ready(function() {
 			var changeResult = function(dbresult){
 				switch(dbresult){
 					case "0":
-						var result = "0-1";
-					 break;
+						return "0-1";
 					case "0.5":
-						var result = "0.5-0.5";
-						break;
+						return "0.5-0.5";
 					case "1":
-						var result = "1-0";
-						break;
-					
+						return"1-0";
 				}
-			return result;
 			};
 			$('#main-windows-games-gameList').html($('#main-windows-games-gameList').html() + "<tr><td>" + fields[6] + " (" + fields[9] + ")" + "</td><td>" + fields[7] + " (" + fields[10] + ")" + "</td><td>" + changeResult(fields[8]) + "</td><td>" + fields[11] + "</td><td>" + fields[1] + "</td><td>" + fields[2] + "</td><td>" + fields[3] + "</td><td>" + fields[4] + "</td><td>" + fields[14] + "</td></tr>"); // fill the list in #main-windows-games
 		});
