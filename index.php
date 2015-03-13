@@ -75,14 +75,14 @@
 			
 			<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
 				<div class="closeDialog"></div>
-				<p>List of Databases:</p>
+				<p style="cursor:pointer">List of Databases:</p>
 				<ul id="openDatabaseDialog-databaseList">
 					<!-- this list is filled via Ajax -->
 				</ul>
 			</div>
 			<div class = "dialog" id="createGameDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
 				<div class="closeDialog"></div>
-				<p>Create Game</p>
+				<p style="cursor:pointer">Create Game</p>
 				<form method=post>
 					<i>White Player</i><input type="text" name="White" value=""><br>
 					<i>Black Player</i><input type="text" name="Black" value=""><br>
@@ -138,7 +138,7 @@
 				fenEl.html(game.fen());
 				pgnEl.html(game.pgn());
 			};
-
+		
 			var cfg = {
 				draggable: true,
 				position: 'start',
@@ -147,7 +147,6 @@
 				onSnapEnd: onSnapEnd
 			};
 			board = new ChessBoard('main-chessboardWrapper-chessboard', cfg);
-
 			updateStatus();
 		</script>
 
