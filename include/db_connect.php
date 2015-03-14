@@ -1,5 +1,6 @@
 <?php
-	include_once 'config.php';
+	require_once '../config/config.php';
+
 	try {
 		$database = new PDO('mysql:host=' . HOST . ';dbname=' . DATABASE, USER, PASSWORD);
 	}
