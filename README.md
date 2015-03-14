@@ -14,8 +14,10 @@ You should have Apache, PHP and MySQL installed and running.
 4. Create a user called webchess and give it acces to the database you just created (this is only for security reasons, you can also use root)
 5. Enter the users password into config/config.php or take the example password from there for your user (NOT RECOMMENDED!!!)
 6. If you are using phpMyAdmin, you can simply go into the newly created database, select "Import" and select webchess.sql from the reporitory to set up the tables in the database. If you use another interface, just look into the webchess.sql file to see which tables you have to create.
+7. Install composer (http://getcomposer.org)
+8. run 'composer install' in your local repository's root directory to install all required libraries.
 
-WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional tables or change anything else.
+WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional database tables or change anything else.
 If you commit such a change, please also leave a notice here where you explain, what other people have to do to perform the same changes on their machines.
 You should also put some kind of note into your commit message.
 
