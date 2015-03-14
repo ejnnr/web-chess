@@ -1,5 +1,5 @@
 <?php
-require '../include/square.php';
+require 'include/square.php';
 
 class squareTest extends PHPUnit_Framework_TestCase
 {
