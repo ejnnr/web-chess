@@ -93,12 +93,10 @@ html, body {
 #openDatabaseDialog-databaseList > li {
     list-style-type: none;
 }
-#createGameDialog > form > input {
+#createGameDialog > form > input , #createDbDialog > form > input {
 	float:right;
 }
-#dialog-createGameButton{
-	float:left;
-}
+
 
 #main {
 	margin: 0 20px 0 10px;

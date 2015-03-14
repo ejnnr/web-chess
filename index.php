@@ -17,9 +17,8 @@
 		<div id="mainNav"><!-- #mainNav: the navigation bar at the top with various commands such as 'New game', ... -->
 			<ul>
 				<li id="mainNav-openDatabaseButton">Open Database</li>
-				<li>Create new database</li>
+				<li id="mainNav-createDbButton">Create new database</li>
 				<li id="mainNav-createGameButton">New game</li>
-				<li>Save game</li>
 			</ul>
 			<div class="clear"></div><!-- necessary because the list elements of #mainNav>ul are floated with css -->
 		</div>
@@ -37,6 +36,7 @@
 				<ul id="main-chessboardWrapper-buttons">
 					<li><div style="cursor:pointer" id= "flipOrientationButton"><img src ="themes/default/img/Rotatebutton.png" style = "height:50px; margin:10px"></div></li>
 					<li><div style="cursor:pointer" id= "undoButton"><img src ="themes/default/img/Undobutton.png" style = "height:50px; margin:10px"></div></li>
+					<li><div style="cursor:pointer" id= "saveButton"><img src ="themes/default/img/Savebutton.png" style = "height:50px; margin:10px"></div></li>
 				</ul>
 				<div class="clear"></div><!-- Necessary because the buttons are floated via css -->
 				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div><!-- the actual chessboard (displayed using chessboard.js) -->
@@ -80,6 +80,7 @@
 					<!-- this list is filled via Ajax -->
 				</ul>
 			</div>
+			
 			<div class = "dialog" id="createGameDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
 				<div class="closeDialog"></div>
 				<p style="cursor:pointer">Create Game</p>
@@ -92,8 +93,19 @@
 					<i>Event</i><input type="text" name="Event" value=""><br>
 					<i>Round</i><input type="text" name="Round" value=""><br>
 					<i>Date</i><input type="text" name="Date" value=""><br>
-					<i>Tags</i><input type="text" name="Tags" value=""><br>
-					<input type = "button" name="dialog-createGameButton" value="Create" id="dialog-createGameButton">
+					<i>Tags</i><input type="text" name="newGameTags" value=""><br>
+					<input type = "button" name="dialog-createButton" value="Create" class="dialog-createButton">
+				</form>
+			</div>
+			
+			<div class = "dialog" id="createDbDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p style="cursor:pointer">Create Database</p>
+				<form method=post>
+					<i>Database Name</i><input type="text" name="newDbName" value=""><br>
+					<i>Visibility <sub style = "font-size:10px">(private/shared/public)</sub></i><input type="text" name="visibility" value=""><br>
+					<i>Tags</i><input type="text" name="newDbTags" value=""><br>
+					<input type = "button" name="dialog-createDbButton" value="Create" class="dialog-createButton">
 				</form>
 			</div>
 		</div>

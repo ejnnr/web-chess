@@ -14,6 +14,10 @@ $(document).ready(function() {
 		$("#createGameDialog").addClass("visible"); // open the dialog for opening databases
 	});
 	
+	$("#mainNav-createDbButton").click(function(event) {
+		$("#createDbDialog").addClass("visible"); // open the dialog for opening databases
+	});
+	
 	
 	$('#flipOrientationButton').on('click', board.flip); // board is the variable the chessboard is stored in. flip is a function provided by chessboard.js
 	$('#undoButton').on('click', function() {

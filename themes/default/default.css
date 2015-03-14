@@ -92,6 +92,6 @@ html {
 	-o-transition: background 0.3s ease;
 	transition: background 0.3s ease; 
 }
-#createGameDialog > p {
+#createGameDialog > p , #createDbDialog > p {
 	background-color: #FF943C;
 }
