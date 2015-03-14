@@ -15,11 +15,11 @@ $(document).ready(function() {
 	});
 	
 	
-	$('#flipOrientationButton').on('click', board.flip);// board is the variable the chessboard is stored in. flip is a function provided by chessboard.js
+	$('#flipOrientationButton').on('click', board.flip); // board is the variable the chessboard is stored in. flip is a function provided by chessboard.js
 	$('#undoButton').on('click', function() {
-		game.undo(); // undo the move with chess.js
+		game.undo();                // undo the move with chess.js
 		board.position(game.fen()); // update the board
-		updateStatus(); // update status elements (FEN, PGN)
+		updateStatus();             // update status elements (FEN, PGN)
 	});
 	
 	$.get("ajax/getDatabases.php", function(response) { // get a list of available databases via Ajax
@@ -50,31 +50,32 @@ $(document).ready(function() {
 			tabs.tabs("refresh");
 		}
 	});
+	
 	tabs.find(".ui-tabs-nav").disableSelection();
 	
 	$.get("ajax/getGames.php", function(response) { // get a list of games
 		var list = response.split(";");
+		
 		list.forEach(function(game) {
+			
 			var fields = game.split("|");
-			var changeResult = function(dbresult){
-				switch(dbresult){
+			
+			var changeResult = function(dbresult) { // change the  result to more readable formats
+				switch(dbresult) {
 					case "0":
 						return "0-1";
 					case "0.5":
 						return "0.5-0.5";
 					case "1":
-						var result = "1-0";
-						break;
 						return"1-0";
-
 				}
 			};
 			$('#main-windows-games-gameList').html($('#main-windows-games-gameList').html() + "<tr><td>" + fields[6] + " (" + fields[9] + ")" + "</td><td>" + fields[7] + " (" + fields[10] + ")" + "</td><td>" + changeResult(fields[8]) + "</td><td>" + fields[11] + "</td><td>" + fields[1] + "</td><td>" + fields[2] + "</td><td>" + fields[3] + "</td><td>" + fields[4] + "</td><td>" + fields[14] + "</td></tr>"); // fill the list in #main-windows-games
 		});
 		$("#main-windows-games-gameList").colResizable({ // make columns resizable
-				liveDrag: true, // just looks better
+				liveDrag: true,       // just looks better
 				partialRefresh: true, // necessary when using Ajax
-				postbackSafe: true // save the user's layout in the browser
+				postbackSafe: true    // save the user's layout in the browser
 		});
 	});
 });
