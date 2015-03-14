@@ -1,6 +1,6 @@
 <?php
 	class ChessGameException extends Exception {}
-	
+
 	/*
 		Exception codes:
 		1 - 100: General errors (empty arguments, ...)
@@ -9,11 +9,11 @@
 			3: Wrong argument type
 			4: Invalid argument
 	*/
-	
+
 	/**
 	* A class representing a game of chess
 	*/
-	
+
 	class ChessGame
 	{
 		private $fen; // stores the current fen
@@ -29,19 +29,19 @@
 		private $enPassant; // stores the current en passant file as a letter; '' if there is no en passant file
 		private $halfMoves; // number of half-moves since the last pawn move of capture
 		private $moveNumber; // the current move number
-		
+
 		define(WHITE_PIECES, array("P", "N", "B", "R", "Q", "K"));
-		define(BLACK_PECES), array("p", "n", "b", "r", "q", "k"));
-		
+		define(BLACK_PECES, array("p", "n", "b", "r", "q", "k"));
+
 		private $moves; // store the game as an array of Move objects
-		
+
 		function __construct($fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-		{	
+		{
 			if (empty($fen) {
 				throw new ChessGameException("__construct: fen may not be null", 2);
 			}
-			
-			$this->loadFen($fen);	
+
+			$this->loadFen($fen);
 		}
 	}
 ?>
