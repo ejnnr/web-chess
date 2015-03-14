@@ -17,9 +17,8 @@
 		<div id="mainNav"><!-- #mainNav: the navigation bar at the top with various commands such as 'New game', ... -->
 			<ul>
 				<li id="mainNav-openDatabaseButton">Open Database</li>
-				<li>Create new database</li>
-				<li>New game</li>
-				<li>Save game</li>
+				<li id="mainNav-createDbButton">Create new database</li>
+				<li id="mainNav-createGameButton">New game</li>
 			</ul>
 			<div class="clear"></div><!-- necessary because the list elements of #mainNav>ul are floated with css -->
 		</div>
@@ -35,8 +34,9 @@
 		<div id="main"><!-- #main: the container for the largest part of the page. Necessary to have a consistent padding for chessboard and windows -->
 			<div id="main-chessboardWrapper"><!-- a wrapper for the chessboard and some buttons -->
 				<ul id="main-chessboardWrapper-buttons">
-					<li><input type="button" id="flipOrientationButton" class="button" value="Flip orientation"></li>
-					<li><input type="button" id="undoButton" class="button" value="Undo last move"></li>
+					<li><div style="cursor:pointer" id= "flipOrientationButton"><img src ="themes/default/img/Rotatebutton.png" style = "height:50px; margin:10px"></div></li>
+					<li><div style="cursor:pointer" id= "undoButton"><img src ="themes/default/img/Undobutton.png" style = "height:50px; margin:10px"></div></li>
+					<li><div style="cursor:pointer" id= "saveButton"><img src ="themes/default/img/Savebutton.png" style = "height:50px; margin:10px"></div></li>
 				</ul>
 				<div class="clear"></div><!-- Necessary because the buttons are floated via css -->
 				<div id="main-chessboardWrapper-chessboard" style="width: 400px;"></div><!-- the actual chessboard (displayed using chessboard.js) -->
@@ -75,10 +75,38 @@
 			
 			<div class="dialog" id="openDatabaseDialog" style="width: 500px; position: absolute; top: 100px; left: 300px;">
 				<div class="closeDialog"></div>
-				<p>List of Databases:</p>
+				<p style="cursor:pointer">List of Databases:</p>
 				<ul id="openDatabaseDialog-databaseList">
 					<!-- this list is filled via Ajax -->
 				</ul>
+			</div>
+			
+			<div class = "dialog" id="createGameDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p style="cursor:pointer">Create Game</p>
+				<form method=post>
+					<i>White Player</i><input type="text" name="White" value=""><br>
+					<i>Black Player</i><input type="text" name="Black" value=""><br>
+					<i>Result</i><input type="text" name="Result" value=""><br>
+					<i>Eco</i><input type="text" name="Eco" value=""><br>
+					<i>Site</i><input type="text" name="Site" value=""><br>
+					<i>Event</i><input type="text" name="Event" value=""><br>
+					<i>Round</i><input type="text" name="Round" value=""><br>
+					<i>Date</i><input type="text" name="Date" value=""><br>
+					<i>Tags</i><input type="text" name="newGameTags" value=""><br>
+					<input type = "button" name="dialog-createButton" value="Create" class="dialog-createButton">
+				</form>
+			</div>
+			
+			<div class = "dialog" id="createDbDialog" style="width: 300px; position: absolute; top: 100px; left: 300px;">
+				<div class="closeDialog"></div>
+				<p style="cursor:pointer">Create Database</p>
+				<form method=post>
+					<i>Database Name</i><input type="text" name="newDbName" value=""><br>
+					<i>Visibility <sub style = "font-size:10px">(private/shared/public)</sub></i><input type="text" name="visibility" value=""><br>
+					<i>Tags</i><input type="text" name="newDbTags" value=""><br>
+					<input type = "button" name="dialog-createDbButton" value="Create" class="dialog-createButton">
+				</form>
 			</div>
 		</div>
 		
@@ -122,7 +150,7 @@
 				fenEl.html(game.fen());
 				pgnEl.html(game.pgn());
 			};
-
+		
 			var cfg = {
 				draggable: true,
 				position: 'start',
@@ -131,9 +159,9 @@
 				onSnapEnd: onSnapEnd
 			};
 			board = new ChessBoard('main-chessboardWrapper-chessboard', cfg);
-
 			updateStatus();
 		</script>
+
 		<script src="js/ui.js"></script>
 	</body>
 </html>

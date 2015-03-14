@@ -93,6 +93,10 @@ html, body {
 #openDatabaseDialog-databaseList > li {
     list-style-type: none;
 }
+#createGameDialog > form > input , #createDbDialog > form > input {
+	float:right;
+}
+
 
 #main {
 	margin: 0 20px 0 10px;
@@ -117,6 +121,7 @@ html, body {
 
 #main-windows-games {
 	font-size: 14px;
+	text-align:center;
 }
 
 #main-windows-games-gameList td {

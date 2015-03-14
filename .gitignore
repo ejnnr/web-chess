@@ -2,3 +2,4 @@ test/
 Thumbs.db
 *.log
 .c9/
+vendor/

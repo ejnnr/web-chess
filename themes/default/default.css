@@ -12,6 +12,7 @@ html {
 	background-position: -80px -128px;
 }
 
+
 .button {
 	background-color: #009BB5;
 	border: none;
@@ -75,6 +76,7 @@ html {
 	background-color: #FF943C;
 }
 
+
 #openDatabaseDialog > ul > li {
 	background-color: transparent;
 	-webkit-transition: background 0.3s ease; 
@@ -89,4 +91,7 @@ html {
 	-moz-transition: background 0.3s ease; 
 	-o-transition: background 0.3s ease;
 	transition: background 0.3s ease; 
+}
+#createGameDialog > p , #createDbDialog > p {
+	background-color: #FF943C;
 }
