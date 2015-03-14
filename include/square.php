@@ -38,7 +38,7 @@ function string2square ($square)
 		default: return FALSE; // should actually never happen, since we already used preg_match
 	}
 
-	return $fileNumber + (int)substr($square, 1, 1) * 8; // put together the return value; see phpdoc for more details
+	return $fileNumber + ((int)substr($square, 1, 1) - 1) * 8; // put together the return value; see phpdoc for more details
 }
 
 /**
@@ -50,7 +50,7 @@ function string2square ($square)
 
 function square2string ($square)
 {
-	if (!gettype($square) == 'integer') {
+	if (!is_int($square)) {
 		return FALSE;
 	}
 
@@ -71,7 +71,7 @@ function square2string ($square)
 		default: return FALSE; // should never happen
 	}
 
-	return $file . (string)(($square & 56) / 8); // take the three bits where the rank is saved and divide by 8; hint: 56 is 2^5 + 2^4 + 2^3
+	return $file . (string)((($square & 56) / 8 + 1)); // take the three bits where the rank is saved and divide by 8; hint: 56 is 2^5 + 2^4 + 2^3
 }
 
 ?>
