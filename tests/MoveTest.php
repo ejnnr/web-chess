@@ -34,9 +34,9 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	 * @expectedException     MoveException
 	 * @expectedExceptionCode 2
 	 */
-	public function testCreateMoveEmptyArgument()
+	public function testCreateMoveNullArgument()
 	{
-		$move = new Move('', 'e3');
+		$move = new Move(NULL, 'e3');
 	}
 
 	/**
@@ -45,8 +45,8 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	public function testGetDeparture(Move $move)
 	{
 		$this->assertSame(0, $move->getDeparture(SQUARE_FORMAT_INT));
-		$this->assertSame(0, $move->getDeparture(SQUARE_FORMAT_STRING));
-		$this->assertSame(0, $move->getDeparture(SQUARE_FORMAT_ARRAY));
+		$this->assertSame('a1', $move->getDeparture(SQUARE_FORMAT_STRING));
+		$this->assertSame(array(0, 0), $move->getDeparture(SQUARE_FORMAT_ARRAY));
 	}
 
 	/**
@@ -55,8 +55,28 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	public function testGetDestination(Move $move)
 	{
 		$this->assertSame(8, $move->getDestination(SQUARE_FORMAT_INT));
-		$this->assertSame(8, $move->getDestination(SQUARE_FORMAT_STRING));
-		$this->assertSame(8, $move->getDestination(SQUARE_FORMAT_ARRAY));
+		$this->assertSame('a2', $move->getDestination(SQUARE_FORMAT_STRING));
+		$this->assertSame(array(0, 1), $move->getDestination(SQUARE_FORMAT_ARRAY));
+	}
+
+	/**
+	 * @depends testCreateValidMove
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 7
+	 */
+	public function testGetDepartureInvalidFormat(Move $move)
+	{
+		$move->getDeparture(0.5);
+	}
+
+	/**
+	 * @depends testCreateValidMove
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 7
+	 */
+	public function testGetDestinationInvalidFormat(Move $move)
+	{
+		$move->getDestination(0.5);
 	}
 }
 ?>

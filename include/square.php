@@ -13,13 +13,37 @@ define('SQUARE_FORMAT_ARRAY', 2);
  *
  * Be careful: this function can return 0 or false, so use === to check the result
  *
- * @param string $square the square to convert as an array ([$fileNumber, $rankNumber], both startin at 0)
+ * @param array $square the square to convert as an array ([$fileNumber, $rankNumber], both starting at 0)
  * @return int an integer; bit 0 to 2 are the file number, bit 3 to 5 are the rank number and bit 6 and 7 are always zero (in LSB 0); returns false on failure
  */
 
 function array2square($square)
 {
+	// check if the argument is an  array
+	if (!is_array($square)) {
+		return FALSE;
+	}
 
+	//check if the array has two elements
+	if (!(count($square) == 2)) {
+		return FALSE;
+	}
+
+	// check if one of the coordinates is no integer
+	if (!is_integer($square[0])
+	 || !is_integer($square[1])) {
+		return FALSE;
+	}
+
+	// check if one of the  coordinates is outside the allowed range
+	if ($square[0] > 7
+	 || $square[0] < 0
+	 || $square[1] > 7
+	 || $square[1] < 0) {
+		return FALSE;
+	}
+
+	return $square[0] + $square[1] * 8; // $square[0] is the file number and $square[1] the rank number; use * 8 to shift rank number by three places
 }
 
 /**
@@ -68,7 +92,16 @@ function string2square ($square)
 
 function square2array($square)
 {
-	
+	if (!is_int($square)) {
+		return FALSE;
+	}
+
+	if (($square > 63)
+	 || ($square < 0)) {
+		return FALSE;
+	}
+
+	return array(($square & 7), (($square & 56) / 8)); // hint: 56 is 2^5 + 2^4 + 2^3
 }
 
 /**
@@ -84,7 +117,8 @@ function square2string ($square)
 		return FALSE;
 	}
 
-	if (($square > 63) || ($square < 0)) {
+	if (($square > 63)
+	 || ($square < 0)) {
 		return FALSE;
 	}
 
@@ -102,6 +136,27 @@ function square2string ($square)
 	}
 
 	return $file . (string)((($square & 56) / 8 + 1)); // take the three bits where the rank is saved and divide by 8; hint: 56 is 2^5 + 2^4 + 2^3
+}
+
+/**
+ * checks if a square in SQUARE_FORMAT_INT is valid
+ *
+ * @param integer $square The square to validate
+ * @return boolean true if the square is valid, false if it isn't
+ */
+
+function validateSquare ($square)
+{
+	if (!(is_int($square))) {
+		return FALSE;
+	}
+
+	if (($square > 63)
+	 || ($square < 0)) {
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 ?>

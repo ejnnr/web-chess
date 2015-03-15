@@ -11,7 +11,7 @@ require_once 'square.php';
  *
  * List of Exception Codes:
  *  1: Unknown internal error
- *  2: Empty/Null argument
+ *  2: Null argument
  *  3: Wrong argument count
  *  4: Wrong argument type
  *  5: Invalid argument value (general)
@@ -55,7 +55,66 @@ class Move
 
 	function __construct($departure, $destination)
 	{
+		//check for argument count
+		if (func_num_args() != 2) {
+			throw new MoveException('__construct: there must be two arguments', 3);
+		}
 
+		// check if departure or destination exist
+		if ((!isset($departure))
+		 || (!isset($destination))) {
+			throw new MoveException('__construct: departure and destination must not be null', 2);
+		}
+
+		// check wich square format departure is and parse it
+		if (is_int($departure)) {
+			if (validateSquare($departure)) {
+				$this->departure = $departure;
+			} else {
+				throw new MoveException('__construct: departure has an invalid value.', 5);
+			}
+		} elseif (is_string($departure)) {
+			$departure = string2square($departure);
+			if ($departure !== FALSE) {
+				$this->departure = $departure;
+			} else {
+				throw new MoveException('__construct: departure has an invalid value.', 5);
+			}
+		} elseif (is_array($departure)) {
+			$departure = array2square($departure);
+			if ($departure !== FALSE) {
+				$this->departure = $departure;
+			} else {
+				throw new MoveException('__construct: departure has an invalid value.', 5);
+			}
+		} else {
+			throw new MoveException('__construct: departure is neither string nor integer nor array', 4);
+		}
+
+		// check wich square format destination is and parse it
+		if (is_int($destination)) {
+			if (validateSquare($destination)) {
+				$this->destination = $destination;
+			} else {
+				throw new MoveException('__construct: destination has an invalid value.', 5);
+			}
+		} elseif (is_string($destination)) {
+			$destination = string2square($destination);
+			if ($destination !== FALSE) {
+				$this->destination = $destination;
+			} else {
+				throw new MoveException('__construct: destination has an invalid value.', 5);
+			}
+		} elseif (is_array($destination)) {
+			$destination = array2square($destination);
+			if ($destination !== FALSE) {
+				$this->destination = $destination;
+			} else {
+				throw new MoveException('__construct: destination has an invalid value.', 5);
+			}
+		} else {
+			throw new MoveException('__construct: destination is neither string nor integer nor array', 4);
+		}
 	}
 
 	/**
@@ -68,7 +127,16 @@ class Move
 
 	function getDeparture($format = SQUARE_FORMAT_INT)
 	{
-
+		switch ($format) {
+			case SQUARE_FORMAT_INT:
+				return $this->departure;
+			case SQUARE_FORMAT_STRING:
+				return square2string($this->departure);
+			case SQUARE_FORMAT_ARRAY:
+				return square2array($this->departure);
+			default:
+				throw new MoveException('getDeparture: format must be either 0, 1 or 2', 7);
+		}
 	}
 
 	/**
@@ -81,7 +149,16 @@ class Move
 
 	function getDestination($format = SQUARE_FORMAT_INT)
 	{
-
+		switch ($format) {
+			case SQUARE_FORMAT_INT:
+				return $this->destination;
+			case SQUARE_FORMAT_STRING:
+				return square2string($this->destination);
+			case SQUARE_FORMAT_ARRAY:
+				return square2array($this->destination);
+			default:
+				throw new MoveException('getDestination: format must be either 0, 1 or 2', 7);
+		}
 	}
 }
 
