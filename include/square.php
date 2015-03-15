@@ -4,6 +4,24 @@
  * Contains functions and constants to work with squares
  */
 
+define('SQUARE_FORMAT_INT', 0);
+define('SQUARE_FORMAT_STRING', 1);
+define('SQUARE_FORMAT_ARRAY', 2);
+
+/**
+ * converts formats like array(1, 3) to an integer
+ *
+ * Be careful: this function can return 0 or false, so use === to check the result
+ *
+ * @param string $square the square to convert as an array ([$fileNumber, $rankNumber], both startin at 0)
+ * @return int an integer; bit 0 to 2 are the file number, bit 3 to 5 are the rank number and bit 6 and 7 are always zero (in LSB 0); returns false on failure
+ */
+
+function array2square($square)
+{
+
+}
+
 /**
  * converts formats like 'a4' to an integer
  *
@@ -42,7 +60,19 @@ function string2square ($square)
 }
 
 /**
- * converts formats integers created by string2square() to readable  strings like 'a4'
+ * converts integers created by string2square()/array2square() to arrays like [$fileNumber, $rankNumber], with file and rank count starting at 0
+ *
+ * @param int $square the square to convert
+ * @return array the square as an array
+ */
+
+function square2array($square)
+{
+	
+}
+
+/**
+ * converts integers created by string2square() to readable  strings like 'a4'
  *
  * @param int $square the square to convert
  * @return string the square as a string; false on failure
