@@ -1,5 +1,5 @@
 <?php
-require 'include/Move.php';
+require_once 'include/Move.php';
 
 class MoveTest extends PHPUnit_Framework_TestCase
 {
