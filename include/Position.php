@@ -23,4 +23,59 @@
  * 110: Invalid FEN syntax
  */
 
+class PositionException extends Exception {}
+
+class Position
+{
+	function __construct($position)
+	{
+
+	}
+
+	function getFEN()
+	{
+
+	}
+
+	function getArray()
+	{
+
+	}
+
+	function loadFEN($fen)
+	{
+
+	}
+
+	function reset()
+	{
+
+	}
+
+	function isFiftyMoves()
+	{
+
+	}
+
+	function isStaleMate()
+	{
+
+	}
+
+	function isMate()
+	{
+
+	}
+
+	function inCheck()
+	{
+
+	}
+
+	function isLegalMove($move)
+	{
+
+	}
+}
+
 ?>
