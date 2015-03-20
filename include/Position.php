@@ -27,50 +27,121 @@ class PositionException extends Exception {}
 
 class Position
 {
-	function __construct($position)
+	/**
+	 * Constructor of Position
+	 *
+	 * @param mixed $position The position to load as a FEN
+	 */
+
+	function __construct($position) // TODO: support other formats than FEN
 	{
 
 	}
+
+	/**
+	 * Returns the FEN of the position
+	 *
+	 * @return string The FEN
+	 */
 
 	function getFEN()
 	{
 
 	}
 
+	/**
+	 * Returns the position as an array: [['R', 'N', 'B', ...], ['P', 'P', ...], ..., ['r', 'n', ...]]
+	 *
+	 * @return array The position as an 8x8 array
+	 */
+
 	function getArray()
 	{
 
 	}
+
+	/**
+	 * parses the given FEN and loads it
+	 *
+	 * @param string $fen The FEN to be loaded
+	 * @return true on success, false on failure
+	 */
 
 	function loadFEN($fen)
 	{
 
 	}
 
+	/**
+	 * Sets the position to the starting position
+	 *
+	 * @return true on success, false on failure
+	 */
+
 	function reset()
 	{
 
 	}
+
+	/**
+	 * Returns true if the game is draw by fifty moves rule
+	 *
+	 * Fifty moves must have been played without a piece being captured or a pawn beeing moved by either side
+	 *
+	 * @return boolean true if draw, false if not
+	 */
 
 	function isFiftyMoves()
 	{
 
 	}
 
+
+	/**
+	 * Returns true if the game is drawn by stalemate
+	 *
+	 * True if the side to move hasn't got any valid moves but isn't in check
+	 *
+	 * @return boolean true if draw, false if not
+	 */
+
 	function isStaleMate()
 	{
 
 	}
+
+
+	/**
+	 * Returns true if the side to move is checkmated
+	 *
+	 * @return boolean true if checkmate, false if not
+	 */
 
 	function isMate()
 	{
 
 	}
 
+
+	/**
+	 * Returns true if the side to move is in check
+	 *
+	 * @return boolean true if in check, false if not
+	 */
+
 	function inCheck()
 	{
 
 	}
+
+
+	/**
+	 * Check if the given move is legal
+	 *
+	 *
+	 * @param Move $move the move to check
+	 * @return boolean true if move is legal, false if not
+	 */
 
 	function isLegalMove($move)
 	{
