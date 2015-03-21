@@ -18,7 +18,6 @@
  * 102: Impossible position: one or two kings are missing
  * 103: Impossible position: too many pieces of one kind
  * 104: Impossible position: side not to move is in check
- * 104: Impossible position: both sides are in check
  * 105: Impossible position: pawns on 1st or 8th rank
  * 110: Invalid FEN syntax
  */
