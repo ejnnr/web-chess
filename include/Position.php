@@ -21,6 +21,9 @@
  * 105: Impossible position: pawns on 1st or 8th rank
  * 106: Invalid en passant square
  * 110: Invalid FEN syntax
+ * 111: Invalid FEN syntax: no castling flags
+ * 112: Invalid FEN syntax: one or more ranks don't contain 8 squares
+ * 119: Invalid FEN syntax: wrong number of sections TODO: remove this!
  */
 
 class PositionException extends Exception {}
@@ -29,6 +32,7 @@ class Position
 {
 	private $fen;
 
+	private $board;
 	/**
 	 * Constructor of Position
 	 *
@@ -97,7 +101,7 @@ class Position
 		// '=== 0' (instead of a simple '!') must be used because preg_macth returns FALSE on failure and 0 if nothing's been found
 		// $matches must be used because the RegEx would allow castling flags to be omitted
 
-		$regExResult = preg_match('#^([1-8KQRBNPkqrbnp]{1,8}/){7}[1-8KQRBNPkqrbnp]{1,8} [wb] (?P<castling>K?Q?k?q?)|(?P<noCastling>\-) [a-h]|\- [0-9]+ [0-9]+$#', $fen, $matches);
+		$regExResult = preg_match('#^([1-8KQRBNPkqrbnp]{1,8}/){7}[1-8KQRBNPkqrbnp]{1,8} [wb] (K?Q?k?q?|-) ([a-h][36]|-) [0-9]+ [0-9]+$#', $fen, $matches);
 
 		if ($regExResult === FALSE) { // an error occurred, this should never happen
 			throw new PositionException('function loadFEN: error parsing fen with preg_match', 1);
@@ -108,8 +112,8 @@ class Position
 		}
 
 		// check if castling flags are missing (the RegEx doesn't do this well)
-		if (empty($matches['castling']) && empty($matches['noCastling'])) {
-			throw new PositionException('function loadFEN: castling flags missing', 110);
+		if (empty($matches[2])) {
+			throw new PositionException('function loadFEN: castling flags missing', 111);
 		}
 
 		// split fen
@@ -119,7 +123,7 @@ class Position
 		// this is actually unnecessary because it was already checked with the RegEx but as long as this is still in testing it might be useful in case the RegEx doesn't work
 		// TODO: remove this!
 		if (!(count($sections) == 6)) {
-			throw new PositionException('function loadFEN: Invalid FEN syntax', 110);
+			throw new PositionException('function loadFEN: Invalid FEN syntax', 119);
 		}
 
 		
@@ -127,7 +131,7 @@ class Position
 		// check if all kings are on the bord
 		if (strpos($sections[0], "K") === FALSE || strpos($sections[0], "k") === FALSE)
 		{
-			throw new ChessGameException('Function loadFen: there must be a black and a white king on the board.', 102);
+			throw new PositionException('Function loadFen: there must be a black and a white king on the board.', 102);
 		}
 
 		// split position into ranks
@@ -179,7 +183,7 @@ class Position
 			}
 
 			if ($i_file != 8) {
-				throw new PositionException('function loadFEN: each rank must have 8 files', 110);
+				throw new PositionException('function loadFEN: each rank must have 8 files', 112);
 			}
 
 		}
@@ -308,7 +312,7 @@ class Position
 		/* set move-number */
 		$this->moveNumber = $sections[5];
 
-
+		$this->fen = $fen;
 	}
 
 	/**
