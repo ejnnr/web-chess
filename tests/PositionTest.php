@@ -46,8 +46,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPawnsOnBackRank()
 	{
-	//	$position = new Position('p7/8/8/8/k7/8/7K/8 w - - 0 39');
-		$this->markTestIncomplete();
+		$position = new Position('p7/8/8/8/k7/8/7K/8 w - - 0 39');
 	}
 
 	/**

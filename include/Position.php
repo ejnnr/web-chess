@@ -154,7 +154,7 @@ class Position
 		);
 
 		$this->board == array(); // clean board
-
+		$i_rank = 0;
 		$ranks = array_reverse($ranks); // FEN starts with 8th rank and ends with 1st rank so it has to be reversed
 		foreach ($ranks as $rank) // go through all of the ranks (seperated by '/' in fen)
 		{
@@ -174,6 +174,9 @@ class Position
 				}
 				else // there's a piece on the square
 				{
+					if ((substr($rank, 0, 1) == 'P' || substr($rank, 0, 1) == 'p') && ($i_rank == 0 || $i_rank == 7)) {
+						throw new PositionException('function loadFEN: there is a pawn on the backrank', 105);
+					}
 					$pieceCountOf[substr($rank, 0, 1)]++;
 					$this->board[] = substr($rank, 0, 1); // get the first character of the current rank (i.e. the current piece) and add it to board
 					$rank = substr($rank, 1); // strip the piece just added from $rank
@@ -185,6 +188,7 @@ class Position
 			if ($i_file != 8) {
 				throw new PositionException('function loadFEN: each rank must have 8 files', 112);
 			}
+			$i_rank++;
 
 		}
 
@@ -291,7 +295,7 @@ class Position
 		// set en passant square
 		if ($sections[3] != "-")
 		{
-			if (((string2square($sections[3]) & 56) / 8) != ($this->turn == 'w' ? 2 : 5)) {
+				if (((string2square($sections[3]) & 56) / 8) != ($this->turn == 'w' ? 2 : 5)) { // if it's white's turn, en passant sqaure mudt be on sixth rank, otherwise on third
 				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($this->turn == 'w' ? 'white\'s' : 'black\'s') . ' turn', 106);
 			}
 			
