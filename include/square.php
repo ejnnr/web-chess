@@ -159,4 +159,22 @@ function validateSquare ($square)
 	return TRUE;
 }
 
+function getRank($square)
+{
+	if (!validateSquare($square))
+	{
+		return FALSE;
+	}
+
+	return ($square & 56) / 8 + 1;
+}
+
+function getFile($square)
+{
+	if (!validateSquare($square)) {
+		return FALSE;
+	}
+
+	return $square & 7;
+}
 ?>

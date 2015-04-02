@@ -4,6 +4,9 @@
  * This file contains the class Position and the corresponding exception class.
  */
 
+require_once 'square.php';
+require_once 'Move.php';
+
 /**
  * Represents an exception thrown by Position.
  * List of Exception Codes:
@@ -126,7 +129,7 @@ class Position
 			throw new PositionException('function loadFEN: Invalid FEN syntax', 119);
 		}
 
-		
+
 
 		// check if all kings are on the bord
 		if (strpos($sections[0], "K") === FALSE || strpos($sections[0], "k") === FALSE)
@@ -295,10 +298,10 @@ class Position
 		// set en passant square
 		if ($sections[3] != "-")
 		{
-				if (((string2square($sections[3]) & 56) / 8) != ($this->turn == 'w' ? 2 : 5)) { // if it's white's turn, en passant sqaure mudt be on sixth rank, otherwise on third
+			if (((string2square($sections[3]) & 56) / 8) != ($this->turn == 'w' ? 2 : 5)) { // if it's white's turn, en passant sqaure mudt be on sixth rank, otherwise on third
 				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($this->turn == 'w' ? 'white\'s' : 'black\'s') . ' turn', 106);
 			}
-			
+
 			if ($this->board[string2square($sections[3]) + ($this->turn == 'w' ? 8 : (-8))] != ($this->turn == 'w' ? 'P' : 'p')) {
 				throw new PositionException('function loadFEN: en passant square is invalid: no pawn that could be taken', 106);
 			}
@@ -393,6 +396,102 @@ class Position
 	function isLegalMove($move)
 	{
 
+	}
+
+	/**
+	 * Checks if the move is possible for a king (geometrically)
+	 *
+	 * @param  integer $departure   the square of departure
+	 * @param  integer $destination the square of destination
+	 * @return boolean true if possible, otherwise false
+	 */
+	private function possibleKingMove($departure, $destination)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function possibleKingMove: invalid departure', 7);
+		}
+
+		if (!validateSquare($destination)) {
+			throw new PositionException('function possibleKingMove: invalid destination', 7);
+		}
+
+		return ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 1));
+	}
+
+	/**
+	 * Checks if the move is possible for a queen (geometrically)
+	 *
+	 * @param  integer $departure   the square of departure
+	 * @param  integer $destination the square of destination
+	 * @return boolean true if possible, otherwise false
+	 */
+	private function possibleQueenMove($departure, $destination)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function possibleQueenMove: invalid departure', 7);
+		}
+
+		if (!validateSquare($destination)) {
+			throw new PositionException('function possibleQueenMove: invalid destination', 7);
+		}
+	}
+
+	/**
+	 * Checks if the move is possible for a rook (geometrically)
+	 *
+	 * @param  integer $departure   the square of departure
+	 * @param  integer $destination the square of destination
+	 * @return boolean true if possible, otherwise false
+	 */
+	private function possibleRookMove($departure, $destination)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function possibleRookMove: invalid departure', 7);
+		}
+
+		if (!validateSquare($destination)) {
+			throw new PositionException('function possibleRookMove: invalid destination', 7);
+		}
+
+		return ((((getRank($departure) - getRank($destination)) == 0) && ((getFile($departure) - getFile($destination)) != 0)) || (((getRank($departure) - getRank($destination)) != 0) && ((getFile($departure) - getFile($destination)) == 0)));
+	}
+
+	/**
+	 * Checks if the move is possible for a bishop (geometrically)
+	 *
+	 * @param  integer $departure   the square of departure
+	 * @param  integer $destination the square of destination
+	 * @return boolean true if possible, otherwise false
+	 */
+	private function possibleBishopMove($departure, $destination)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function possibleBishopMove: invalid departure', 7);
+		}
+
+		if (!validateSquare($destination)) {
+			throw new PositionException('function possibleBishopMove: invalid destination', 7);
+		}
+
+		return (abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination)));
+	}
+
+	/**
+	 * Checks if the move is possible for a knight (geometrically)
+	 *
+	 * @param  integer $departure   the square of departure
+	 * @param  integer $destination the square of destination
+	 * @return boolean true if possible, otherwise false
+	 */
+	private function possibleKnightMove($departure, $destination)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function possibleKnightMove: invalid departure', 7);
+		}
+
+		if (!validateSquare($destination)) {
+			throw new PositionException('function possibleKnightMove: invalid destination', 7);
+		}
 	}
 }
 
