@@ -4,8 +4,21 @@
  * Contains functions and constants to work with squares
  */
 
+/**
+ * A square format that gives everz square a number ranging from 0 to 63
+ */
 define('SQUARE_FORMAT_INT', 0);
+/**
+ * SAN square format, e.g. 'e4'
+ */
 define('SQUARE_FORMAT_STRING', 1);
+/**
+ * A square formar where each sqaure is an array.
+ *
+ * The array has the form [$fileNumber, $rankNumber].
+ * Both file and rank range from 0 to 7.
+ * For the file a is 0 and h is 7.
+ */
 define('SQUARE_FORMAT_ARRAY', 2);
 
 /**
@@ -159,6 +172,12 @@ function validateSquare ($square)
 	return TRUE;
 }
 
+/**
+ * get the rank of a square
+ *
+ * @param  integer $square The square to parse in SQUARE_FORMAT_INT
+ * @return integer The rank of the square, from 0 (1st rank) to 7 (8th rank)
+ */
 function getRank($square)
 {
 	if (!validateSquare($square))
@@ -166,9 +185,16 @@ function getRank($square)
 		return FALSE;
 	}
 
-	return ($square & 56) / 8 + 1;
+	return ($square & 56) / 8;
 }
 
+
+/**
+ * get the file of a square
+ *
+ * @param  integer $square The square to parse in SQUARE_FORMAT_INT
+ * @return integer The file of the square, from 0 (a-file) to 7 (h-file)
+ */
 function getFile($square)
 {
 	if (!validateSquare($square)) {

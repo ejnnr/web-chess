@@ -1,10 +1,18 @@
 <?php
-
 /**
  * This file contains the class Position and the corresponding exception class.
+ *
+ * This file includes square.php and Move.php.
  */
 
+/**
+ * Include necessary files
+ */
 require_once 'square.php';
+
+/**
+ * Include necessary files
+ */
 require_once 'Move.php';
 
 /**
@@ -29,7 +37,12 @@ require_once 'Move.php';
  * 119: Invalid FEN syntax: wrong number of sections TODO: remove this!
  */
 
+
 class PositionException extends Exception {}
+
+/**
+ * Represents a position that could occur in a game of chess
+ */
 
 class Position
 {
@@ -324,8 +337,6 @@ class Position
 
 	/**
 	 * Sets the position to the starting position
-	 *
-	 * @return true on success, false on failure
 	 */
 
 	function reset()
@@ -494,6 +505,153 @@ class Position
 		if (!validateSquare($destination)) {
 			throw new PositionException('function possibleKnightMove: invalid destination', 7);
 		}
+
+		return (((abs(getFile($departure) - getFile($destination)) == 2) && (abs(getRank($departure) - getRank($destination)) == 1)) || ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 2)));
+	}
+
+	/**
+	 * Checks if a certain piece attacks a certain square
+	 *
+	 * This function checks the following things:
+	 *  * If the piece in question can move to the square (geometrically)
+	 *  * If there is any piece in the way
+	 *  * If the square is attakced en passant
+	 * It does NOT check:
+	 *  * Whose turn it is or by what piece the square is occupied
+	 *  * If moving the piece to that square would leave the king in check
+	 *  * For pawns: if the pawn could MOVE onto that square (since pawns move differently depending on whether or not it's a capture
+	 *  * Castling (since castling is a never a capturing move)
+	 * 
+	 * @param  integer $departure   the square currently occupied by the piece
+	 * @param  integer $destination the square that is (not) attackes
+	 * @param  array   $board       the board to use for the checks (equal to $this->board if left out)
+	 * @return boolean true if the piece attacks the square, otherwise false
+	 */
+
+	private function attacks($departure, $destination, $board = $this->board)
+	{
+		if (!validateSquare($departure)) {
+			throw new PositionException('function attacks: departure is no valid square', 7);
+		}
+		if (!validateSquare($destination)) {
+			throw new PositionException('function attacks: destination is no valid square', 7);
+		}
+
+		if (!count($board) == 64) {
+			throw new PositionException('function attacks: board must have 64 squares', 5);
+		}
+
+		foreach ($board as $square) {
+			if (!is_string($square)) {
+				throw new PositionException('function attacks: there are non-string values in board', 4);
+			}
+			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+				throw new PositionException('function attacks: there are invalid values in board', 5);
+			}
+		}
+
+		switch ($board[$departure]) {
+		case '':
+			throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
+		case 'K':
+		case 'k':
+			return possibleKingMove($departure, $destination);
+		case 'N':
+		case 'n':
+			return possibleKnightMove($departure, $destination);
+		case 'R':
+		case 'r':
+			if (!possibleRookMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'B':
+		case 'b':
+			if (!possibleBishopMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'Q':
+		case 'q':
+			if (!possibleQueenMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'P':
+			return ((abs(getFile($departure) - getFile($destination)) == 1)
+				&& ((getRank($departure) - getRank($destination)) == -1));
+		case 'p':
+			return ((abs(getFile($departure) - getFile($destination)) == 1)
+				&& ((getRank($departure) - getRank($destination)) == 1));
 	}
 }
 

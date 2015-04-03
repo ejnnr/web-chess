@@ -528,9 +528,130 @@ class Position
 	 * @return boolean true if the piece attacks the square, otherwise false
 	 */
 
-	private function attacks($departure, $destination, $board = $this->board[])
+	private function attacks($departure, $destination, $board = $this->board)
 	{
-		
+		if (!validateSquare($departure)) {
+			throw new PositionException('function attacks: departure is no valid square', 7);
+		}
+		if (!validateSquare($destination)) {
+			throw new PositionException('function attacks: destination is no valid square', 7);
+		}
+
+		if (!count($board) == 64) {
+			throw new PositionException('function attacks: board must have 64 squares', 5);
+		}
+
+		foreach ($board as $square) {
+			if (!is_string($square)) {
+				throw new PositionException('function attacks: there are non-string values in board', 4);
+			}
+			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+				throw new PositionException('function attacks: there are invalid values in board', 5);
+			}
+		}
+
+		switch ($board[$departure]) {
+		case '':
+			throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
+		case 'K':
+		case 'k':
+			return possibleKingMove($departure, $destination);
+		case 'N':
+		case 'n':
+			return possibleKnightMove($departure, $destination);
+		case 'R':
+		case 'r':
+			if (!possibleRookMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'B':
+		case 'b':
+			if (!possibleBishopMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'Q':
+		case 'q':
+			if (!possibleQueenMove($departure, $destination)) {
+				return FALSE;
+			}
+
+			if ((getFile($destination) - getFile($departure)) == 0) {
+				$fileMovement = 0;
+			} elseif ((getFile($destination) - getFile($departure)) > 0) {
+				$fileMovement = 1;
+			} else ((getFile($destination) - getFile($departure)) < 0) {
+				$fileMovement = -1;
+			}
+			if ((getRank($destination) - getRank($departure)) == 0) {
+				$rankMovement = 0;
+			} elseif ((getRank($destination) - getRank($departure)) > 0) {
+				$rankMovement = 1;
+			} else ((getRank($destination) - getRank($departure)) < 0) {
+				$rankMovement = -1;
+			}
+
+			$file = getFile($departure) + $fileMovement;
+			$rank = getRank($departure) + $rankMovement;
+			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+				$file += $fileMovement;
+				$rank += $rankMovement;
+			}
+			
+			return (array2square([$file, $rank]) == $destination);
+		case 'P':
+			return ((abs(getFile($departure) - getFile($destination)) == 1)
+				&& ((getRank($departure) - getRank($destination)) == -1));
+		case 'p':
+			return ((abs(getFile($departure) - getFile($destination)) == 1)
+				&& ((getRank($departure) - getRank($destination)) == 1));
 	}
 }
 

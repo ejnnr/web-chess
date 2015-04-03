@@ -1,10 +1,13 @@
 <?php
 
-require_once 'square.php';
-
 /**
  * Contains the classes Move and MoveException
  */
+
+/**
+ * Include necessary files
+ */
+require_once 'square.php';
 
 /**
  * A class respresenting a exception thrown by Move
