@@ -434,6 +434,8 @@ class Position
 		if (!validateSquare($destination)) {
 			throw new PositionException('function possibleQueenMove: invalid destination', 7);
 		}
+
+		return (possibleRookMove($departure, $destination) || possibleBishopMove($departure, $destination));
 	}
 
 	/**
@@ -473,7 +475,7 @@ class Position
 			throw new PositionException('function possibleBishopMove: invalid destination', 7);
 		}
 
-		return (abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination)));
+		return ((abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination))) && (($getFile($departure) - getFile($destination)) == 0));
 	}
 
 	/**
