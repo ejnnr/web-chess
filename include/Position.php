@@ -49,6 +49,10 @@ class Position
 	private $fen;
 
 	private $board;
+	
+	private $castlings;
+	
+	private $turn;
 	/**
 	 * Constructor of Position
 	 *
@@ -311,11 +315,11 @@ class Position
 		// set en passant square
 		if ($sections[3] != "-")
 		{
-			if (((string2square($sections[3]) & 56) / 8) != ($this->turn == 'w' ? 2 : 5)) { // if it's white's turn, en passant sqaure mudt be on sixth rank, otherwise on third
+			if (getRank(string2square($sections[3])) != ($this->turn == 'w' ? 5 : 2)) { // if it's white's turn, en passant square must be on sixth rank, otherwise on third
 				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($this->turn == 'w' ? 'white\'s' : 'black\'s') . ' turn', 106);
 			}
 
-			if ($this->board[string2square($sections[3]) + ($this->turn == 'w' ? 8 : (-8))] != ($this->turn == 'w' ? 'P' : 'p')) {
+			if ($this->board[string2square($sections[3]) + ($this->turn == 'w' ? (-8) : 8)] != ($this->turn == 'w' ? 'p' : 'P')) {
 				throw new PositionException('function loadFEN: en passant square is invalid: no pawn that could be taken', 106);
 			}
 			$this->enPassant = $sections[3];
@@ -392,9 +396,27 @@ class Position
 
 	function inCheck()
 	{
-
+		return $this->internalInCheck($this->turn, $this->board);
 	}
+	
+	/**
+	 * Returns true if the side given in $side is in check
+	 *
+	 * @param  string  $side  The side to be checked
+	 * @param  array   $board The board used for checking
+	 * @return boolean true if in check, false if not
+	 */
 
+	function internalInCheck($side, $board)
+	{
+		foreach ($board as $index=>$currentSquare) {
+			if ($currentSquare == ($side == 'w' ? 'K' : 'k')) {	
+				return $this->isAttacked($index, ($side == 'w' ? 'b' : 'w'), $board);
+			}
+		}
+		// should never happen
+		throw new PositionException('function internalInCheck: A king is missing. This is probably a bug.', 1);
+	}
 
 	/**
 	 * Check if the given move is legal
@@ -439,27 +461,28 @@ class Position
 			case 'P':
 				if (!((($departure - $destination == -8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
 				   || (($departure - $destination == -16) && ($this->board[$destination] == '') && ($this->board[$destination - 8] == '') && (getRank($departure) == 1)) // double step if pawn is still on starting position
-				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == -8) && (in_array($this->board[$destination], ['q', 'r', 'b', 'n', 'p']))) // normal capture
-				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == -8) && ($destination == string2square($this->enPassant))))) { // en passant capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == -1) && (in_array($this->board[$destination], ['q', 'r', 'b', 'n', 'p']))) // normal capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == -1) && ($destination == string2square($this->enPassant))))) { // en passant capture
 					return FALSE;
 				}
 				break;
 			case 'p':
 				if (!((($departure - $destination == 8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
 				   || (($departure - $destination == 16) && ($this->board[$destination] == '') && ($this->board[$destination + 8] == '') && (getRank($departure) == 6)) // double step if pawn is still on starting position
-				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == 8) && (in_array($this->board[$destination], ['Q', 'R', 'B', 'N', 'P']))) // normal capture
-				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == 8) && ($destination == string2square($this->enPassant))))) { // en passant capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == 1) && (in_array($this->board[$destination], ['Q', 'R', 'B', 'N', 'P']))) // normal capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == 1) && ($destination == string2square($this->enPassant))))) { // en passant capture
 					return FALSE;
 				}
 				break;
 			case 'K':
 				// normal king move
 				if ($this->attacks($departure, $destination)) {
+					
 					break;
 				}
 
-				// from here on everzthin is castling
-				//
+				// from here on everything is castling
+
 				// if departure isn't e1, we can return FALSE right away
 				if ($departure != string2square('e1')) {
 					return FALSE;
@@ -468,7 +491,7 @@ class Position
 				// kingside castling
 				if ($destination == string2square('g1')) {
 					// check if castling rights are present
-					if (!$this->castlings('K')) {
+					if (!$this->castlings['K']) {
 						return FALSE;
 					}
 					// check if in check
@@ -493,7 +516,7 @@ class Position
 
 				// queenside castling
 				} elseif ($destination == string2square('c1')) {
-					if (!$this->castlings('Q')) {
+					if (!$this->castlings['Q']) {
 						return FALSE;
 					}
 					if ($this->isAttacked(string2square('e1'), 'b')) {
@@ -504,7 +527,7 @@ class Position
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('g1'), 'b')) {
+					if ($this->isAttacked(string2square('c1'), 'b')) {
 						return FALSE;
 					}
 					if (($this->board[string2square('d1')] != '')
@@ -518,7 +541,7 @@ class Position
 				} else {
 					return FALSE;
 				}
-				// checking if the move lets the king in check can be skipped since this is already done
+				// checking if the move leaves the king in check can be skipped since this is already done
 				return TRUE;
 				break; // actually unnecessary but something might be changed and then this will become useful
 			case 'k':
@@ -528,7 +551,7 @@ class Position
 				}
 
 				// from here on everything is castling
-				//
+
 				// if departure isn't e8, we can return FALSE right away
 				if ($departure != string2square('e8')) {
 					return FALSE;
@@ -537,7 +560,7 @@ class Position
 				// kingside castling
 				if ($destination == string2square('g8')) {
 					// check if castling rights are present
-					if (!$this->castlings('k')) {
+					if (!$this->castlings['k']) {
 						return FALSE;
 					}
 					// check if in check
@@ -562,7 +585,7 @@ class Position
 
 				// queenside castling
 				} elseif ($destination == string2square('c8')) {
-					if (!$this->castlings('q')) {
+					if (!$this->castlings['q']) {
 						return FALSE;
 					}
 					if ($this->isAttacked(string2square('e8'), 'w')) {
@@ -573,7 +596,7 @@ class Position
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('g8'), 'w')) {
+					if ($this->isAttacked(string2square('c8'), 'w')) {
 						return FALSE;
 					}
 					if (($this->board[string2square('d8')] != '')
@@ -587,7 +610,7 @@ class Position
 				} else {
 					return FALSE;
 				}
-				// checking if the move lets the king in check can be skipped since this is already done
+				// checking if the move leaves the king in check can be skipped since this is already done
 				return TRUE;
 				break; // actually unnecessary but something might be changed and then this will become useful
 		}
@@ -596,15 +619,9 @@ class Position
 		$boardTemp = $this->board;
 		$boardTemp[$departure] = '';
 		$boardTemp[$destination] = $this->board[$departure];
-
+		
 		// check if the move would leave the king in check
-		foreach ($boardTemp as $index=>$currentSquare) {
-			if ($currentSquare == ($this->turn == 'w' ? 'K' : 'k')) {
-				return !$this->isAttacked($index, ($this->turn == 'w' ? 'b' : 'w'), $boardTemp);
-			}
-		}
-		// should never happen
-		throw new PositionException('function isLegal: A king is missing. This is probably a bug.', 1);
+		return !($this->internalInCheck($this->turn, $boardTemp));
 	}
 
 	/**
@@ -624,7 +641,9 @@ class Position
 			throw new PositionException('function possibleKingMove: invalid destination', 7);
 		}
 
-		return ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 1));
+		return (((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 1))
+		     || ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 0))
+		     || ((abs(getFile($departure) - getFile($destination)) == 0) && (abs(getRank($departure) - getRank($destination)) == 1)));
 	}
 
 	/**
@@ -644,7 +663,7 @@ class Position
 			throw new PositionException('function possibleQueenMove: invalid destination', 7);
 		}
 
-		return (possibleRookMove($departure, $destination) || possibleBishopMove($departure, $destination));
+		return ($this->possibleRookMove($departure, $destination) || $this->possibleBishopMove($departure, $destination));
 	}
 
 	/**
@@ -684,7 +703,7 @@ class Position
 			throw new PositionException('function possibleBishopMove: invalid destination', 7);
 		}
 
-		return ((abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination))) && (($getFile($departure) - getFile($destination)) == 0));
+		return ((abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination))) && ((getFile($departure) - getFile($destination)) != 0));
 	}
 
 	/**
@@ -733,7 +752,7 @@ class Position
 			$board = $this->board;
 		}
 
-		// check if bith squares are valid
+		// check if both squares are valid
 		if (!validateSquare($departure)) {
 			throw new PositionException('function attacks: departure is no valid square', 7);
 		}
@@ -764,13 +783,13 @@ class Position
 			throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
 		case 'K':
 		case 'k':
-			return possibleKingMove($departure, $destination);
+			return $this->possibleKingMove($departure, $destination);
 		case 'N':
 		case 'n':
-			return possibleKnightMove($departure, $destination);
+			return $this->possibleKnightMove($departure, $destination);
 		case 'R':
 		case 'r':
-			if (!possibleRookMove($departure, $destination)) {
+			if (!$this->possibleRookMove($departure, $destination)) {
 				return FALSE;
 			}
 
@@ -793,7 +812,7 @@ class Position
 			$file = getFile($departure) + $fileMovement;
 			$rank = getRank($departure) + $rankMovement;
 			// go ine square at a time in the direction of the move until hitting another piece or reaching destination
-			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
 				$file += $fileMovement;
 				$rank += $rankMovement;
 			}
@@ -802,7 +821,7 @@ class Position
 			return (array2square([$file, $rank]) == $destination);
 		case 'B':
 		case 'b':
-			if (!possibleBishopMove($departure, $destination)) {
+			if (!$this->possibleBishopMove($departure, $destination)) {
 				return FALSE;
 			}
 
@@ -823,7 +842,7 @@ class Position
 
 			$file = getFile($departure) + $fileMovement;
 			$rank = getRank($departure) + $rankMovement;
-			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
 				$file += $fileMovement;
 				$rank += $rankMovement;
 			}
@@ -831,7 +850,7 @@ class Position
 			return (array2square([$file, $rank]) == $destination);
 		case 'Q':
 		case 'q':
-			if (!possibleQueenMove($departure, $destination)) {
+			if (!$this->possibleQueenMove($departure, $destination)) {
 				return FALSE;
 			}
 
@@ -852,7 +871,7 @@ class Position
 
 			$file = getFile($departure) + $fileMovement;
 			$rank = getRank($departure) + $rankMovement;
-			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
+			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
 				$file += $fileMovement;
 				$rank += $rankMovement;
 			}
@@ -869,7 +888,7 @@ class Position
 	}
 
 	/**
-	 * Checks if a certain square is attacked bz at least one piece of a certain color
+	 * Checks if a certain square is attacked by at least one piece of a certain color
 	 *
 	 * This function uses attacks() for every piece of the color specified with $turn.
 	 * Be careful: even if the square is occupied by a piece of the attacking color, this function may still return true.
@@ -898,13 +917,13 @@ class Position
 		}
 
 		// validate each square
-		foreach ($board as $square) {
+		foreach ($board as $currentSquare) {
 			// check if the square is a string
-			if (!is_string($square)) {
+			if (!is_string($currentSquare)) {
 				throw new PositionException('function isAttacked: there are non-string values in board', 4);
 			}
 			// check if the square has a valid value
-			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+			if (!in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
 				throw new PositionException('function isAttacked: there are invalid values in board', 5);
 			}
 		}
@@ -917,13 +936,13 @@ class Position
 		foreach($board as $index=>$currentSquare) {
 			if ($turn == 'w') {
 				if (in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P'])) {
-					if (attacks($index, $square)) {
+					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
 					}
 				}
 			} else {
 				if (in_array($currentSquare, ['k', 'q', 'r', 'b', 'n', 'p'])) {
-					if (attacks($index, $square)) {
+					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
 					}
 				}
