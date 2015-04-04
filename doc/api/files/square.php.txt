@@ -5,7 +5,7 @@
  */
 
 /**
- * A square format that gives everz square a number ranging from 0 to 63
+ * A square format that gives every square a number ranging from 0 to 63
  */
 define('SQUARE_FORMAT_INT', 0);
 /**

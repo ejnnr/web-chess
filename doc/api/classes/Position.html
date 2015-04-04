@@ -106,12 +106,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">5</span>
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">4</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="../reports/markers.html">
-                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
                                 </a>
                             </li>
                             <li>
@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1930535294"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-657677838"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1930535294" class="accordion-body collapse in">
+            <div id="namespace-657677838" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -166,7 +166,7 @@
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
                     <h1><small>\</small>Position</h1>
-                    <p><em></em></p>
+                    <p><em>Represents a position that could occur in a game of chess</em></p>
                     
                     
                                         
@@ -194,6 +194,7 @@
                                                                     <a href="../classes/Position.html#method_isStaleMate" class="">isStaleMate()</a><br />
                                                                     <a href="../classes/Position.html#method_isMate" class="">isMate()</a><br />
                                                                     <a href="../classes/Position.html#method_inCheck" class="">inCheck()</a><br />
+                                                                    <a href="../classes/Position.html#method_internalInCheck" class="">internalInCheck()</a><br />
                                                                     <a href="../classes/Position.html#method_isLegalMove" class="">isLegalMove()</a><br />
                                                             </section>
                             <section class="span4">
@@ -221,10 +222,14 @@
                                                                     <a href="../classes/Position.html#method_possibleRookMove" class="">possibleRookMove()</a><br />
                                                                     <a href="../classes/Position.html#method_possibleBishopMove" class="">possibleBishopMove()</a><br />
                                                                     <a href="../classes/Position.html#method_possibleKnightMove" class="">possibleKnightMove()</a><br />
+                                                                    <a href="../classes/Position.html#method_attacks" class="">attacks()</a><br />
+                                                                    <a href="../classes/Position.html#method_isAttacked" class="">isAttacked()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/Position.html#property_fen" class="">$fen</a><br />
                                                                     <a href="../classes/Position.html#property_board" class="">$board</a><br />
+                                                                    <a href="../classes/Position.html#property_castlings" class="">$castlings</a><br />
+                                                                    <a href="../classes/Position.html#property_turn" class="">$turn</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -296,6 +301,54 @@
             <article class="property">
                 <h3 class="private ">$board</h3>
                 <pre class="signature">$board : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_castlings" name="property_castlings" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$castlings</h3>
+                <pre class="signature">$castlings : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_turn" name="property_turn" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$turn</h3>
+                <pre class="signature">$turn : </pre>
                 <p><em></em></p>
                 
 
@@ -456,16 +509,13 @@
             <article class="method">
                 <h3 class="public ">reset()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">reset() : true</pre>
+                <pre class="signature" style="margin-right: 54px;">reset() </pre>
                 <p><em>Sets the position to the starting position</em></p>
                 
 
                 
                 
-                                    <h4>Returns</h4>
-                    true
-                                            &mdash; <p>on success, false on failure</p>
-                                    				
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -576,6 +626,48 @@
                 <p><em>Returns true if the side to move is in check</em></p>
                 
 
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true if in check, false if not</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_internalInCheck" name="method_internalInCheck" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">internalInCheck()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">internalInCheck(string  <span class="argument">$side</span>, array  <span class="argument">$board</span>) : boolean</pre>
+                <p><em>Returns true if the side given in $side is in check</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$side </td>
+                                <td><p>The side to be checked</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$board </td>
+                                <td><p>The board used for checking</p></td>
+                            </tr>
+                                            </table>
                 
                 
                                     <h4>Returns</h4>
@@ -842,6 +934,111 @@
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_attacks" name="method_attacks" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">attacks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">attacks(integer  <span class="argument">$departure</span>, integer  <span class="argument">$destination</span>, array  <span class="argument">$board = null</span>) : boolean</pre>
+                <p><em>Checks if a certain piece attacks a certain square</em></p>
+                <p>This function checks the following things:</p>
+<ul>
+<li>If the piece in question can move to the square (geometrically)</li>
+<li>If there is any piece in the way</li>
+<li>If the square is attakced en passant
+It does NOT check:</li>
+<li>Whose turn it is or by what piece the square is occupied</li>
+<li>If moving the piece to that square would leave the king in check</li>
+<li>For pawns: if the pawn could MOVE onto that square (since pawns move differently depending on whether or not it's a capture</li>
+<li>Castling (since castling is a never a capturing move)</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$departure </td>
+                                <td><p>the square currently occupied by the piece</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$destination </td>
+                                <td><p>the square that is (not) attackes</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$board </td>
+                                <td><p>the board to use for the checks (equal to $this-&gt;board if left out)</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true if the piece attacks the square, otherwise false</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isAttacked" name="method_isAttacked" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">isAttacked()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isAttacked(integer  <span class="argument">$square</span>, string  <span class="argument">$turn = null</span>, array  <span class="argument">$board = null</span>) : boolean</pre>
+                <p><em>Checks if a certain square is attacked by at least one piece of a certain color</em></p>
+                <p>This function uses attacks() for every piece of the color specified with $turn.
+Be careful: even if the square is occupied by a piece of the attacking color, this function may still return true.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$square </td>
+                                <td><p>The square to check</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$turn </td>
+                                <td><p>The color to attack the square; if left out, this defaults to $this-&gt;turn</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$board </td>
+                                <td><p>The board to use; defaults to $this-&gt;board</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true if it is attacked, otherwise false</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
                                     </div>
     </section>
 
@@ -891,7 +1088,9 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on April 3rd, 2015 at 10:11.
+                    on 
+Warning: date_default_timezone_get(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /srv/http/web-chess/vendor/twig/twig/lib/Twig/Extension/Core.php on line 89
+April 4th, 2015 at 15:41.
                 </section>
             </section>
         </section>
