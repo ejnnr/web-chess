@@ -528,8 +528,14 @@ class Position
 	 * @return boolean true if the piece attacks the square, otherwise false
 	 */
 
-	private function attacks($departure, $destination, $board = $this->board)
+	private function attacks($departure, $destination, $board = null)
 	{
+		// default for $board is $this->board
+		if (empty($board)) {
+			$board = $this->board;
+		}
+
+		// check if bith squares are valid
 		if (!validateSquare($departure)) {
 			throw new PositionException('function attacks: departure is no valid square', 7);
 		}
@@ -537,19 +543,24 @@ class Position
 			throw new PositionException('function attacks: destination is no valid square', 7);
 		}
 
+		// check if $board has 64 squares
 		if (!count($board) == 64) {
 			throw new PositionException('function attacks: board must have 64 squares', 5);
 		}
 
+		// validate each square
 		foreach ($board as $square) {
+			// check if the square is a string
 			if (!is_string($square)) {
 				throw new PositionException('function attacks: there are non-string values in board', 4);
 			}
+			// check if the square has a valid value
 			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
 				throw new PositionException('function attacks: there are invalid values in board', 5);
 			}
 		}
 
+		// depending on which type of piece is on departure different things need to be checked
 		switch ($board[$departure]) {
 		case '':
 			throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
@@ -565,28 +576,31 @@ class Position
 				return FALSE;
 			}
 
+			// get the direction of movement (-1, 0 or 1)
 			if ((getFile($destination) - getFile($departure)) == 0) {
 				$fileMovement = 0;
 			} elseif ((getFile($destination) - getFile($departure)) > 0) {
 				$fileMovement = 1;
-			} else ((getFile($destination) - getFile($departure)) < 0) {
+			} elseif ((getFile($destination) - getFile($departure)) < 0) {
 				$fileMovement = -1;
 			}
 			if ((getRank($destination) - getRank($departure)) == 0) {
 				$rankMovement = 0;
 			} elseif ((getRank($destination) - getRank($departure)) > 0) {
 				$rankMovement = 1;
-			} else ((getRank($destination) - getRank($departure)) < 0) {
+			} elseif ((getRank($destination) - getRank($departure)) < 0) {
 				$rankMovement = -1;
 			}
 
 			$file = getFile($departure) + $fileMovement;
 			$rank = getRank($departure) + $rankMovement;
+			// go ine square at a time in the direction of the move until hitting another piece or reaching destination
 			while (($board[array2square($file, $rank)] == '') && array2square([$file, $rank]) != $destination) {
 				$file += $fileMovement;
 				$rank += $rankMovement;
 			}
 			
+			// if we've reached destination, the move is possible, otherwise there is something in the way
 			return (array2square([$file, $rank]) == $destination);
 		case 'B':
 		case 'b':
@@ -598,14 +612,14 @@ class Position
 				$fileMovement = 0;
 			} elseif ((getFile($destination) - getFile($departure)) > 0) {
 				$fileMovement = 1;
-			} else ((getFile($destination) - getFile($departure)) < 0) {
+			} elseif ((getFile($destination) - getFile($departure)) < 0) {
 				$fileMovement = -1;
 			}
 			if ((getRank($destination) - getRank($departure)) == 0) {
 				$rankMovement = 0;
 			} elseif ((getRank($destination) - getRank($departure)) > 0) {
 				$rankMovement = 1;
-			} else ((getRank($destination) - getRank($departure)) < 0) {
+			} elseif ((getRank($destination) - getRank($departure)) < 0) {
 				$rankMovement = -1;
 			}
 
@@ -627,14 +641,14 @@ class Position
 				$fileMovement = 0;
 			} elseif ((getFile($destination) - getFile($departure)) > 0) {
 				$fileMovement = 1;
-			} else ((getFile($destination) - getFile($departure)) < 0) {
+			} elseif ((getFile($destination) - getFile($departure)) < 0) {
 				$fileMovement = -1;
 			}
 			if ((getRank($destination) - getRank($departure)) == 0) {
 				$rankMovement = 0;
 			} elseif ((getRank($destination) - getRank($departure)) > 0) {
 				$rankMovement = 1;
-			} else ((getRank($destination) - getRank($departure)) < 0) {
+			} elseif ((getRank($destination) - getRank($departure)) < 0) {
 				$rankMovement = -1;
 			}
 
@@ -647,12 +661,13 @@ class Position
 			
 			return (array2square([$file, $rank]) == $destination);
 		case 'P':
+			// we only have to check for capturing movement
 			return ((abs(getFile($departure) - getFile($destination)) == 1)
 				&& ((getRank($departure) - getRank($destination)) == -1));
 		case 'p':
 			return ((abs(getFile($departure) - getFile($destination)) == 1)
 				&& ((getRank($departure) - getRank($destination)) == 1));
+		}
 	}
 }
-
 ?>
