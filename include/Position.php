@@ -669,5 +669,69 @@ class Position
 				&& ((getRank($departure) - getRank($destination)) == 1));
 		}
 	}
+
+	/**
+	 * Checks if a certain square is attacked bz at least one piece of a certain color
+	 *
+	 * This function uses attacks() for every piece of the color specified with $turn.
+	 * Be careful: even if the square is occupied by a piece of the attacking color, this function may still return true.
+	 *
+	 * @param integer $square The square to check
+	 * @param string  $turn   The color to attack the square; if left out, this defaults to $this->turn
+	 * @param array   $board  The board to use; defaults to $this->board
+	 * @return boolean true if it is attacked, otherwise false
+	 */
+	private function isAttacked($square, $turn = null, $board = null)
+	{
+		if (empty($turn)) {
+			$turn = $this->turn;
+		}
+		if (empty($board)) {
+			$board = $this->board;
+		}
+
+		if (!validateSquare($square)) {
+			throw new PositionException('function isAttacked: square is no valid square', 7);
+		}
+
+		// check if $board has 64 squares
+		if (!count($board) == 64) {
+			throw new PositionException('function isAttacked: board must have 64 squares', 5);
+		}
+
+		// validate each square
+		foreach ($board as $square) {
+			// check if the square is a string
+			if (!is_string($square)) {
+				throw new PositionException('function isAttacked: there are non-string values in board', 4);
+			}
+			// check if the square has a valid value
+			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+				throw new PositionException('function isAttacked: there are invalid values in board', 5);
+			}
+		}
+
+		// validate turn
+		if (($turn != 'w') && ($turn != 'b')) {
+			throw new PositionException('function isAttacked: turn is invalid', 6);
+		}
+
+		foreach($board as $index=>$currentSquare) {
+			if ($turn == 'w') {
+				if (in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P'])) {
+					if (attacks($index, $square)) {
+						return TRUE;
+					}
+				}
+			} else {
+				if (in_array($currentSquare, ['k', 'q', 'r', 'b', 'n', 'p'])) {
+					if (attacks($index, $square)) {
+						return TRUE;
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
 }
 ?>
