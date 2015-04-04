@@ -406,7 +406,205 @@ class Position
 
 	function isLegalMove($move)
 	{
+		if (!($move instanceof Move)) {
+			throw new PositionException('function isLegal: move is no instance of class Move', 4);
+		}
 
+		$departure = $move->getDeparture();
+		$destination = $move->getDestination();
+
+		if ($this->turn == 'w') {
+			if (!in_array($this->board[$departure], ['K', 'Q', 'R', 'B', 'N', 'P'])) {
+				return FALSE;
+			}
+		} else {
+			if (!in_array($this->board[$departure], ['k', 'q', 'r', 'b', 'n', 'p'])) {
+				return FALSE;
+			}
+		}
+
+		switch ($this->board[$departure]) {
+			case 'Q':
+			case 'q':
+			case 'R':
+			case 'r':
+			case 'B':
+			case 'b':
+			case 'N':
+			case 'n':
+				if (!$this->attacks($departure, $destination)) {
+					return FALSE;
+				}
+				break;
+			case 'P':
+				if (!((($departure - $destination == -8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
+				   || (($departure - $destination == -16) && ($this->board[$destination] == '') && ($this->board[$destination - 8] == '') && (getRank($departure) == 1)) // double step if pawn is still on starting position
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == -8) && (in_array($this->board[$destination], ['q', 'r', 'b', 'n', 'p']))) // normal capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == -8) && ($destination == string2square($this->enPassant))))) { // en passant capture
+					return FALSE;
+				}
+				break;
+			case 'p':
+				if (!((($departure - $destination == 8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
+				   || (($departure - $destination == 16) && ($this->board[$destination] == '') && ($this->board[$destination + 8] == '') && (getRank($departure) == 6)) // double step if pawn is still on starting position
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == 8) && (in_array($this->board[$destination], ['Q', 'R', 'B', 'N', 'P']))) // normal capture
+				   || ((abs(getFile($departure) - getFile($destination)) == 1) && ($departure - $destination == 8) && ($destination == string2square($this->enPassant))))) { // en passant capture
+					return FALSE;
+				}
+				break;
+			case 'K':
+				// normal king move
+				if ($this->attacks($departure, $destination)) {
+					break;
+				}
+
+				// from here on everzthin is castling
+				//
+				// if departure isn't e1, we can return FALSE right away
+				if ($departure != string2square('e1')) {
+					return FALSE;
+				}
+
+				// kingside castling
+				if ($destination == string2square('g1')) {
+					// check if castling rights are present
+					if (!$this->castlings('K')) {
+						return FALSE;
+					}
+					// check if in check
+					if ($this->isAttacked(string2square('e1'), 'b')) {
+						return FALSE;
+					}
+					// check if castling would be through check
+					if ($this->isAttacked(string2square('f1'), 'b')) {
+						return FALSE;
+					}
+					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
+					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
+					if ($this->isAttacked(string2square('g1'), 'b')) {
+						return FALSE;
+					}
+					// check if all squares are empty
+					if (($this->board[string2square('f1')] != '')
+			         || ($this->board[string2square('g1')] != '')
+					 || ($this->board[string2square('h1')] != 'R')) {
+						return FALSE;
+					}
+
+				// queenside castling
+				} elseif ($destination == string2square('c1')) {
+					if (!$this->castlings('Q')) {
+						return FALSE;
+					}
+					if ($this->isAttacked(string2square('e1'), 'b')) {
+						return FALSE;
+					}
+					if ($this->isAttacked(string2square('d1'), 'b')) {
+						return FALSE;
+					}
+					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
+					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
+					if ($this->isAttacked(string2square('g1'), 'b')) {
+						return FALSE;
+					}
+					if (($this->board[string2square('d1')] != '')
+			         || ($this->board[string2square('c1')] != '')
+					 || ($this->board[string2square('b1')] != '')
+					 || ($this->board[string2square('a1')] != 'R')) {
+						return FALSE;
+					}
+
+				// neither kingside nor queenside castling => return FALSE
+				} else {
+					return FALSE;
+				}
+				// checking if the move lets the king in check can be skipped since this is already done
+				return TRUE;
+				break; // actually unnecessary but something might be changed and then this will become useful
+			case 'k':
+				// normal king move
+				if ($this->attacks($departure, $destination)) {
+					break;
+				}
+
+				// from here on everything is castling
+				//
+				// if departure isn't e8, we can return FALSE right away
+				if ($departure != string2square('e8')) {
+					return FALSE;
+				}
+
+				// kingside castling
+				if ($destination == string2square('g8')) {
+					// check if castling rights are present
+					if (!$this->castlings('k')) {
+						return FALSE;
+					}
+					// check if in check
+					if ($this->isAttacked(string2square('e8'), 'w')) {
+						return FALSE;
+					}
+					// check if castling would be through check
+					if ($this->isAttacked(string2square('f8'), 'w')) {
+						return FALSE;
+					}
+					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
+					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
+					if ($this->isAttacked(string2square('g8'), 'w')) {
+						return FALSE;
+					}
+					// check if all squares are empty
+					if (($this->board[string2square('f8')] != '')
+			         || ($this->board[string2square('g8')] != '')
+					 || ($this->board[string2square('h8')] != 'r')) {
+						return FALSE;
+					}
+
+				// queenside castling
+				} elseif ($destination == string2square('c8')) {
+					if (!$this->castlings('q')) {
+						return FALSE;
+					}
+					if ($this->isAttacked(string2square('e8'), 'w')) {
+						return FALSE;
+					}
+					if ($this->isAttacked(string2square('d8'), 'w')) {
+						return FALSE;
+					}
+					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
+					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
+					if ($this->isAttacked(string2square('g8'), 'w')) {
+						return FALSE;
+					}
+					if (($this->board[string2square('d8')] != '')
+			         || ($this->board[string2square('c8')] != '')
+					 || ($this->board[string2square('b8')] != '')
+					 || ($this->board[string2square('a8')] != 'r')) {
+						return FALSE;
+					}
+
+				// neither kingside nor queenside castling => return FALSE
+				} else {
+					return FALSE;
+				}
+				// checking if the move lets the king in check can be skipped since this is already done
+				return TRUE;
+				break; // actually unnecessary but something might be changed and then this will become useful
+		}
+
+		// create a copy of board and do the move on that copy
+		$boardTemp = $this->board;
+		$boardTemp[$departure] = '';
+		$boardTemp[$destination] = $this->board[$departure];
+
+		// check if the move would leave the king in check
+		foreach ($boardTemp as $index=>$currentSquare) {
+			if ($currentSquare == ($this->turn == 'w' ? 'K' : 'k')) {
+				return !$this->isAttacked($index, ($this->turn == 'w' ? 'b' : 'w'), $boardTemp);
+			}
+		}
+		// should never happen
+		throw new PositionException('function isLegal: A king is missing. This is probably a bug.', 1);
 	}
 
 	/**
