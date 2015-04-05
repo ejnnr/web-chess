@@ -230,6 +230,12 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$positionObject->doMove(new Move('e1', 'g1'));
 		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQ1RK1 b - - 5 6', $positionObject->getFEN());
 	}
+
+	public function testDoMovePromotion() {
+		$position = new Position('8/5P1k/R7/8/8/8/BB6/6K1 w - - 1 30');
+		$position->doMove(new Move('f7', 'f8', PROMOTION_KNIGHT));
+		$this->assertEquals('5N2/7k/R7/8/8/8/BB6/6K1 b - - 0 30', $position->getFEN());
+	}
 }
 
 ?>

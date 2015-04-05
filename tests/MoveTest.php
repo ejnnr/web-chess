@@ -23,11 +23,20 @@ class MoveTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException     MoveException
+	 * @expectedExceptionCode 4
+	 */
+	public function testCreateMoveWrongArgumentTypePromotion()
+	{
+		$move = new Move('a4', 'a5', 'a6');
+	}
+
+	/**
+	 * @expectedException     MoveException
 	 * @expectedExceptionCode 3
 	 */
 	public function testCreateMoveWrongArgumentCount()
 	{
-		$move = new Move('a4', 'a5', 'a6');
+		$move = new Move('a7', 'a8', PROMOTION_BISHOP, 'foo');
 	}
 
 	/**
@@ -77,6 +86,14 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	public function testGetDestinationInvalidFormat(Move $move)
 	{
 		$move->getDestination(0.5);
+	}
+	
+	/**
+	 * @depends testCreateValidMove
+	 */
+	public function testGetPromotion(Move $move)
+	{
+		$this->assertSame(PROMOTION_QUEEN, $move->getPromotion());
 	}
 }
 ?>
