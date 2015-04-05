@@ -35,6 +35,7 @@ require_once 'Move.php';
  * 111: Invalid FEN syntax: no castling flags
  * 112: Invalid FEN syntax: one or more ranks don't contain 8 squares
  * 119: Invalid FEN syntax: wrong number of sections TODO: remove this!
+ * 120: Trying to play illegal move
  */
 
 
@@ -994,6 +995,155 @@ class Position
 			}
 		}
 		return FALSE;
+	}
+
+	/**
+ 	 * Plays the move and updates the position
+ 	 *
+ 	 * @param Move $move The move to be played
+ 	 */
+
+	public function doMove($move) {
+		if (!($move instanceof Move)) {
+			throw new PositionException('function doMove: move is no instance of class Move', 4);
+		}
+
+		if (!$this->isLegalMove($move)) {
+			throw new PositionException('function doMove: move is illegal', 120);
+		}
+		
+		$departure = $move->getDeparture();
+		$destination = $move->getDestination();
+		$this->halfMoves++;
+		$preserveEnPassant = FALSE;
+		switch ($this->board[$departure]) {
+			case 'Q':
+			case 'q':
+			case 'B':
+			case 'b':
+			case 'N':
+			case 'n':
+				if ($this->board[$destination] != '') {
+					$this->halfMoves = 0;
+				}
+				$this->board[$destination] = $this->board[$departure];
+				$this->board[$departure] = '';
+				break;
+			case 'R':
+				if ($this->board[$destination] != '') {
+					$this->halfMoves = 0;
+				}
+				$this->board[$destination] = $this->board[$departure];
+				$this->board[$departure] = '';
+				if ($departure == string2square('h1')) {
+					$this->castlings['K'] == false;
+				}
+				if ($departure == string2square('a1')) {
+					$this->castlings['Q'] == false;
+				}
+				break;
+			case 'r':
+				if ($this->board[$destination] != '') {
+					$this->halfMoves = 0;
+				}
+				$this->board[$destination] = $this->board[$departure];
+				$this->board[$departure] = '';
+				if ($departure == string2square('h8')) {
+					$this->castlings['k'] == false;
+				}
+				if ($departure == string2square('a8')) {
+					$this->castlings['q'] == false;
+				}
+				break;
+			case 'P':
+				$this->halfMoves = 0;
+				if (abs(getRank($departure) - getRank ($destination)) == 2) { // double step
+					$this->enPassant = substr(square2string($destination), 0, 1) . '3'; // add en passant square
+					$preserveEnPassant = TRUE; // make sure en passant square doesn't get overwritten
+				}
+				if ($destination === string2square($this->enPassant)) { // en passant capture
+					$this->board[$destination - 8] = '';
+				}
+				$this->board[$destination] = $this->board[$departure];
+				$this->board[$departure] = '';
+				break;
+			case 'p':
+				$this->halfMoves = 0;
+				if (abs(getRank($departure) - getRank ($destination)) == 2) { // double step
+					$this->enPassant = substr(square2string($destination), 0, 1) . '6'; // add en passant square
+					$preserveEnPassant = TRUE; // make sure en passant square doesn't get overwritten
+				}
+				if ($destination === string2square($this->enPassant)) { // en passant capture
+					$this->board[$destination + 8] = '';
+				}
+				$this->board[$destination] = $this->board[$departure];
+				$this->board[$departure] = '';
+				break;
+			case 'K':
+				$this->castlings['K'] = FALSE;
+				$this->castlings['Q'] = FALSE;
+				if ($this->possibleKingMove($departure, $destination)) { // regular king move
+					if ($this->board[$destination] != '') {
+						$this->halfMoves = 0;
+					}
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					break;
+				}
+				// from here on everything is castling
+
+				if ($destination == string2square('g1')) { // kingside castling
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					$this->board[string2square('f1')] = 'R';
+					$this->board[string2square('h1')] = '';
+				} elseif ($destination == string2square('c1')) { // queenside castling
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					$this->board[string2square('d1')] = 'R';
+					$this->board[string2square('a1')] = '';
+				} else {
+					throw new PositionException('function doMove: Wrong king position. This is probably a bug.' . $destination, 1);
+				}
+				break;
+			case 'k':
+				$this->castlings['k'] = FALSE;
+				$this->castlings['q'] = FALSE;
+				if ($this->possibleKingMove($departure, $destination)) { // regular king move
+					if ($this->board[$destination] != '') {
+						$this->halfMoves = 0;
+					}
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					break;
+				}
+				// from here on everything is castling
+
+				if ($destination == string2square('g8')) { // kingside castling
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					$this->board[string2square('f8')] = 'r';
+					$this->board[string2square('h1')] = '';
+				} elseif ($destination == string2square('c8')) { // queenside castling
+					$this->board[$destination] = $this->board[$departure];
+					$this->board[$departure] = '';
+					$this->board[string2square('d8')] = 'r';
+					$this->board[string2square('a8')] = '';
+				} else {
+					throw new PositionException('function doMove: Wrong king position. This is probably a bug.' . $destination, 1);
+				}
+				break;
+		}
+
+		if (!$preserveEnPassant) {
+			$this->enPassant = 0;
+		}
+
+		if ($this->turn == 'b') {
+			$this->moveNumber++;
+		}
+
+		$this->turn = ($this->turn == 'w' ? 'b' : 'w');
 	}
 }
 ?>

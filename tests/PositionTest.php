@@ -201,6 +201,35 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'd1')));
 		$this->assertFalse($position->isLegalMove(new Move('e2', 'd1')));
 	}
+
+	/**
+	 * @depends testCreateValidPosition
+	 */
+	public function testDoMove($positionObject)
+	{
+		$positionObject->doMove(new Move('e2', 'e4'));
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1', $positionObject->getFEN());
+		$positionObject->doMove(new Move('d7', 'd5'));
+		$this->assertEquals('rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2', $positionObject->getFEN());
+		$positionObject->doMove(new Move('e4', 'd5'));
+		$this->assertEquals('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', $positionObject->getFEN());
+		$positionObject->doMove(new Move('c7', 'c5'));
+		$this->assertEquals('rnbqkbnr/pp2pppp/8/2pP4/8/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 3', $positionObject->getFEN());
+		$positionObject->doMove(new Move('d5', 'c6'));
+		$this->assertEquals('rnbqkbnr/pp2pppp/2P5/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3', $positionObject->getFEN());
+		$positionObject->doMove(new Move('b8', 'c6'));
+		$this->assertEquals('r1bqkbnr/pp2pppp/2n5/8/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 4', $positionObject->getFEN());
+		$positionObject->doMove(new Move('g1', 'f3'));
+		$this->assertEquals('r1bqkbnr/pp2pppp/2n5/8/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 4', $positionObject->getFEN());
+		$positionObject->doMove(new Move('e8', 'd7'));
+		$this->assertEquals('r1bq1bnr/pp1kpppp/2n5/8/8/5N2/PPPP1PPP/RNBQKB1R w KQ - 2 5', $positionObject->getFEN());
+		$positionObject->doMove(new Move('f1', 'c4'));
+		$this->assertEquals('r1bq1bnr/pp1kpppp/2n5/8/2B5/5N2/PPPP1PPP/RNBQK2R b KQ - 3 5', $positionObject->getFEN());
+		$positionObject->doMove(new Move('d8', 'a5'));
+		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQK2R w KQ - 4 6', $positionObject->getFEN());
+		$positionObject->doMove(new Move('e1', 'g1'));
+		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQ1RK1 b - - 5 6', $positionObject->getFEN());
+	}
 }
 
 ?>
