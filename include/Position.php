@@ -50,9 +50,18 @@ class Position
 
 	private $board;
 	
-	private $castlings;
+	private $castlings = ['K' => false,
+		                  'Q' => false,
+	                      'k' => false,
+	                      'q' => false];
 	
 	private $turn;
+
+	private $halfMoves;
+
+	private $moveNumber;
+
+	private $enPassant;
 	/**
 	 * Constructor of Position
 	 *
@@ -72,7 +81,30 @@ class Position
 
 	function getFEN()
 	{
-		return $this->fen;
+		$boardString = ''; // this is were the string will be put together
+		$emptySquares = 0; // this is a counter that is used because empty square need to be grouped together, i.e. '3' instead of '111'
+
+		foreach (array_reverse($this->getArray()) as $index=>$rank) {
+			if ($index != 0) {
+				$boardString .= ($emptySquares != 0 ? (string)$emptySquares : '') . '/'; // add the remaining empty squares to the old rank and start a new one
+				$emptySquares = 0;
+			}
+			foreach ($rank as $square) {
+				if (empty($square)) { // empty square
+					$emptySquares++;
+				} else { // a piece is on this square
+					$boardString .= ($emptySquares != 0 ? (string)$emptySquares : '') . $square;
+					$emptySquares = 0;
+				}
+			}
+		}
+
+		$castlingString = ($this->castlings['K'] ? 'K' : '')
+		                . ($this->castlings['Q'] ? 'Q' : '')
+						. ($this->castlings['k'] ? 'k' : '')
+						. ($this->castlings['q'] ? 'q' : '');
+
+		return $boardString . ' ' . $this->turn . ' ' . $castlingString . ' ' . (empty($this->enPassant) ? '-' : $this->enPassant) . ' ' . (string)$this->halfMoves . ' ' . (string)$this->moveNumber;
 	}
 
 	/**
@@ -83,7 +115,16 @@ class Position
 
 	function getArray()
 	{
+		$ret = array();
 
+		foreach ($this->board as $index=>$square) {
+			if ($index % 8 == 0) { // start of a new rank
+				$ret[] = array();
+			}
+			$ret[getRank($index)][] = $square;
+		}
+
+		return $ret;
 	}
 
 	/**
