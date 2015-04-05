@@ -51,7 +51,7 @@ class Position
 	private $board;
 	
 	private $castlings = ['K' => false,
-		                  'Q' => false,
+	                      'Q' => false,
 	                      'k' => false,
 	                      'q' => false];
 	
@@ -98,11 +98,15 @@ class Position
 				}
 			}
 		}
+		$boardString .= ($emptySquares != 0 ? (string)$emptySquares : ''); // add the remaining empty squares to the old rank
 
 		$castlingString = ($this->castlings['K'] ? 'K' : '')
 		                . ($this->castlings['Q'] ? 'Q' : '')
-						. ($this->castlings['k'] ? 'k' : '')
-						. ($this->castlings['q'] ? 'q' : '');
+		                . ($this->castlings['k'] ? 'k' : '')
+		   	            . ($this->castlings['q'] ? 'q' : '');
+		if (empty($castlingString)) {
+			$castlingString = '-';
+		}
 
 		return $boardString . ' ' . $this->turn . ' ' . $castlingString . ' ' . (empty($this->enPassant) ? '-' : $this->enPassant) . ' ' . (string)$this->halfMoves . ' ' . (string)$this->moveNumber;
 	}
