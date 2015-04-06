@@ -1066,6 +1066,22 @@ class Position
 				}
 				$this->board[$destination] = $this->board[$departure];
 				$this->board[$departure] = '';
+				if (getRank($destination) == 7) { // promotion
+					switch ($move->getPromotion()) {
+						case PROMOTION_QUEEN:
+							$this->board[$destination] = 'Q';
+							break;
+						case PROMOTION_ROOK:
+							$this->board[$destination] = 'R';
+							break;
+						case PROMOTION_BISHOP:
+							$this->board[$destination] = 'B';
+							break;
+						case PROMOTION_KNIGHT:
+							$this->board[$destination] = 'N';
+							break;
+ 				   	}
+				}
 				break;
 			case 'p':
 				$this->halfMoves = 0;
@@ -1078,6 +1094,22 @@ class Position
 				}
 				$this->board[$destination] = $this->board[$departure];
 				$this->board[$departure] = '';
+				if (getRank($destination) == 0) { // promotion
+					switch ($move->getPromotion()) {
+						case PROMOTION_QUEEN:
+							$this->board[$destination] = 'q';
+							break;
+						case PROMOTION_ROOK:
+							$this->board[$destination] = 'r';
+							break;
+						case PROMOTION_BISHOP:
+							$this->board[$destination] = 'b';
+							break;
+						case PROMOTION_KNIGHT:
+							$this->board[$destination] = 'n';
+							break;
+ 				   	}
+				}
 				break;
 			case 'K':
 				$this->castlings['K'] = FALSE;
