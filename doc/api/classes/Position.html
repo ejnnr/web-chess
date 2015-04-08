@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1862948871"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1992628163"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1862948871" class="accordion-body collapse in">
+            <div id="namespace-1992628163" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -197,6 +197,7 @@
                                                                     <a href="../classes/Position.html#method_internalInCheck" class="">internalInCheck()</a><br />
                                                                     <a href="../classes/Position.html#method_isLegalMove" class="">isLegalMove()</a><br />
                                                                     <a href="../classes/Position.html#method_doMove" class="">doMove()</a><br />
+                                                                    <a href="../classes/Position.html#method_parseSAN" class="">parseSAN()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -834,6 +835,72 @@
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_parseSAN" name="method_parseSAN" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">parseSAN()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">parseSAN(string  <span class="argument">$move</span>) </pre>
+                <p><em>parses a move in SAN and returns a Move object</em></p>
+                <p>The function allows the following syntax:</p>
+<ul>
+<li>The actual move. This can be either:
+<ul>
+<li>a normal move:
+<ul>
+<li>the piece letter if it's not a pawn</li>
+<li>the necessary information for disambiguation</li>
+<li>'x' for captures if necessary (can be left out)</li>
+<li>the destination square (a letter from a to h followed by a number from 1 to 8)</li>
+<li>'=' and a piece letter for promotion (if it's a promoting move)</li>
+</ul></li>
+<li>O-O</li>
+<li>O-O-O</li>
+</ul></li>
+<li>a '+' for check or a '#' for mate</li>
+<li>a space (optional)</li>
+<li>one of the following (optional):
+<ul>
+<li>!</li>
+<li>?</li>
+<li>!!</li>
+<li>??</li>
+<li>!?</li>
+<li>?!</li>
+</ul></li>
+<li>the following (optional, multiple times):
+<ul>
+<li>a space (optional)</li>
+<li>$</li>
+<li>a number from 0 to 255</li>
+</ul></li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$move </td>
+                                <td><p>The move to be parsed in SAN</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
                                                                     <div class="row-fluid">
         <div class="span8 content class">
             <a id="method_possibleKingMove" name="method_possibleKingMove" class="anchor"></a>
@@ -1200,7 +1267,7 @@ Be careful: even if the square is occupied by a piece of the attacking color, th
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
                     on 
 Warning: date_default_timezone_get(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /srv/http/web-chess/vendor/twig/twig/lib/Twig/Extension/Core.php on line 89
-April 6th, 2015 at 14:47.
+April 8th, 2015 at 13:27.
                 </section>
             </section>
         </section>

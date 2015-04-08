@@ -36,6 +36,9 @@ require_once 'Move.php';
  * 112: Invalid FEN syntax: one or more ranks don't contain 8 squares
  * 119: Invalid FEN syntax: wrong number of sections TODO: remove this!
  * 120: Trying to play illegal move
+ * 130: Invalid SAN move syntax
+ * 131: SAN move is ambiguous
+ * 132: Illegal SAN move
  */
 
 
@@ -1176,6 +1179,113 @@ class Position
 		}
 
 		$this->turn = ($this->turn == 'w' ? 'b' : 'w');
+	}
+
+	/**
+ 	 * parses a move in SAN and returns a Move object
+ 	 *
+ 	 * The function allows the following syntax:
+ 	 *  * The actual move. This can be either:
+ 	 *    * a normal move:
+ 	 *      * the piece letter if it's not a pawn
+ 	 *      * the necessary information for disambiguation
+ 	 *      * 'x' for captures if necessary (can be left out)
+ 	 *      * the destination square (a letter from a to h followed by a number from 1 to 8)
+ 	 *      * '=' and a piece letter for promotion (if it's a promoting move)
+ 	 *    * O-O
+ 	 *    * O-O-O
+ 	 *  * a '+' for check or a '#' for mate
+ 	 *  * a space (optional)
+ 	 *  * one of the following (optional):
+ 	 *    * !
+ 	 *    * ?
+ 	 *    * !!
+ 	 *    * ??
+ 	 *    * !?
+ 	 *    * ?!
+ 	 *  * the following (optional, multiple times):
+ 	 *    * a space (optional)
+ 	 *    * $
+ 	 *    * a number from 0 to 255
+ 	 *
+ 	 * @param string $move The move to be parsed in SAN
+ 	 */
+
+	function parseSAN($move)
+	{
+		if (empty($move)) {
+			throw new PositionException('function parseSAN: move is empty', 2);
+		}
+
+		$matches = array();
+		if (!preg_match('/^(?<move>(?<piece>[KQRBN]?)(?<disambiguationFile>[a-h]?)(?<disambiguationRank>[1-8]?)(?<capture>[x]?)(?<destination>[a-h][1-8])(=(?<promotion>[QRBN]))?|(?<kingsideCastling>O-O)|(?<queensideCastling>O-O-O))(?<check>\+|\#)? ?(?<annotationMove>\?|!|\?!|!\?|\?\?|!!)? ?(?<NAGs>( ?\$[0-9]+ ?)*)$/', $move, $matches)) {
+			throw new PositionException('function parseSAN: invalid move syntax', 130);
+		}
+
+		if (!empty($matches['kingsideCastling'])) {
+			$departure = ($this->turn == 'w' ? 4 : 60);
+			$destination = ($this->turn == 'w' ? 6 : 62);
+			if ($this->board[$departure] != ($this->turn == 'w' ? 'K' : 'k')) {
+				throw new PositionException('function parseSAN: castling is not possible', 132);
+			}
+			if (!$this->isLegalMove(new Move($departure, $destination))) {
+				throw new PositionException('function parseSAN: csatling is no legal move', 132);
+			}
+			$promotion = PROMOTION_QUEEN;
+			goto castling;
+		}
+
+		if (empty($matches['piece'])) { // piece is a pawn
+			$piece = 'P';
+		} else {
+			$piece = $matches['piece'];
+		}
+		if (!empty($matches['promotion'])) {
+			$promotion = substr($matches['promotion'], 1);
+		} else {
+			$promotion = PROMOTION_QUEEN;
+		}
+		$destination = string2square($matches['destination']);
+
+		$foundLegalMove = FALSE;
+		foreach ($this->board as $index=>$square) {
+			if ($square != ($this->turn == 'w' ? $piece : strtolower($piece))) { // check if the current sqaure has the right piece
+				continue;
+			}
+
+			if (!empty($matches['disambiguationFile']) && ($matches['disambiguationFile'] - 1) != getFile($index)) {
+				continue;
+			}
+
+			if (!empty($matches['disambiguationRank']) && $matches['disambiguationRank'] != substr(square2string($index), 0, 1)) {
+				continue;
+			}
+
+			if ($this->isLegalMove(new Move($index, $destination, $promotion))) {
+				if ($foundLegalMove) {
+					throw new PositionException('function parseSAN: move is ambiguous', 131);
+				}
+				$foundLegalMove = TRUE;
+				$departure = $index;
+			}
+		}
+
+		if (!isset($departure)) {
+			throw new PositionException('function parseSAN: no legal move found', 132);
+		}
+
+		castling:
+
+		$annotationMove = preg_replace(array('/^!$/', '/^\?$/', '/^!!$/', '/^\?\?$/', '/^!\?$/', '/^\?!$/'), array('\$1', '\$2', '\$3', '\$4', '\$5', '\$6'), $matches['annotationMove']);
+		$NAGs = $matches['NAGs'] . $annotationMove;
+		$NAGs = str_replace(' ', '', $NAGs);
+		$NAGs = explode('$', $NAGs);
+		unset($NAGs[0]); // delete the first element, because it is empty (the string used with explode started with $)
+		foreach ($NAGs as $index=>$NAG) {
+			$NAGs[$index] = (int)$NAG;
+		}
+
+		return new Move($departure, $destination, $promotion, $NAGs);
 	}
 }
 ?>

@@ -157,6 +157,27 @@ class Move
 			throw new MoveException('__construct: destination is neither string nor integer nor array', 4);
 		}
 
+		if (empty($promotion)) {
+			$promotion = PROMOTION_QUEEN;
+		}
+
+		if (is_string($promotion)) {
+			switch ($promotion) {
+				case 'Q':
+					$promotion = PROMOTION_QUEEN;
+					break;
+				case 'R':
+					$promotion = PROMOTION_ROOK;
+					break;
+				case 'B':
+					$promotion = PROMOTION_BISHOP;
+					break;
+				case 'N':
+					$promotion = PROMOTION_KNIGHT;
+					break;
+			}
+		}
+
 		if (!is_integer($promotion)) {
 			throw new MoveException('__construct: promotion is no integer', 4);
 		}
