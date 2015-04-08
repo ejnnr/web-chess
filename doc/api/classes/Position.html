@@ -106,12 +106,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">7</span>
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="../reports/markers.html">
-                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">3</span>
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">1</span>
                                 </a>
                             </li>
                             <li>
@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1992628163"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1849861688"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1992628163" class="accordion-body collapse in">
+            <div id="namespace-1849861688" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -190,11 +190,7 @@
                                                                     <a href="../classes/Position.html#method_getArray" class="">getArray()</a><br />
                                                                     <a href="../classes/Position.html#method_loadFEN" class="">loadFEN()</a><br />
                                                                     <a href="../classes/Position.html#method_reset" class="">reset()</a><br />
-                                                                    <a href="../classes/Position.html#method_isFiftyMoves" class="">isFiftyMoves()</a><br />
-                                                                    <a href="../classes/Position.html#method_isStaleMate" class="">isStaleMate()</a><br />
-                                                                    <a href="../classes/Position.html#method_isMate" class="">isMate()</a><br />
                                                                     <a href="../classes/Position.html#method_inCheck" class="">inCheck()</a><br />
-                                                                    <a href="../classes/Position.html#method_internalInCheck" class="">internalInCheck()</a><br />
                                                                     <a href="../classes/Position.html#method_isLegalMove" class="">isLegalMove()</a><br />
                                                                     <a href="../classes/Position.html#method_doMove" class="">doMove()</a><br />
                                                                     <a href="../classes/Position.html#method_parseSAN" class="">parseSAN()</a><br />
@@ -219,6 +215,7 @@
                         </section>
                         <section class="row-fluid private">
                             <section class="span4">
+                                                                    <a href="../classes/Position.html#method_internalInCheck" class="">internalInCheck()</a><br />
                                                                     <a href="../classes/Position.html#method_possibleKingMove" class="">possibleKingMove()</a><br />
                                                                     <a href="../classes/Position.html#method_possibleQueenMove" class="">possibleQueenMove()</a><br />
                                                                     <a href="../classes/Position.html#method_possibleRookMove" class="">possibleRookMove()</a><br />
@@ -228,7 +225,6 @@
                                                                     <a href="../classes/Position.html#method_isAttacked" class="">isAttacked()</a><br />
                                                             </section>
                             <section class="span4">
-                                                                    <a href="../classes/Position.html#property_fen" class="">$fen</a><br />
                                                                     <a href="../classes/Position.html#property_board" class="">$board</a><br />
                                                                     <a href="../classes/Position.html#property_castlings" class="">$castlings</a><br />
                                                                     <a href="../classes/Position.html#property_turn" class="">$turn</a><br />
@@ -278,36 +274,13 @@
 
                                                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="property_fen" name="property_fen" class="anchor"></a>
-            <article class="property">
-                <h3 class="private ">$fen</h3>
-                <pre class="signature">$fen : </pre>
-                <p><em></em></p>
-                
-
-                                <h4>Type</h4>
-                
-                                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                        <dl>
-                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
             <a id="property_board" name="property_board" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$board</h3>
                 <pre class="signature">$board : </pre>
-                <p><em></em></p>
-                
+                <p><em>the internal board representation</em></p>
+                <p>This is an array of strings. Each element is either an empty string or the piece letter of the piece occupying that square.
+As indices integers from 0 (a1) to 63 (h8) are used. See squares.php for more information.</p>
 
                                 <h4>Type</h4>
                 
@@ -330,7 +303,7 @@
             <article class="property">
                 <h3 class="private ">$castlings</h3>
                 <pre class="signature">$castlings : </pre>
-                <p><em></em></p>
+                <p><em>An array saving which castlings are allowed</em></p>
                 
 
                                 <h4>Type</h4>
@@ -354,8 +327,8 @@
             <article class="property">
                 <h3 class="private ">$turn</h3>
                 <pre class="signature">$turn : </pre>
-                <p><em></em></p>
-                
+                <p><em>the side whose turn it is</em></p>
+                <p>Either 'w' or 'b'</p>
 
                                 <h4>Type</h4>
                 
@@ -378,7 +351,7 @@
             <article class="property">
                 <h3 class="private ">$halfMoves</h3>
                 <pre class="signature">$halfMoves : </pre>
-                <p><em></em></p>
+                <p><em>the number of half-moves since the last pawn move or capture</em></p>
                 
 
                                 <h4>Type</h4>
@@ -402,7 +375,7 @@
             <article class="property">
                 <h3 class="private ">$moveNumber</h3>
                 <pre class="signature">$moveNumber : </pre>
-                <p><em></em></p>
+                <p><em>th current move number</em></p>
                 
 
                                 <h4>Type</h4>
@@ -426,7 +399,7 @@
             <article class="property">
                 <h3 class="private ">$enPassant</h3>
                 <pre class="signature">$enPassant : </pre>
-                <p><em></em></p>
+                <p><em>the currently possible en passant square</em></p>
                 
 
                                 <h4>Type</h4>
@@ -608,93 +581,6 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_isFiftyMoves" name="method_isFiftyMoves" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">isFiftyMoves()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isFiftyMoves() : boolean</pre>
-                <p><em>Returns true if the game is draw by fifty moves rule</em></p>
-                <p>Fifty moves must have been played without a piece being captured or a pawn beeing moved by either side</p>
-
-                
-                
-                                    <h4>Returns</h4>
-                    boolean
-                                            &mdash; <p>true if draw, false if not</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_isStaleMate" name="method_isStaleMate" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">isStaleMate()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isStaleMate() : boolean</pre>
-                <p><em>Returns true if the game is drawn by stalemate</em></p>
-                <p>True if the side to move hasn't got any valid moves but isn't in check</p>
-
-                
-                
-                                    <h4>Returns</h4>
-                    boolean
-                                            &mdash; <p>true if draw, false if not</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_isMate" name="method_isMate" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">isMate()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isMate() : boolean</pre>
-                <p><em>Returns true if the side to move is checkmated</em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    boolean
-                                            &mdash; <p>true if checkmate, false if not</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
             <a id="method_inCheck" name="method_inCheck" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">inCheck()</h3>
@@ -703,48 +589,6 @@
                 <p><em>Returns true if the side to move is in check</em></p>
                 
 
-                
-                
-                                    <h4>Returns</h4>
-                    boolean
-                                            &mdash; <p>true if in check, false if not</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_internalInCheck" name="method_internalInCheck" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">internalInCheck()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">internalInCheck(string  <span class="argument">$side</span>, array  <span class="argument">$board</span>) : boolean</pre>
-                <p><em>Returns true if the side given in $side is in check</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$side </td>
-                                <td><p>The side to be checked</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>array</td>
-                                <td>$board </td>
-                                <td><p>The board used for checking</p></td>
-                            </tr>
-                                            </table>
                 
                 
                                     <h4>Returns</h4>
@@ -902,6 +746,48 @@
     </div>
 
                                                                     <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_internalInCheck" name="method_internalInCheck" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">internalInCheck()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">internalInCheck(string  <span class="argument">$side</span>, array  <span class="argument">$board</span>) : boolean</pre>
+                <p><em>Returns true if the side given in $side is in check</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$side </td>
+                                <td><p>The side to be checked</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$board </td>
+                                <td><p>The board used for checking</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>true if in check, false if not</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
         <div class="span8 content class">
             <a id="method_possibleKingMove" name="method_possibleKingMove" class="anchor"></a>
             <article class="method">
@@ -1267,7 +1153,7 @@ Be careful: even if the square is occupied by a piece of the attacking color, th
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
                     on 
 Warning: date_default_timezone_get(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /srv/http/web-chess/vendor/twig/twig/lib/Twig/Extension/Core.php on line 89
-April 8th, 2015 at 13:27.
+April 8th, 2015 at 13:39.
                 </section>
             </section>
         </section>

@@ -34,7 +34,6 @@ require_once 'Move.php';
  * 110: Invalid FEN syntax
  * 111: Invalid FEN syntax: no castling flags
  * 112: Invalid FEN syntax: one or more ranks don't contain 8 squares
- * 119: Invalid FEN syntax: wrong number of sections TODO: remove this!
  * 120: Trying to play illegal move
  * 130: Invalid SAN move syntax
  * 131: SAN move is ambiguous
@@ -50,21 +49,42 @@ class PositionException extends Exception {}
 
 class Position
 {
-	private $fen;
-
+	/**
+ 	 * the internal board representation
+ 	 *
+ 	 * This is an array of strings. Each element is either an empty string or the piece letter of the piece occupying that square.
+ 	 * As indices integers from 0 (a1) to 63 (h8) are used. See squares.php for more information.
+ 	 */
 	private $board;
 	
+	/**
+ 	 * An array saving which castlings are allowed
+ 	 */
 	private $castlings = ['K' => false,
 	                      'Q' => false,
 	                      'k' => false,
 	                      'q' => false];
 	
+	/**
+ 	 * the side whose turn it is
+ 	 *
+ 	 * Either 'w' or 'b'
+ 	 */
 	private $turn;
 
+	/**
+ 	 * the number of half-moves since the last pawn move or capture
+ 	 */
 	private $halfMoves;
 
+	/**
+ 	 * th current move number
+ 	 */
 	private $moveNumber;
 
+	/**
+ 	 * the currently possible en passant square
+ 	 */
 	private $enPassant;
 	/**
 	 * Constructor of Position
@@ -72,7 +92,7 @@ class Position
 	 * @param mixed $position The position to load as a FEN
 	 */
 
-	function __construct($position) // TODO: support other formats than FEN
+	function __construct($position)
 	{
 		$this->loadFEN($position);
 	}
@@ -187,15 +207,6 @@ class Position
 
 		// split fen
 		$sections = explode(" ", $fen);
-
-		// validate fen
-		// this is actually unnecessary because it was already checked with the RegEx but as long as this is still in testing it might be useful in case the RegEx doesn't work
-		// TODO: remove this!
-		if (!(count($sections) == 6)) {
-			throw new PositionException('function loadFEN: Invalid FEN syntax', 119);
-		}
-
-
 
 		// check if all kings are on the bord
 		if (strpos($sections[0], "K") === FALSE || strpos($sections[0], "k") === FALSE)
@@ -384,8 +395,6 @@ class Position
 
 		/* set move-number */
 		$this->moveNumber = $sections[5];
-
-		$this->fen = $fen;
 	}
 
 	/**
@@ -394,48 +403,8 @@ class Position
 
 	function reset()
 	{
-
+		$this->loadFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 	}
-
-	/**
-	 * Returns true if the game is draw by fifty moves rule
-	 *
-	 * Fifty moves must have been played without a piece being captured or a pawn beeing moved by either side
-	 *
-	 * @return boolean true if draw, false if not
-	 */
-
-	function isFiftyMoves()
-	{
-
-	}
-
-
-	/**
-	 * Returns true if the game is drawn by stalemate
-	 *
-	 * True if the side to move hasn't got any valid moves but isn't in check
-	 *
-	 * @return boolean true if draw, false if not
-	 */
-
-	function isStaleMate()
-	{
-
-	}
-
-
-	/**
-	 * Returns true if the side to move is checkmated
-	 *
-	 * @return boolean true if checkmate, false if not
-	 */
-
-	function isMate()
-	{
-
-	}
-
 
 	/**
 	 * Returns true if the side to move is in check
@@ -456,7 +425,7 @@ class Position
 	 * @return boolean true if in check, false if not
 	 */
 
-	function internalInCheck($side, $board)
+	private function internalInCheck($side, $board)
 	{
 		foreach ($board as $index=>$currentSquare) {
 			if ($currentSquare == ($side == 'w' ? 'K' : 'k')) {	
