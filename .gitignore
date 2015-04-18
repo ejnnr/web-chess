@@ -1,5 +1,10 @@
+composer.phar
+ctags
 test/
 Thumbs.db
 *.log
 .c9/
-vendor/
+/vendor
+/node_modules
+.env
+resources/assets/vendor
