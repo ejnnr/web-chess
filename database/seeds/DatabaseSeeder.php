@@ -51,10 +51,12 @@ class SharedDatabasesPivotTableSeeder extends Seeder {
 	{
         \DB::table('shared_databases')->delete();
 
-		$database = \App\Database::find(1);
-		$database->share(2, 3);
+		$database = \App\Database::where('name', '=', 'sample database')->first();
+		$id = \App\User::where('name', '=', 'user2')->first()->id;
+		$database->share($id, 3);
 
-		$database = \App\Database::find(2);
-		$database->share(4, 2);
+		$database = \App\Database::where('name', '=', 'my games')->first();
+		$id = \App\User::where('name', '=', 'user4')->first()->id;
+		$database->share($id, 2);
 	}
 }
