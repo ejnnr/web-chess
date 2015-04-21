@@ -8,14 +8,20 @@ Setting it up on your local machine
 
 You should have Apache, PHP and MySQL installed and running.
 
-1. Clone the repository
-2. Set up you configuration file: config/config.php is a symlink to config/config.sample.php by default. If you want to change your configuration, copy config/conifg.sample.php to config/config.php and edit whatever you want in there. See https://github.com/jupiter24/web-chess/issues/11 for reasons behind this.
-3. Create a MySQL database called webchess (notice: You can change all of these names, but you also have to change them in config/config.php accordingly if you do so)
-4. Create a user called webchess and give it acces to the database you just created (this is only for security reasons, you can also use root)
-5. Enter the users password into config/config.php or take the example password from there for your user (NOT RECOMMENDED!!!)
-6. If you are using phpMyAdmin, you can simply go into the newly created database, select "Import" and select webchess.sql from the reporitory to set up the tables in the database. If you use another interface, just look into the webchess.sql file to see which tables you have to create.
-7. Install composer (http://getcomposer.org)
-8. run 'composer install' in your local repository's root directory to install all required libraries.
+0.  Setup Apache, PHP and MySQL if you haven't already
+1.  Clone the repository
+2.  Create a MySQL database for web-chess
+3.  (optional) Create a user called webchess and give it access to the database you just created (you can also use a pre-existing user if you want)
+4.  Install composer (http://getcomposer.org)
+5.  run `composer install` in your projects root directory
+6.  copy .env.example to .env and enter your MySQL credentials there
+7.  run `php artisan key:generate` in your project root
+8.  run `php artisan migrate` in your project root
+9.  install nodejs (https://nodejs.org/)
+10. run `npm install --global bower` (you might need sudo)
+11. run `npm install --global gulp`
+12. run `bower install` in your project root
+
 
 WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional database tables or change anything else.
 If you commit such a change, please also leave a notice here where you explain, what other people have to do to perform the same changes on their machines.
