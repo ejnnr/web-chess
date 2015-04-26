@@ -5,11 +5,11 @@ class UserTest extends TestCase
 	public function setUp()
 	{
 		parent::setUp();
-		$this->seed('DatabaseSeeder');
+		$this->seed('TestingSeeder');
 	}
 
 	public function testGetUser() {
 		$user = \App\User::where('name', '=', 'user1')->first();
-		$this->assertEquals('foo@bar.com', $user->email);
+		$this->assertEquals('user1@example.com', $user->email);
 	}
 }
