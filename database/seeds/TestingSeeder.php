@@ -40,10 +40,15 @@ class TestingDatabaseTableSeeder extends Seeder {
 	{
         \DB::table('databases')->delete();
 
-		\App\Database::create(['name' => 'private_database1', 'owner_id' => 4, 'public' => FALSE]);
-        \App\Database::create(['name' => 'shared_database1', 'owner_id' => 1, 'public' => FALSE]);
-        \App\Database::create(['name' => 'shared_database2', 'owner_id' => 2, 'public' => FALSE]);
-        \App\Database::create(['name' => 'public_database1', 'owner_id' => 3, 'public' => TRUE]);
+		$user1 = App\User::where('name', '=', 'user1')->first()->id;
+		$user2 = App\User::where('name', '=', 'user2')->first()->id;
+		$user3 = App\User::where('name', '=', 'user3')->first()->id;
+		$user4 = App\User::where('name', '=', 'user4')->first()->id;
+
+		\App\Database::create(['name' => 'private_database1', 'owner_id' => $user4, 'public' => FALSE]);
+        \App\Database::create(['name' => 'shared_database1', 'owner_id' => $user1, 'public' => FALSE]);
+        \App\Database::create(['name' => 'shared_database2', 'owner_id' => $user2, 'public' => FALSE]);
+        \App\Database::create(['name' => 'public_database1', 'owner_id' => $user3, 'public' => TRUE]);
 	}
 }
 
