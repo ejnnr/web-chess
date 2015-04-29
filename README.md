@@ -1,5 +1,9 @@
 web-chess
 ================
+Develop:
+[![Build Status](https://travis-ci.org/jupiter24/web-chess.svg?branch=develop)](https://travis-ci.org/jupiter24/web-chess)
+Master:
+[![Build Status](https://travis-ci.org/jupiter24/web-chess.svg?branch=master)](https://travis-ci.org/jupiter24/web-chess)
 
 A web implementation of a chess database program like SCID.
 
