@@ -1348,4 +1348,3 @@ class Position
 		return new Move($departure, $destination, $promotion, $NAGs);
 	}
 }
-?>

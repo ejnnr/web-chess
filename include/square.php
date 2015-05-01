@@ -203,4 +203,3 @@ function getFile($square)
 
 	return $square & 7;
 }
-?>

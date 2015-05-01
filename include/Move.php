@@ -274,5 +274,3 @@ class Move
 		return $this->NAGs;
 	}
 }
-
-?>
