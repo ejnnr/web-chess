@@ -17,6 +17,7 @@ require_once 'Move.php';
 
 /**
  * Represents an exception thrown by Position.
+ *
  * List of Exception Codes:
  *   1: Unknown internal error
  *   2: Null argument
@@ -86,6 +87,7 @@ class Position
  	 * the currently possible en passant square
  	 */
 	private $enPassant;
+
 	/**
 	 * Constructor of Position
 	 *
@@ -100,15 +102,18 @@ class Position
 	/**
 	 * Returns the FEN of the position
 	 *
-	 * @return string The FEN
+	 * @return string the FEN
 	 */
 
 	function getFEN()
 	{
-		$boardString = ''; // this is were the string will be put together
+		$boardString = ''; // this is where the string will be put together
 		$emptySquares = 0; // this is a counter that is used because empty square need to be grouped together, i.e. '3' instead of '111'
 
+		// loop through a two-dimensional array returned by getArray()
+		// array_reverse is necessary because FEN starts with the 8th rank
 		foreach (array_reverse($this->getArray()) as $index=>$rank) {
+			// Don't add a / at the beginning of the FEN
 			if ($index != 0) {
 				$boardString .= ($emptySquares != 0 ? (string)$emptySquares : '') . '/'; // add the remaining empty squares to the old rank and start a new one
 				$emptySquares = 0;
@@ -117,7 +122,7 @@ class Position
 				if (empty($square)) { // empty square
 					$emptySquares++;
 				} else { // a piece is on this square
-					$boardString .= ($emptySquares != 0 ? (string)$emptySquares : '') . $square;
+					$boardString .= ($emptySquares != 0 ? (string)$emptySquares : '') . $square; // add the remaining empty squares as a number
 					$emptySquares = 0;
 				}
 			}
@@ -143,11 +148,13 @@ class Position
 
 	function getArray()
 	{
+		// the return value
 		$ret = array();
 
+		// iterate through the board
 		foreach ($this->board as $index=>$square) {
 			if ($index % 8 == 0) { // start of a new rank
-				$ret[] = array();
+				$ret[] = array(); // add a new rank (array) to the return value
 			}
 			$ret[getRank($index)][] = $square;
 		}
@@ -171,24 +178,22 @@ class Position
 			throw new PositionException('function loadFEN: fen must be of type string', 4);
 		}
 
-		$matches = array(); // used to store the match result of the RegEx
+		$matches = array(); // used to store the match result of the RegExp
 		// the regular expression is structured as follows (spaces aren't listed here):
 		//  #                            the delimiter
 		//  ^                            beginning of string (to prevent that only part of the string macthes)
-		//  ([1-8KQRBNPkqrbnp]{1,8}/)    one rank followd by a / ...
+		//  ([1-8KQRBNPkqrbnp]{1,8}/)    one rank followed by a / ...
 		//  {7}                          ... seven times
 		//  [1-8KQRBNPkqrbnp]{1-8}       and the last one without a following /
 		//  [wb]                         whose turn it is
-		//  (?P<castling>                name the following sub expression castling
-		//  K?Q?k?q?)                    the castling flags ...
-		//  |(?P<noCastling>\-)          ... or no castling
-		//  ([a-h][36])|\-               the en passant file or -
+		//  (K?Q?k?q?|-)                 the castling flags or -
+		//  ([a-h][36]|\-)               the en passant file or -
 		//  [0-9]+                       number of half-moves since last capture or pawn move
 		//  [0-9]+                       move count
 		//  $                            end of string (see ^)
 		//  #                            the ending delimiter
 		// '=== 0' (instead of a simple '!') must be used because preg_macth returns FALSE on failure and 0 if nothing's been found
-		// $matches must be used because the RegEx would allow castling flags to be omitted
+		// $matches must be used because the RegExp would allow castling flags to be omitted
 
 		$regExResult = preg_match('#^([1-8KQRBNPkqrbnp]{1,8}/){7}[1-8KQRBNPkqrbnp]{1,8} [wb] (K?Q?k?q?|-) ([a-h][36]|-) [0-9]+ [0-9]+$#', $fen, $matches);
 
@@ -200,16 +205,16 @@ class Position
 			throw new PositionException('function loadFEN: fen syntax is invalid', 110);
 		}
 
-		// check if castling flags are missing (the RegEx doesn't do this well)
+		// check if castling flags are missing (the RegEx doesn't check this)
 		if (empty($matches[2])) {
 			throw new PositionException('function loadFEN: castling flags missing', 111);
 		}
 
 		// split fen
-		$sections = explode(" ", $fen);
+		$sections = explode(' ', $fen);
 
 		// check if all kings are on the bord
-		if (strpos($sections[0], "K") === FALSE || strpos($sections[0], "k") === FALSE)
+		if (strpos($sections[0], 'K') === FALSE || strpos($sections[0], 'k') === FALSE)
 		{
 			throw new PositionException('Function loadFen: there must be a black and a white king on the board.', 102);
 		}
@@ -349,31 +354,31 @@ class Position
 
 		$this->turn = $sections[1];
 
-		/* set possible castlings */
-		$this->castlings = array("K" => false, "Q" => false, "k" => false, "q" => false);
+		// set possible castlings
+		$this->castlings = array('K' => false, 'Q' => false, 'k' => false, 'q' => false);
 
-		if (strpos($sections[2], "K") !== false) /* '!== false' is necessary. See http://php.net/manual/en/function.strpos.php for further information */
+		if (strpos($sections[2], 'K') !== false) // '!== false' is necessary. See http://php.net/manual/en/function.strpos.php for further information
 		{
-			$this->castlings["K"] = true;
+			$this->castlings['K'] = true;
 		}
 
-		if (strpos($sections[2], "Q") !== false)
+		if (strpos($sections[2], 'Q') !== false)
 		{
-			$this->castlings["Q"] = true;
+			$this->castlings['Q'] = true;
 		}
 
-		if (strpos($sections[2], "k") !== false)
+		if (strpos($sections[2], 'k') !== false)
 		{
-			$this->castlings["k"] = true;
+			$this->castlings['k'] = true;
 		}
 
-		if (strpos($sections[2], "q") !== false)
+		if (strpos($sections[2], 'q') !== false)
 		{
-			$this->castlings["q"] = true;
+			$this->castlings['q'] = true;
 		}
 
 		// set en passant square
-		if ($sections[3] != "-")
+		if ($sections[3] != '-')
 		{
 			if (getRank(string2square($sections[3])) != ($this->turn == 'w' ? 5 : 2)) { // if it's white's turn, en passant square must be on sixth rank, otherwise on third
 				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($this->turn == 'w' ? 'white\'s' : 'black\'s') . ' turn', 106);
@@ -387,13 +392,13 @@ class Position
 		else
 		{
 			// no en passant square
-			$this->enPassant = "";
+			$this->enPassant = '';
 		}
 
-		/* set number of half-moves since the last pawn move of capture */
+		// set number of half-moves since the last pawn move of capture
 		$this->halfMoves = $sections[4];
 
-		/* set move-number */
+		// set move-number
 		$this->moveNumber = $sections[5];
 	}
 
@@ -420,7 +425,7 @@ class Position
 	/**
 	 * Returns true if the side given in $side is in check
 	 *
-	 * @param  string  $side  The side to be checked
+	 * @param  string  $side  The side to be checked (either 'w' or 'b')
 	 * @param  array   $board The board used for checking
 	 * @return boolean true if in check, false if not
 	 */
@@ -429,7 +434,7 @@ class Position
 	{
 		foreach ($board as $index=>$currentSquare) {
 			if ($currentSquare == ($side == 'w' ? 'K' : 'k')) {	
-				return $this->isAttacked($index, ($side == 'w' ? 'b' : 'w'), $board);
+				return $this->isAttacked($index, ($side == 'w' ? 'b' : 'w'), $board); // call isAttacked; the second parameter is the attacking color which is the opposite of the color in check
 			}
 		}
 		// should never happen
@@ -453,6 +458,7 @@ class Position
 		$departure = $move->getDeparture();
 		$destination = $move->getDestination();
 
+		// if the piece on the departure square is not of the right color or if there is no piece at all, return false
 		if ($this->turn == 'w') {
 			if (!in_array($this->board[$departure], ['K', 'Q', 'R', 'B', 'N', 'P'])) {
 				return FALSE;
@@ -472,11 +478,13 @@ class Position
 			case 'b':
 			case 'N':
 			case 'n':
+				// return false if the piece doesn't even attack the destination square
 				if (!$this->attacks($departure, $destination)) {
 					return FALSE;
 				}
 				break;
 			case 'P':
+				// if none of the types of moves a pawn can make fits, return false
 				if (!((($departure - $destination == -8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
 				   || (($departure - $destination == -16) && ($this->board[$destination] == '') && ($this->board[$destination - 8] == '') && (getRank($departure) == 1)) // double step if pawn is still on starting position
 				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == -1) && (in_array($this->board[$destination], ['q', 'r', 'b', 'n', 'p']))) // normal capture
@@ -485,6 +493,7 @@ class Position
 				}
 				break;
 			case 'p':
+				// if none of the types of moves a pawn can make fits, return false
 				if (!((($departure - $destination == 8) && ($this->board[$destination] == '')) // normal pawn move: one square forward
 				   || (($departure - $destination == 16) && ($this->board[$destination] == '') && ($this->board[$destination + 8] == '') && (getRank($departure) == 6)) // double step if pawn is still on starting position
 				   || ((abs(getFile($departure) - getFile($destination)) == 1) && (getRank($departure) - getRank($destination) == 1) && (in_array($this->board[$destination], ['Q', 'R', 'B', 'N', 'P']))) // normal capture
@@ -495,7 +504,6 @@ class Position
 			case 'K':
 				// normal king move
 				if ($this->attacks($departure, $destination)) {
-					
 					break;
 				}
 
@@ -633,7 +641,7 @@ class Position
 				break; // actually unnecessary but something might be changed and then this will become useful
 		}
 
-		// create a copy of board and do the move on that copy
+		// create a copy of board and do the move on that copy to see if it would leave the king in check
 		$boardTemp = $this->board;
 		$boardTemp[$departure] = '';
 		$boardTemp[$destination] = $this->board[$departure];
@@ -659,6 +667,15 @@ class Position
 			throw new PositionException('function possibleKingMove: invalid destination', 7);
 		}
 
+		// King moves:
+		// format: abs(file movement), abs(rank, movement)
+		// 1,1 | 0,1 | 1,1
+		// ---------------
+		// 1,0 |  K  | 1,0
+		// ---------------
+		// 1,1 | 0,1 | 1,1
+		// so for a valid king move the movement must be either 1,1 or 0,1 or 1,0
+
 		return (((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 1))
 		     || ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 0))
 		     || ((abs(getFile($departure) - getFile($destination)) == 0) && (abs(getRank($departure) - getRank($destination)) == 1)));
@@ -681,6 +698,7 @@ class Position
 			throw new PositionException('function possibleQueenMove: invalid destination', 7);
 		}
 
+		// a queen can move like a rook and like a bishop, so just call these two functions
 		return ($this->possibleRookMove($departure, $destination) || $this->possibleBishopMove($departure, $destination));
 	}
 
@@ -700,6 +718,20 @@ class Position
 		if (!validateSquare($destination)) {
 			throw new PositionException('function possibleRookMove: invalid destination', 7);
 		}
+
+		// Rook moves:
+		// 
+		//     |     | 0,2 |     |
+		// ---------------------------
+		//     |     | 0,1 |     |
+		// ---------------------------
+		// 2,0 | 1,0 |  R  | 1,0 | 2,0
+		// ---------------------------
+		//     |     | 0,1 |     |
+		// ---------------------------
+		//     |     | 0,2 |     |
+		//
+		// so a valid rook move means that either the file movement or the rank movement is not equal to zero and the other one is.
 
 		return ((((getRank($departure) - getRank($destination)) == 0) && ((getFile($departure) - getFile($destination)) != 0)) || (((getRank($departure) - getRank($destination)) != 0) && ((getFile($departure) - getFile($destination)) == 0)));
 	}
@@ -721,6 +753,21 @@ class Position
 			throw new PositionException('function possibleBishopMove: invalid destination', 7);
 		}
 
+
+		// bishop moves:
+		// 
+		// 2,2 |     |     |     | 2,2
+		// ---------------------------
+		//     | 1,1 |     | 1,1 |
+		// ---------------------------
+		//     |     |  B  |     |
+		// ---------------------------
+		//     | 1,1 |     | 1,1 |
+		// ---------------------------
+		// 2,2 |     |     |     | 2,2
+		//
+		// so for a valid bishop moves, abs() of both movement directions must be equal and they must not be zero
+		
 		return ((abs(getFile($departure) - getFile($destination)) == abs(getRank($departure) - getRank($destination))) && ((getFile($departure) - getFile($destination)) != 0));
 	}
 
@@ -740,6 +787,20 @@ class Position
 		if (!validateSquare($destination)) {
 			throw new PositionException('function possibleKnightMove: invalid destination', 7);
 		}
+
+		// knight moves:
+		// 
+		//     | 1,2 |     | 1,2 |
+		// ---------------------------
+		// 2,1 |     |     |     | 2,1
+		// ---------------------------
+		//     |     |  N  |     |
+		// ---------------------------
+		// 2,1 |     |     |     | 2,1
+		// ---------------------------
+		//     | 1,2 |     | 1,2 |
+		//
+		// so for a valid knight move one movement direction must be 2, the other one 1
 
 		return (((abs(getFile($departure) - getFile($destination)) == 2) && (abs(getRank($departure) - getRank($destination)) == 1)) || ((abs(getFile($departure) - getFile($destination)) == 1) && (abs(getRank($departure) - getRank($destination)) == 2)));
 	}
@@ -797,111 +858,117 @@ class Position
 
 		// depending on which type of piece is on departure different things need to be checked
 		switch ($board[$departure]) {
-		case '':
-			throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
-		case 'K':
-		case 'k':
-			return $this->possibleKingMove($departure, $destination);
-		case 'N':
-		case 'n':
-			return $this->possibleKnightMove($departure, $destination);
-		case 'R':
-		case 'r':
-			if (!$this->possibleRookMove($departure, $destination)) {
-				return FALSE;
-			}
+			case '':
+				throw new PositionException('function attacks: departure square doesn\'t contain a piece', 5);
+			case 'K':
+			case 'k':
+				return $this->possibleKingMove($departure, $destination);
+			case 'N':
+			case 'n':
+				return $this->possibleKnightMove($departure, $destination);
+			case 'R':
+			case 'r':
+				if (!$this->possibleRookMove($departure, $destination)) {
+					return FALSE;
+				}
 
-			// get the direction of movement (-1, 0 or 1)
-			if ((getFile($destination) - getFile($departure)) == 0) {
-				$fileMovement = 0;
-			} elseif ((getFile($destination) - getFile($departure)) > 0) {
-				$fileMovement = 1;
-			} elseif ((getFile($destination) - getFile($departure)) < 0) {
-				$fileMovement = -1;
-			}
-			if ((getRank($destination) - getRank($departure)) == 0) {
-				$rankMovement = 0;
-			} elseif ((getRank($destination) - getRank($departure)) > 0) {
-				$rankMovement = 1;
-			} elseif ((getRank($destination) - getRank($departure)) < 0) {
-				$rankMovement = -1;
-			}
+				// the rest of this function basically checks if there is any piece between departure and destination because rooks cannot jump
 
-			$file = getFile($departure) + $fileMovement;
-			$rank = getRank($departure) + $rankMovement;
-			// go ine square at a time in the direction of the move until hitting another piece or reaching destination
-			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
-				$file += $fileMovement;
-				$rank += $rankMovement;
-			}
-			
-			// if we've reached destination, the move is possible, otherwise there is something in the way
-			return (array2square([$file, $rank]) == $destination);
-		case 'B':
-		case 'b':
-			if (!$this->possibleBishopMove($departure, $destination)) {
-				return FALSE;
-			}
+				// get the direction of movement (-1, 0 or 1)
+				if ((getFile($destination) - getFile($departure)) == 0) {
+					$fileMovement = 0;
+				} elseif ((getFile($destination) - getFile($departure)) > 0) {
+					$fileMovement = 1;
+				} elseif ((getFile($destination) - getFile($departure)) < 0) {
+					$fileMovement = -1;
+				}
+				if ((getRank($destination) - getRank($departure)) == 0) {
+					$rankMovement = 0;
+				} elseif ((getRank($destination) - getRank($departure)) > 0) {
+					$rankMovement = 1;
+				} elseif ((getRank($destination) - getRank($departure)) < 0) {
+					$rankMovement = -1;
+				}
 
-			if ((getFile($destination) - getFile($departure)) == 0) {
-				$fileMovement = 0;
-			} elseif ((getFile($destination) - getFile($departure)) > 0) {
-				$fileMovement = 1;
-			} elseif ((getFile($destination) - getFile($departure)) < 0) {
-				$fileMovement = -1;
-			}
-			if ((getRank($destination) - getRank($departure)) == 0) {
-				$rankMovement = 0;
-			} elseif ((getRank($destination) - getRank($departure)) > 0) {
-				$rankMovement = 1;
-			} elseif ((getRank($destination) - getRank($departure)) < 0) {
-				$rankMovement = -1;
-			}
+				$file = getFile($departure) + $fileMovement;
+				$rank = getRank($departure) + $rankMovement;
+				// go one square at a time in the direction of the move until hitting another piece or reaching destination
+				while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
+					$file += $fileMovement;
+					$rank += $rankMovement;
+				}
 
-			$file = getFile($departure) + $fileMovement;
-			$rank = getRank($departure) + $rankMovement;
-			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
-				$file += $fileMovement;
-				$rank += $rankMovement;
-			}
-			
-			return (array2square([$file, $rank]) == $destination);
-		case 'Q':
-		case 'q':
-			if (!$this->possibleQueenMove($departure, $destination)) {
-				return FALSE;
-			}
+				// if we've reached destination, the move is possible, otherwise there is something in the way
+				return (array2square([$file, $rank]) == $destination);
+			case 'B':
+			case 'b':
+				if (!$this->possibleBishopMove($departure, $destination)) {
+					return FALSE;
+				}
 
-			if ((getFile($destination) - getFile($departure)) == 0) {
-				$fileMovement = 0;
-			} elseif ((getFile($destination) - getFile($departure)) > 0) {
-				$fileMovement = 1;
-			} elseif ((getFile($destination) - getFile($departure)) < 0) {
-				$fileMovement = -1;
-			}
-			if ((getRank($destination) - getRank($departure)) == 0) {
-				$rankMovement = 0;
-			} elseif ((getRank($destination) - getRank($departure)) > 0) {
-				$rankMovement = 1;
-			} elseif ((getRank($destination) - getRank($departure)) < 0) {
-				$rankMovement = -1;
-			}
+				// the rest of this function basically checks if there is any piece between departure and destination because bishops cannot jump
 
-			$file = getFile($departure) + $fileMovement;
-			$rank = getRank($departure) + $rankMovement;
-			while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
-				$file += $fileMovement;
-				$rank += $rankMovement;
-			}
-			
-			return (array2square([$file, $rank]) == $destination);
-		case 'P':
-			// we only have to check for capturing movement
-			return ((abs(getFile($departure) - getFile($destination)) == 1)
-				&& ((getRank($departure) - getRank($destination)) == -1));
-		case 'p':
-			return ((abs(getFile($departure) - getFile($destination)) == 1)
-				&& ((getRank($departure) - getRank($destination)) == 1));
+				if ((getFile($destination) - getFile($departure)) == 0) {
+					$fileMovement = 0;
+				} elseif ((getFile($destination) - getFile($departure)) > 0) {
+					$fileMovement = 1;
+				} elseif ((getFile($destination) - getFile($departure)) < 0) {
+					$fileMovement = -1;
+				}
+				if ((getRank($destination) - getRank($departure)) == 0) {
+					$rankMovement = 0;
+				} elseif ((getRank($destination) - getRank($departure)) > 0) {
+					$rankMovement = 1;
+				} elseif ((getRank($destination) - getRank($departure)) < 0) {
+					$rankMovement = -1;
+				}
+
+				$file = getFile($departure) + $fileMovement;
+				$rank = getRank($departure) + $rankMovement;
+				while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
+					$file += $fileMovement;
+					$rank += $rankMovement;
+				}
+
+				return (array2square([$file, $rank]) == $destination);
+			case 'Q':
+			case 'q':
+				if (!$this->possibleQueenMove($departure, $destination)) {
+					return FALSE;
+				}
+
+				// the rest of this function basically checks if there is any piece between departure and destination because queens cannot jump
+
+				if ((getFile($destination) - getFile($departure)) == 0) {
+					$fileMovement = 0;
+				} elseif ((getFile($destination) - getFile($departure)) > 0) {
+					$fileMovement = 1;
+				} elseif ((getFile($destination) - getFile($departure)) < 0) {
+					$fileMovement = -1;
+				}
+				if ((getRank($destination) - getRank($departure)) == 0) {
+					$rankMovement = 0;
+				} elseif ((getRank($destination) - getRank($departure)) > 0) {
+					$rankMovement = 1;
+				} elseif ((getRank($destination) - getRank($departure)) < 0) {
+					$rankMovement = -1;
+				}
+
+				$file = getFile($departure) + $fileMovement;
+				$rank = getRank($departure) + $rankMovement;
+				while (($board[array2square([$file, $rank])] == '') && array2square([$file, $rank]) != $destination) {
+					$file += $fileMovement;
+					$rank += $rankMovement;
+				}
+
+				return (array2square([$file, $rank]) == $destination);
+			case 'P':
+				// we only have to check for capturing movement
+				return ((abs(getFile($departure) - getFile($destination)) == 1)
+					&& ((getRank($departure) - getRank($destination)) == -1));
+			case 'p':
+				return ((abs(getFile($departure) - getFile($destination)) == 1)
+					&& ((getRank($departure) - getRank($destination)) == 1));
 		}
 	}
 
@@ -952,13 +1019,13 @@ class Position
 		}
 
 		foreach($board as $index=>$currentSquare) {
-			if ($turn == 'w') {
+			if ($turn == 'w') { // white is the attacking color
 				if (in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P'])) {
 					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
 					}
 				}
-			} else {
+			} else { // black is the attacking color
 				if (in_array($currentSquare, ['k', 'q', 'r', 'b', 'n', 'p'])) {
 					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
@@ -983,7 +1050,7 @@ class Position
 		if (!$this->isLegalMove($move)) {
 			throw new PositionException('function doMove: move is illegal', 120);
 		}
-		
+
 		$departure = $move->getDeparture();
 		$destination = $move->getDestination();
 		$this->halfMoves++;
@@ -996,17 +1063,26 @@ class Position
 			case 'N':
 			case 'n':
 				if ($this->board[$destination] != '') {
+					// the move is a capturing move, therefore the 50-moves-counter must be reset
 					$this->halfMoves = 0;
 				}
+
+				// update the board
 				$this->board[$destination] = $this->board[$departure];
 				$this->board[$departure] = '';
 				break;
+
 			case 'R':
 				if ($this->board[$destination] != '') {
+					// the move is a capturing move, therefore the 50-moves-counter must be reset
 					$this->halfMoves = 0;
 				}
+
+				// update the board
 				$this->board[$destination] = $this->board[$departure];
 				$this->board[$departure] = '';
+
+				// update castling rights
 				if ($departure == string2square('h1')) {
 					$this->castlings['K'] == false;
 				}
@@ -1014,12 +1090,16 @@ class Position
 					$this->castlings['Q'] == false;
 				}
 				break;
+
 			case 'r':
 				if ($this->board[$destination] != '') {
+					// the move is a capturing move, therefore the 50-moves-counter must be reset
 					$this->halfMoves = 0;
 				}
 				$this->board[$destination] = $this->board[$departure];
 				$this->board[$departure] = '';
+
+				// update castling rights
 				if ($departure == string2square('h8')) {
 					$this->castlings['k'] == false;
 				}
@@ -1027,8 +1107,11 @@ class Position
 					$this->castlings['q'] == false;
 				}
 				break;
+
 			case 'P':
+				// since this is a pawn move, the 50-moves-counter must be reset
 				$this->halfMoves = 0;
+
 				if (abs(getRank($departure) - getRank ($destination)) == 2) { // double step
 					$this->enPassant = substr(square2string($destination), 0, 1) . '3'; // add en passant square
 					$preserveEnPassant = TRUE; // make sure en passant square doesn't get overwritten
@@ -1040,19 +1123,19 @@ class Position
 				$this->board[$departure] = '';
 				if (getRank($destination) == 7) { // promotion
 					switch ($move->getPromotion()) {
-						case PROMOTION_QUEEN:
-							$this->board[$destination] = 'Q';
-							break;
-						case PROMOTION_ROOK:
-							$this->board[$destination] = 'R';
-							break;
-						case PROMOTION_BISHOP:
-							$this->board[$destination] = 'B';
-							break;
-						case PROMOTION_KNIGHT:
-							$this->board[$destination] = 'N';
-							break;
- 				   	}
+					case PROMOTION_QUEEN:
+						$this->board[$destination] = 'Q';
+						break;
+					case PROMOTION_ROOK:
+						$this->board[$destination] = 'R';
+						break;
+					case PROMOTION_BISHOP:
+						$this->board[$destination] = 'B';
+						break;
+					case PROMOTION_KNIGHT:
+						$this->board[$destination] = 'N';
+						break;
+ 					}
 				}
 				break;
 			case 'p':
@@ -1068,19 +1151,19 @@ class Position
 				$this->board[$departure] = '';
 				if (getRank($destination) == 0) { // promotion
 					switch ($move->getPromotion()) {
-						case PROMOTION_QUEEN:
-							$this->board[$destination] = 'q';
-							break;
-						case PROMOTION_ROOK:
-							$this->board[$destination] = 'r';
-							break;
-						case PROMOTION_BISHOP:
-							$this->board[$destination] = 'b';
-							break;
-						case PROMOTION_KNIGHT:
-							$this->board[$destination] = 'n';
-							break;
- 				   	}
+					case PROMOTION_QUEEN:
+						$this->board[$destination] = 'q';
+						break;
+					case PROMOTION_ROOK:
+						$this->board[$destination] = 'r';
+						break;
+					case PROMOTION_BISHOP:
+						$this->board[$destination] = 'b';
+						break;
+					case PROMOTION_KNIGHT:
+						$this->board[$destination] = 'n';
+						break;
+ 					}
 				}
 				break;
 			case 'K':
@@ -1088,6 +1171,7 @@ class Position
 				$this->castlings['Q'] = FALSE;
 				if ($this->possibleKingMove($departure, $destination)) { // regular king move
 					if ($this->board[$destination] != '') {
+						// the move is a capturing move, therefore the 50-moves-counter must be reset
 						$this->halfMoves = 0;
 					}
 					$this->board[$destination] = $this->board[$departure];
@@ -1115,6 +1199,7 @@ class Position
 				$this->castlings['q'] = FALSE;
 				if ($this->possibleKingMove($departure, $destination)) { // regular king move
 					if ($this->board[$destination] != '') {
+						// the move is a capturing move, therefore the 50-moves-counter must be reset
 						$this->halfMoves = 0;
 					}
 					$this->board[$destination] = $this->board[$departure];
@@ -1186,19 +1271,22 @@ class Position
 			throw new PositionException('function parseSAN: move is empty', 2);
 		}
 
+		// this function is mainly based around the following regular expression.
+		// All the seperate fields of a SAN move, i.e. diambiguation, destination, promotion etc. are later accessed via $matches
+
 		$matches = array();
 		if (!preg_match('/^(?<move>(?<piece>[KQRBN]?)(?<disambiguationFile>[a-h]?)(?<disambiguationRank>[1-8]?)(?<capture>[x]?)(?<destination>[a-h][1-8])(=(?<promotion>[QRBN]))?|(?<kingsideCastling>O-O)|(?<queensideCastling>O-O-O))(?<check>\+|\#)? ?(?<annotationMove>\?|!|\?!|!\?|\?\?|!!)? ?(?<NAGs>( ?\$[0-9]+ ?)*)$/', $move, $matches)) {
 			throw new PositionException('function parseSAN: invalid move syntax', 130);
 		}
 
-		if (!empty($matches['kingsideCastling'])) {
-			$departure = ($this->turn == 'w' ? 4 : 60);
-			$destination = ($this->turn == 'w' ? 6 : 62);
+		if (!empty($matches['kingsideCastling'])) { // the moves is kingside castling
+			$departure = ($this->turn == 'w' ? 4 : 60); // set departure to e1 or e8
+			$destination = ($this->turn == 'w' ? 6 : 62); // set destination to g1 or g8
 			if ($this->board[$departure] != ($this->turn == 'w' ? 'K' : 'k')) {
 				throw new PositionException('function parseSAN: castling is not possible', 132);
 			}
 			if (!$this->isLegalMove(new Move($departure, $destination))) {
-				throw new PositionException('function parseSAN: csatling is no legal move', 132);
+				throw new PositionException('function parseSAN: castling is no legal move', 132);
 			}
 			$promotion = PROMOTION_QUEEN;
 			goto castling;
@@ -1245,8 +1333,11 @@ class Position
 
 		castling:
 
+		// replace !, ?, !!, ??, ?! and !? with NAGs
 		$annotationMove = preg_replace(array('/^!$/', '/^\?$/', '/^!!$/', '/^\?\?$/', '/^!\?$/', '/^\?!$/'), array('\$1', '\$2', '\$3', '\$4', '\$5', '\$6'), $matches['annotationMove']);
+		// add the NAGs just created to the NAGs in the move
 		$NAGs = $matches['NAGs'] . $annotationMove;
+		// strip whitespaces
 		$NAGs = str_replace(' ', '', $NAGs);
 		$NAGs = explode('$', $NAGs);
 		unset($NAGs[0]); // delete the first element, because it is empty (the string used with explode started with $)
