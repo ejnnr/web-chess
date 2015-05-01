@@ -38,7 +38,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function databases()
 	{
-		return $this->hasMany('App\Databases', 'owner_id');
+		return $this->hasMany('App\Database', 'owner_id');
 	}
 
 	public function sharedDatabases()

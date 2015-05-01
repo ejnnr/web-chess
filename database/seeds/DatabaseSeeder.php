@@ -40,9 +40,14 @@ class DatabaseTableSeeder extends Seeder {
 	{
         \DB::table('databases')->delete();
 
-        \App\Database::create(['name' => 'sample database', 'owner_id' => 1, 'public' => FALSE]);
-        \App\Database::create(['name' => 'my games', 'owner_id' => 2, 'public' => FALSE]);
-        \App\Database::create(['name' => 'grandmaster games', 'owner_id' => 3, 'public' => TRUE]);
+		$user1 = App\User::where('name', '=', 'user1')->first()->id;
+		$user2 = App\User::where('name', '=', 'user2')->first()->id;
+		$user3 = App\User::where('name', '=', 'user3')->first()->id;
+		$user4 = App\User::where('name', '=', 'user4')->first()->id;
+
+        \App\Database::create(['name' => 'sample database', 'owner_id' => $user1, 'public' => FALSE]);
+        \App\Database::create(['name' => 'my games', 'owner_id' => $user2, 'public' => FALSE]);
+        \App\Database::create(['name' => 'grandmaster games', 'owner_id' => $user3, 'public' => TRUE]);
 	}
 }
 
