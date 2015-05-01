@@ -13,19 +13,21 @@ Setting it up on your local machine
 You should have Apache, PHP and MySQL installed and running.
 
 0.  Setup Apache, PHP and MySQL if you haven't already
-1.  Clone the repository
-2.  Create a MySQL database for web-chess
-3.  (optional) Create a user called webchess and give it access to the database you just created (you can also use a pre-existing user if you want)
-4.  Install composer (http://getcomposer.org)
-5.  run `composer install` in your projects root directory
-6.  copy .env.example to .env and enter your MySQL credentials there
-7.  run `php artisan key:generate` in your project root
-8.  run `php artisan migrate:install`
-9.  run `php artisan migrate` in your project root
-10. install nodejs (https://nodejs.org/)
-11. run `npm install --global bower` (you might need sudo)
-12. run `npm install --global gulp`
-13. run `bower install` in your project root
+1.  Make sure you have the xsl php extension enabled
+2.  Clone the repository
+3.  Create a MySQL database for web-chess
+4.  (optional) Create a user called webchess and give it access to the database you just created (you can also use a pre-existing user if you want)
+5.  Install composer (http://getcomposer.org)
+6.  run `composer install` in your projects root directory
+7.  make sure apache has writing access to storage/ and vendor/
+8.  copy .env.example to .env and enter your MySQL credentials there
+9.  run `php artisan key:generate` in your project root
+10. run `php artisan migrate:install`
+11. run `php artisan migrate` in your project root
+12. install nodejs (https://nodejs.org/)
+13. run `npm install --global bower` (you might need sudo)
+14. run `npm install --global gulp`
+15. run `bower install` in your project root
 
 
 WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional database tables or change anything else.
