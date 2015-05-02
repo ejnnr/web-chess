@@ -1310,11 +1310,11 @@ class Position
 				continue;
 			}
 
-			if (!empty($matches['disambiguationFile']) && ($matches['disambiguationFile'] - 1) != getFile($index)) {
+			if (!empty($matches['disambiguationFile']) && $matches['disambiguationFile'] != substr(square2string($index), 0, 1)) {
 				continue;
 			}
 
-			if (!empty($matches['disambiguationRank']) && $matches['disambiguationRank'] != substr(square2string($index), 0, 1)) {
+			if (!empty($matches['disambiguationRank']) && ($matches['disambiguationRank'] - 1) != getRank($index)) {
 				continue;
 			}
 

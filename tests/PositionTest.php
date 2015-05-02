@@ -243,6 +243,14 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4');
 		$this->assertEquals(new Move('e1', 'g1', PROMOTION_QUEEN, array(2, 74)), $position->parseSAN('O-O? $74'));
 	}
+
+	public function testParseSANWithDiambiguation()
+	{
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 w - - 3 20');
+		$this->assertEquals(new Move('f1', 'h2'), $position->parseSAN('N1h2'));
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 b - - 3 20');
+		$this->assertEquals(new Move('b8', 'd7'), $position->parseSAN('Nbd7'));
+	}
 }
 
 ?>
