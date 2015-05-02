@@ -13,6 +13,11 @@
         <testsuite name="Application Test Suite">
             <directory>./tests/</directory>
         </testsuite>
+        <testsuite name="Chess API">
+            <file>./tests/squareTest.php</file>
+            <file>./tests/MoveTest.php</file>
+            <file>./tests/PositionTest.php</file>
+        </testsuite>
     </testsuites>
     <php>
         <env name="APP_ENV" value="testing"/>
