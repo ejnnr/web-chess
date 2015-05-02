@@ -25,9 +25,18 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 103
 	 */
-	public function testTooManyPiecesOfOneKind()
+	public function testTooManyQueens()
 	{
 		$position = new Position('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+	}
+
+	/**
+	 * @expectedException     PositionException
+	 * @expectedExceptionCode 103
+	 */
+	public function testTooManyPromotedPieces()
+	{
+		$position = new Position('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
 	}
 
 	/**
@@ -71,7 +80,19 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetArray($positionObject)
 	{
-		$this->markTestIncomplete();
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$positionShouldBe = [
+			['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+			['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+			['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+		];
+		
+		$this->assertEquals($positionShouldBe, $position->getArray());
 	}
 
 	public function testIsLegalQueen()
@@ -250,6 +271,66 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new Move('f1', 'h2'), $position->parseSAN('N1h2'));
 		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 b - - 3 20');
 		$this->assertEquals(new Move('b8', 'd7'), $position->parseSAN('Nbd7'));
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 131
+ 	 */
+	public function testParseSANWithoutEnoughDisambiguation()
+	{
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 w - - 3 20');
+		$position->parseSAN('Nh2');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 132
+ 	 */
+	public function testParseIllegelSAN()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nf4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidPieceName()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Ge4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidDestination()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nj4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidDisambiguation()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Njf3');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidAnnotation()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nf3!!!!');
 	}
 }
 
