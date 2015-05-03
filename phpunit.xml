@@ -18,6 +18,7 @@
             <file>./tests/MoveTest.php</file>
             <file>./tests/PositionTest.php</file>
             <file>./tests/GameTest.php</file>
+            <file>./tests/GameNodeTest.php</file>
         </testsuite>
     </testsuites>
     <php>
