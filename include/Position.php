@@ -51,6 +51,21 @@ class PositionException extends Exception {}
 class Position
 {
 	/**
+ 	 * An array of the letters of all white pieces
+ 	 */
+	const WHITE_PIECES = ['K', 'Q', 'R', 'B', 'N', 'P'];
+
+	/**
+ 	 * An array of the letters of all black pieces
+ 	 */
+	const BLACK_PIECES = ['k', 'q', 'r', 'b', 'n', 'p'];
+
+	/**
+ 	 * An array of the letters of all pieces
+ 	 */
+	const ALL_PIECES = ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''];
+
+	/**
  	 * the internal board representation
  	 *
  	 * This is an array of strings. Each element is either an empty string or the piece letter of the piece occupying that square.
@@ -454,11 +469,11 @@ class Position
 
 		// if the piece on the departure square is not of the right color or if there is no piece at all, return false
 		if ($this->turn) {
-			if (!in_array($this->board[$departure], ['K', 'Q', 'R', 'B', 'N', 'P'])) {
+			if (!in_array($this->board[$departure],self::WHITE_PIECES)) {
 				return FALSE;
 			}
 		} else {
-			if (!in_array($this->board[$departure], ['k', 'q', 'r', 'b', 'n', 'p'])) {
+			if (!in_array($this->board[$departure],self::BLACK_PIECES)) {
 				return FALSE;
 			}
 		}
@@ -504,56 +519,56 @@ class Position
 				// from here on everything is castling
 
 				// if departure isn't e1, we can return FALSE right away
-				if ($departure != string2square('e1')) {
+				if ($departure != SQUARE_E1) {
 					return FALSE;
 				}
 
 				// kingside castling
-				if ($destination == string2square('g1')) {
+				if ($destination == SQUARE_G1) {
 					// check if castling rights are present
 					if (!$this->castlings['K']) {
 						return FALSE;
 					}
 					// check if in check
-					if ($this->isAttacked(string2square('e1'), false)) {
+					if ($this->isAttacked(SQUARE_E1, false)) {
 						return FALSE;
 					}
 					// check if castling would be through check
-					if ($this->isAttacked(string2square('f1'), false)) {
+					if ($this->isAttacked(SQUARE_F1, false)) {
 						return FALSE;
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('g1'), false)) {
+					if ($this->isAttacked(SQUARE_G1, false)) {
 						return FALSE;
 					}
 					// check if all squares are empty
-					if (($this->board[string2square('f1')] != '')
-			         || ($this->board[string2square('g1')] != '')
-					 || ($this->board[string2square('h1')] != 'R')) {
+					if (($this->board[SQUARE_F1] != '')
+			         || ($this->board[SQUARE_G1] != '')
+					 || ($this->board[SQUARE_H1] != 'R')) {
 						return FALSE;
 					}
 
 				// queenside castling
-				} elseif ($destination == string2square('c1')) {
+				} elseif ($destination == SQUARE_C1) {
 					if (!$this->castlings['Q']) {
 						return FALSE;
 					}
-					if ($this->isAttacked(string2square('e1'), false)) {
+					if ($this->isAttacked(SQUARE_E1, false)) {
 						return FALSE;
 					}
-					if ($this->isAttacked(string2square('d1'), false)) {
+					if ($this->isAttacked(SQUARE_D1, false)) {
 						return FALSE;
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('c1'), false)) {
+					if ($this->isAttacked(SQUARE_C1, false)) {
 						return FALSE;
 					}
-					if (($this->board[string2square('d1')] != '')
-			         || ($this->board[string2square('c1')] != '')
-					 || ($this->board[string2square('b1')] != '')
-					 || ($this->board[string2square('a1')] != 'R')) {
+					if (($this->board[SQUARE_D1] != '')
+			         || ($this->board[SQUARE_C1] != '')
+					 || ($this->board[SQUARE_B1] != '')
+					 || ($this->board[SQUARE_A1] != 'R')) {
 						return FALSE;
 					}
 
@@ -573,56 +588,56 @@ class Position
 				// from here on everything is castling
 
 				// if departure isn't e8, we can return FALSE right away
-				if ($departure != string2square('e8')) {
+				if ($departure != SQUARE_E8) {
 					return FALSE;
 				}
 
 				// kingside castling
-				if ($destination == string2square('g8')) {
+				if ($destination == SQUARE_G8) {
 					// check if castling rights are present
 					if (!$this->castlings['k']) {
 						return FALSE;
 					}
 					// check if in check
-					if ($this->isAttacked(string2square('e8'), true)) {
+					if ($this->isAttacked(SQUARE_E8, true)) {
 						return FALSE;
 					}
 					// check if castling would be through check
-					if ($this->isAttacked(string2square('f8'), true)) {
+					if ($this->isAttacked(SQUARE_F8, true)) {
 						return FALSE;
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('g8'), true)) {
+					if ($this->isAttacked(SQUARE_G8, true)) {
 						return FALSE;
 					}
 					// check if all squares are empty
-					if (($this->board[string2square('f8')] != '')
-			         || ($this->board[string2square('g8')] != '')
-					 || ($this->board[string2square('h8')] != 'r')) {
+					if (($this->board[SQUARE_F8] != '')
+			         || ($this->board[SQUARE_G8] != '')
+					 || ($this->board[SQUARE_H8] != 'r')) {
 						return FALSE;
 					}
 
 				// queenside castling
-				} elseif ($destination == string2square('c8')) {
+				} elseif ($destination == SQUARE_C8) {
 					if (!$this->castlings['q']) {
 						return FALSE;
 					}
-					if ($this->isAttacked(string2square('e8'), true)) {
+					if ($this->isAttacked(SQUARE_E8, true)) {
 						return FALSE;
 					}
-					if ($this->isAttacked(string2square('d8'), true)) {
+					if ($this->isAttacked(SQUARE_D8, true)) {
 						return FALSE;
 					}
 					// To ease things a little bit later on it is also checked right away if the king would be in check on destination.
 					// That the rook changes its position during castling is irrelevant, since there's no possible position in which this plazs anz role.
-					if ($this->isAttacked(string2square('c8'), true)) {
+					if ($this->isAttacked(SQUARE_C8, true)) {
 						return FALSE;
 					}
-					if (($this->board[string2square('d8')] != '')
-			         || ($this->board[string2square('c8')] != '')
-					 || ($this->board[string2square('b8')] != '')
-					 || ($this->board[string2square('a8')] != 'r')) {
+					if (($this->board[SQUARE_D8] != '')
+			         || ($this->board[SQUARE_C8] != '')
+					 || ($this->board[SQUARE_B8] != '')
+					 || ($this->board[SQUARE_A8] != 'r')) {
 						return FALSE;
 					}
 
@@ -845,7 +860,7 @@ class Position
 				throw new PositionException('function attacks: there are non-string values in board', 4);
 			}
 			// check if the square has a valid value
-			if (!in_array($square, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+			if (!in_array($square, self::ALL_PIECES)) {
 				throw new PositionException('function attacks: there are invalid values in board', 5);
 			}
 		}
@@ -1002,7 +1017,7 @@ class Position
 				throw new PositionException('function isAttacked: there are non-string values in board', 4);
 			}
 			// check if the square has a valid value
-			if (!in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p', ''])) {
+			if (!in_array($currentSquare, self::ALL_PIECES)) {
 				throw new PositionException('function isAttacked: there are invalid values in board', 5);
 			}
 		}
@@ -1014,13 +1029,13 @@ class Position
 
 		foreach($board as $index=>$currentSquare) {
 			if ($turn == 'w') { // white is the attacking color
-				if (in_array($currentSquare, ['K', 'Q', 'R', 'B', 'N', 'P'])) {
+				if (in_array($currentSquare, self::WHITE_PIECES)) {
 					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
 					}
 				}
 			} else { // black is the attacking color
-				if (in_array($currentSquare, ['k', 'q', 'r', 'b', 'n', 'p'])) {
+				if (in_array($currentSquare, self::BLACK_PIECES)) {
 					if ($this->attacks($index, $square, $board)) {
 						return TRUE;
 					}
@@ -1077,10 +1092,10 @@ class Position
 				$this->board[$departure] = '';
 
 				// update castling rights
-				if ($departure == string2square('h1')) {
+				if ($departure == SQUARE_H1) {
 					$this->castlings['K'] == false;
 				}
-				if ($departure == string2square('a1')) {
+				if ($departure == SQUARE_G1) {
 					$this->castlings['Q'] == false;
 				}
 				break;
@@ -1094,10 +1109,10 @@ class Position
 				$this->board[$departure] = '';
 
 				// update castling rights
-				if ($departure == string2square('h8')) {
+				if ($departure == SQUARE_H8) {
 					$this->castlings['k'] == false;
 				}
-				if ($departure == string2square('a8')) {
+				if ($departure == SQUARE_A8) {
 					$this->castlings['q'] == false;
 				}
 				break;
@@ -1174,16 +1189,16 @@ class Position
 				}
 				// from here on everything is castling
 
-				if ($destination == string2square('g1')) { // kingside castling
+				if ($destination == SQUARE_G1) { // kingside castling
 					$this->board[$destination] = $this->board[$departure];
 					$this->board[$departure] = '';
-					$this->board[string2square('f1')] = 'R';
-					$this->board[string2square('h1')] = '';
-				} elseif ($destination == string2square('c1')) { // queenside castling
+					$this->board[SQUARE_F1] = 'R';
+					$this->board[SQUARE_H1] = '';
+				} elseif ($destination == SQUARE_C1) { // queenside castling
 					$this->board[$destination] = $this->board[$departure];
 					$this->board[$departure] = '';
-					$this->board[string2square('d1')] = 'R';
-					$this->board[string2square('a1')] = '';
+					$this->board[SQUARE_D1] = 'R';
+					$this->board[SQUARE_A1] = '';
 				} else {
 					throw new PositionException('function doMove: Wrong king position. This is probably a bug.' . $destination, 1);
 				}
@@ -1202,16 +1217,16 @@ class Position
 				}
 				// from here on everything is castling
 
-				if ($destination == string2square('g8')) { // kingside castling
+				if ($destination == SQUARE_G8) { // kingside castling
 					$this->board[$destination] = $this->board[$departure];
 					$this->board[$departure] = '';
-					$this->board[string2square('f8')] = 'r';
-					$this->board[string2square('h1')] = '';
-				} elseif ($destination == string2square('c8')) { // queenside castling
+					$this->board[SQUARE_F8] = 'r';
+					$this->board[SQUARE_H8] = '';
+				} elseif ($destination == SQUARE_C8) { // queenside castling
 					$this->board[$destination] = $this->board[$departure];
 					$this->board[$departure] = '';
-					$this->board[string2square('d8')] = 'r';
-					$this->board[string2square('a8')] = '';
+					$this->board[SQUARE_D8] = 'r';
+					$this->board[SQUARE_A8] = '';
 				} else {
 					throw new PositionException('function doMove: Wrong king position. This is probably a bug.' . $destination, 1);
 				}
@@ -1274,8 +1289,8 @@ class Position
 		}
 
 		if (!empty($matches['kingsideCastling'])) { // the moves is kingside castling
-			$departure = ($this->turn ? 4 : 60); // set departure to e1 or e8
-			$destination = ($this->turn ? 6 : 62); // set destination to g1 or g8
+			$departure = ($this->turn ? SQUARE_E1 : SQUARE_E8); // set departure to e1 or e8
+			$destination = ($this->turn ? SQUARE_G1 : SQUARE_G8); // set destination to g1 or g8
 			if ($this->board[$departure] != ($this->turn ? 'K' : 'k')) {
 				throw new PositionException('function parseSAN: castling is not possible', 132);
 			}
