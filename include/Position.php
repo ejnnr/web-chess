@@ -213,12 +213,6 @@ class Position
 		// split fen
 		$sections = explode(' ', $fen);
 
-		// check if all kings are on the bord
-		if (strpos($sections[0], 'K') === FALSE || strpos($sections[0], 'k') === FALSE)
-		{
-			throw new PositionException('Function loadFen: there must be a black and a white king on the board.', 102);
-		}
-
 		// split position into ranks
 		$ranks = explode('/', $sections[0]);
 
