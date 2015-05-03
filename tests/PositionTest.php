@@ -18,13 +18,22 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
+	public function testLoadFEN()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1');
+		$this->assertEquals('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1', $position->getFEN());
+	}
+
 	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 102
 	 */
 	public function testTooFewKings()
 	{
-		$position = new Position('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+		$position = new Position();
+		$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
@@ -33,7 +42,9 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testTooManyQueens()
 	{
-		$position = new Position('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+		$position = new Position();
+		$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
@@ -42,7 +53,9 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testTooManyPromotedPieces()
 	{
-		$position = new Position('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
+		$position = new Position();
+		$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
@@ -61,7 +74,9 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPawnsOnBackRank()
 	{
-		$position = new Position('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		$position = new Position();
+		$position->loadFEN('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
@@ -70,7 +85,60 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testInvalidFENSyntax()
 	{
-		$position = new Position('k/8/8/K/8/8/8/8 w - - 0 1');
+		$position = new Position();
+		$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionTooFewKings()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionTooManyQueens()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionTooManyPromotedPieces()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionSideNotToMoveInCheck()
+	{
+	//	$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
+		$this->markTestIncomplete();
+	}
+
+	public function testPreservePositionPawnsOnBackRank()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionInvalidFENSyntax()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 	
 	/**

@@ -247,7 +247,7 @@ class Position
 			'p' => 0,
 		);
 
-		$this->board == array(); // clean board
+		$boardTemp = array();
 		$i_rank = 0;
 		$ranks = array_reverse($ranks); // FEN starts with 8th rank and ends with 1st rank so it has to be reversed
 		foreach ($ranks as $rank) // go through all of the ranks (seperated by '/' in fen)
@@ -258,7 +258,7 @@ class Position
 			{
 				if (is_numeric(substr($rank, 0, 1))) // empty square(s)
 				{
-					$this->board[] = ''; // add an empty square to the board
+					$boardTemp[] = ''; // add an empty square to the board
 					$new = ((int) substr($rank, 0, 1)) - 1; // decrease the number of empty squares by one
 					if ($new == 0) // if the new number is zero, set it to ''
 					{
@@ -272,7 +272,7 @@ class Position
 						throw new PositionException('function loadFEN: there is a pawn on the backrank', 105);
 					}
 					$pieceCountOf[substr($rank, 0, 1)]++;
-					$this->board[] = substr($rank, 0, 1); // get the first character of the current rank (i.e. the current piece) and add it to board
+					$boardTemp[] = substr($rank, 0, 1); // get the first character of the current rank (i.e. the current piece) and add it to board
 					$rank = substr($rank, 1); // strip the piece just added from $rank
 				}
 
@@ -361,6 +361,26 @@ class Position
 			throw new PositionException('function loadFEN: Too many promoted black pieces', 103);
 		}
 
+		$turn = ($sections[1] == 'w');
+
+		// set en passant square
+		if ($sections[3] != '-')
+		{
+			if (getRank(string2square($sections[3])) != ($turn ? 5 : 2)) { // if it's white's turn, en passant square must be on sixth rank, otherwise on third
+				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($turn ? 'white\'s' : 'black\'s') . ' turn', 106);
+			}
+
+			if ($boardTemp[string2square($sections[3]) + ($turn ? (-8) : 8)] != ($turn ? 'p' : 'P')) {
+				throw new PositionException('function loadFEN: en passant square is invalid: no pawn that could be taken', 106);
+			}
+			$this->enPassant = $sections[3];
+		}
+		else
+		{
+			// no en passant square
+			$this->enPassant = '';
+		}
+
 		$this->turn = ($sections[1] == 'w');
 
 		// set possible castlings
@@ -386,29 +406,13 @@ class Position
 			$this->castlings['q'] = true;
 		}
 
-		// set en passant square
-		if ($sections[3] != '-')
-		{
-			if (getRank(string2square($sections[3])) != ($this->turn ? 5 : 2)) { // if it's white's turn, en passant square must be on sixth rank, otherwise on third
-				throw new PositionException('function loadFEN: en passant square can\'t be ' . $sections[3] . ' because it\'s ' . ($this->turn ? 'white\'s' : 'black\'s') . ' turn', 106);
-			}
-
-			if ($this->board[string2square($sections[3]) + ($this->turn ? (-8) : 8)] != ($this->turn ? 'p' : 'P')) {
-				throw new PositionException('function loadFEN: en passant square is invalid: no pawn that could be taken', 106);
-			}
-			$this->enPassant = $sections[3];
-		}
-		else
-		{
-			// no en passant square
-			$this->enPassant = '';
-		}
-
 		// set number of half-moves since the last pawn move of capture
 		$this->halfMoves = $sections[4];
 
 		// set move-number
 		$this->moveNumber = $sections[5];
+
+		$this->board = $boardTemp;
 	}
 
 	/**
