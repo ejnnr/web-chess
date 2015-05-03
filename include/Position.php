@@ -109,7 +109,7 @@ class Position
 	 * @param mixed $position The position to load as a FEN
 	 */
 
-	function __construct($position)
+	function __construct($position = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
 	{
 		$this->loadFEN($position);
 	}

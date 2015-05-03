@@ -12,6 +12,12 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		return $position;
 	}
 
+	public function testCanCreatePositionWithoutArguments()
+	{
+		$position = new Position();
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
 	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 102
