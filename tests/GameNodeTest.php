@@ -21,13 +21,13 @@ class GameNodeTest extends PHPUnit_Framework_TestCase
 		$node = new GameNode(new Move('e2', 'e4'));
 		$node->addChild($node1 = new GameNode(new Move('e7', 'e5')));
 		$node->addChild($node2 = new GameNode(new Move('c7', 'c5')));
-		$this->assertEquals($node1, $node->getMainline());
+		$this->assertEquals($node1, $node->getMainlineMove());
 	}
 
 	public function testGetMainlineWithoutChildren()
 	{
 		$node = new GameNode(new Move('d2', 'd4'));
-		$this->assertFalse($node->getMainline());
+		$this->assertFalse($node->getMainlineMove());
 	}
 
 	/**
@@ -43,5 +43,29 @@ class GameNodeTest extends PHPUnit_Framework_TestCase
 	{
 		$node = new GameNode(new Move('e2', 'e4'), [new GameNode(new Move('e7', 'e5'))]);
 		$this->assertSame(1, count($node->getChildren()));
+	}
+
+	public function testGetLastChild()
+	{
+		$node = new GameNode(new Move('d2', 'd4'));
+		$node->addChild($node2 = new GameNode(new Move('d7', 'd5')));
+		$node2->addChild($node3 = new GameNode(new Move('c2', 'c4')));
+		$node3->addChild($last = new GameNode(new Move('c7', 'c6')));
+		$this->assertEquals($last, $node->lastDescendant());
+	}
+
+	public function testAddAtEnd()
+	{
+		$node = new GameNode(new Move('d2', 'd4'));
+		$node->addChild($node2 = new GameNode(new Move('d7', 'd5')));
+		$node2->lastDescendant()->addChild($node3 = new GameNode(new Move('c2', 'c4')));
+		$node->lastDescendant()->addChild($last = new GameNode(new Move('c7', 'c6')));
+		$this->assertEquals($last, $node->lastDescendant());
+	}
+
+	public function testLastDescendantIsSelf()
+	{
+		$node = new GameNode(new Move('b2', 'b3'));
+		$this->assertEquals($node, $node->lastDescendant());
 	}
 }

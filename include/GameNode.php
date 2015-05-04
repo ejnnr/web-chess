@@ -30,9 +30,18 @@ class GameNode implements Tree\Node\NodeInterface
  	 * @return GameNode the mainline move or false if there are no children
  	 */
 
-	public function getMainline()
+	public function getMainlineMove()
 	{
 		$children = $this->getChildren();
-		return reset($children);
+		return reset($children); // reset returns the first element of an array or false. See http://php.net/manual/en/function.reset.php
+	}
+
+	public function lastDescendant()
+	{
+		$current = $this;
+		while (!$current->isLeaf()) { // getLeaf returns true if a node has no children
+			$current = $current->getMainlineMove();
+		}
+		return $current;
 	}
 }
