@@ -406,6 +406,15 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 		$position->parseSAN('Nf3!!!!');
 	}
+
+	public function testPositionObjectsAreEqual()
+	{
+		$position1 = new Position('rnbqkb1r/pppppppp/5n2/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 1 2');
+		$position2 = new Position();
+		$position2->doMove(new Move('c2', 'c4'));
+		$position2->doMove(new Move('g8', 'f6'));
+		$this->assertEquals($position1, $position2);
+	}
 }
 
 ?>

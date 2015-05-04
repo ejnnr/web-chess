@@ -407,10 +407,10 @@ class Position
 		}
 
 		// set number of half-moves since the last pawn move of capture
-		$this->halfMoves = $sections[4];
+		$this->halfMoves = (int)$sections[4];
 
 		// set move-number
-		$this->moveNumber = $sections[5];
+		$this->moveNumber = (int)$sections[5];
 
 		$this->board = $boardTemp;
 	}
@@ -1238,7 +1238,7 @@ class Position
 		}
 
 		if (!$preserveEnPassant) {
-			$this->enPassant = 0;
+			$this->enPassant = '';
 		}
 
 		if (!$this->turn) {
