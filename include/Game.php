@@ -2,8 +2,6 @@
 
 class Game
 {
-	private $moveCount;
-
 	/**
  	 * the move tree
  	 */
@@ -11,17 +9,10 @@ class Game
 	private $root;
 
 	/**
- 	 * the current position
- 	 */
-
-	private $position;
-
-	/**
  	 * the constructor
  	 */
 	public function __construct()
 	{
-		$this->position = new Position();
 	}
 
 	/**
@@ -32,7 +23,14 @@ class Game
 
 	public function getPosition()
 	{
-		return $this->position;
+		$moves = $this->getMainline();
+		$position = new Position();
+
+		foreach ($moves as $move) {
+			$position->doMove($move);
+		}
+
+		return $position;
 	}
 
 	/**
@@ -48,8 +46,6 @@ class Game
 		} else {
 			$this->root->lastDescendant()->addChild(new GameNode($move));
 		}
-		$this->moveCount++;
-		$this->position->doMove($move);
 	}
 
 	/**
@@ -60,7 +56,7 @@ class Game
 
 	public function moveCount()
 	{
-		return $this->moveCount;
+		return count($this->getMainline());
 	}
 
 	/**
@@ -71,6 +67,10 @@ class Game
 
 	public function getMainline()
 	{
+		if (!($this->root instanceof GameNode)) {
+			return [];
+		}
+
 		$current = clone $this->root;
 		$ret = [];
 		while (!($current->isLeaf())) {
