@@ -9,6 +9,12 @@ class Game
 	private $root;
 
 	/**
+ 	 * the current node
+ 	 */
+
+	private $currentNode;
+
+	/**
  	 * the constructor
  	 */
 	public function __construct()
@@ -23,9 +29,18 @@ class Game
 
 	public function getPosition()
 	{
-		$moves = $this->getMainline();
+		if (!($this->currentNode instanceof GameNode)) {
+			return new Position();
+		}
+		$moves = [];
+		$iterator = $this->currentNode;
+		while (!($iterator == $this->root)) {
+			$moves[] = $iterator->getValue();
+			$iterator = $iterator->getParent();
+		}
+		$moves[] = $iterator->getValue();
+		$moves = array_reverse($moves);
 		$position = new Position();
-
 		foreach ($moves as $move) {
 			$position->doMove($move);
 		}
@@ -41,10 +56,14 @@ class Game
 
 	public function doMove($move)
 	{
-		if (!($this->root instanceof GameNode)) {
-			$this->root = new GameNode($move);
+		if (!($this->currentNode instanceof GameNode)) {
+			$this->currentNode = new GameNode($move);
+			$this->root = $this->currentNode;
 		} else {
-			$this->root->lastDescendant()->addChild(new GameNode($move));
+			$newNode = new GameNode($move);
+			$this->currentNode->addChild($newNode);
+			// set currentNode to its most lately added child (i.e. the node just added)
+			$this->currentNode = $newNode;
 		}
 	}
 
@@ -79,5 +98,14 @@ class Game
 		}
 		$ret[] = $current->getValue();
 		return $ret;
+	}
+
+	/**
+ 	 * sets the pointer back one move
+ 	 */
+
+	public function back()
+	{
+		$this->currentNode = $this->currentNode->getParent();
 	}
 }

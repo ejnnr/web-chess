@@ -34,4 +34,12 @@ class GameTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new Position('rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq d3 0 2'), $game->getPosition());
 		$this->assertEquals([$move1, $move2, $move3], $game->getMainline());
 	}
+
+	public function testBack()
+	{
+		$game = new Game();
+		$game->doMove(new Move('e2', 'e4'));
+		$game->back();
+		$this->assertEquals(new Position(), $game->getPosition());
+	}
 }
