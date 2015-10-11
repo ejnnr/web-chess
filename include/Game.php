@@ -108,4 +108,35 @@ class Game
 	{
 		$this->currentNode = $this->currentNode->getParent();
 	}
+
+	/**
+ 	 * creates a new variation of the last move
+ 	 */
+
+	public function addVariation($move)
+	{
+		$this->back();
+		$this->doMove($move);
+	}
+
+	/**
+ 	 * jumps back to the position before the last call of addVariation()
+ 	 */
+
+	public function endVariation()
+	{
+		if (!$this->currentNode->isChild()) {
+			$this->currentNode = $this->currentNode->getMainlineMove();
+			return;
+		}
+		while ($this->currentNode != $this->currentNode->getParent()->getMainlineMove()) {
+			$this->back();
+			if (!$this->currentNode->isChild()) {
+				$this->currentNode = $this->currentNode->getMainlineMove();
+				return;
+			}
+		}
+
+		$this->currentNode = $this->currentNode->getParent()->getMainlineMove();
+	}
 }
