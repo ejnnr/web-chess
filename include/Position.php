@@ -1246,6 +1246,8 @@ class Position
 		}
 
 		$this->turn = (!$this->turn);
+
+		return $this;
 	}
 
 	/**

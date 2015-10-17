@@ -2,141 +2,63 @@
 
 class Game
 {
-	/**
- 	 * the move tree
- 	 */
-
-	private $root;
-
-	/**
- 	 * the current node
- 	 */
-
-	private $currentNode;
-
-	/**
- 	 * the constructor
- 	 */
-	public function __construct()
+	public function __construct(Position $startingPosition = null)
 	{
+		if ($startingPosition === null) {
+			$startingPosition = new Position();
+		}
+		$this->startingPosition = $startingPosition;
+		$this->children = [];
 	}
 
-	/**
- 	 * returns the current Position
- 	 *
- 	 * @return Position the current position of the game
- 	 */
-
-	public function getPosition()
+	public function doMove(Move $move)
 	{
-		if (!($this->currentNode instanceof GameNode)) {
-			return new Position();
+		if (!$this->getPosition()->isLegalMove($move)) {
+			throw new Exception('Trying to add illegal Move');
 		}
-		$moves = [];
-		$iterator = $this->currentNode;
-		while (!($iterator == $this->root)) {
-			$moves[] = $iterator->getValue();
-			$iterator = $iterator->getParent();
+		if (empty($this->current)) {
+			$this->current = new GameNode($move);
+			$this->children[] = $this->current;
+			return;
 		}
-		$moves[] = $iterator->getValue();
-		$moves = array_reverse($moves);
-		$position = new Position();
-		foreach ($moves as $move) {
-			$position->doMove($move);
-		}
-
-		return $position;
+		$this->current = $this->current->addMove($move);
 	}
-
-	/**
- 	 * adds the move to the game and updates the pointer to the position after the new move
- 	 *
- 	 * @param Move $move the move to be played
- 	 */
-
-	public function doMove($move)
-	{
-		if (!($this->currentNode instanceof GameNode)) {
-			$this->currentNode = new GameNode($move);
-			$this->root = $this->currentNode;
-		} else {
-			$newNode = new GameNode($move);
-			$this->currentNode->addChild($newNode);
-			// set currentNode to its most lately added child (i.e. the node just added)
-			$this->currentNode = $newNode;
-		}
-	}
-
-	/**
- 	 * returns the count of moves in the mainline
- 	 *
- 	 * @return integer the count of moves
- 	 */
-
-	public function moveCount()
-	{
-		return count($this->getMainline());
-	}
-
-	/**
- 	 * returns the mainline as an array of moves
- 	 *
- 	 * @return Move[] the mainline of the game
- 	 */
-
-	public function getMainline()
-	{
-		if (!($this->root instanceof GameNode)) {
-			return [];
-		}
-
-		$current = clone $this->root;
-		$ret = [];
-		while (!($current->isLeaf())) {
-			$ret[] = $current->getValue();
-			$current = $current->getMainlineMove();
-		}
-		$ret[] = $current->getValue();
-		return $ret;
-	}
-
-	/**
- 	 * sets the pointer back one move
- 	 */
 
 	public function back()
 	{
-		$this->currentNode = $this->currentNode->getParent();
+		if ((!$this->current->isChild()) || empty($this->current)) {
+			$this->current = null;
+			return;
+		}
+
+		$this->current = $this->current->getParent();
 	}
 
-	/**
- 	 * creates a new variation of the last move
- 	 */
+	public function getPosition()
+	{
+		if (empty($this->current)) {
+			return $this->startingPosition;
+		}
+		return $this->current->positionAfter($this->startingPosition);
+	}
 
-	public function addVariation($move)
+	public function addVariation(Move $move)
 	{
 		$this->back();
 		$this->doMove($move);
 	}
 
-	/**
- 	 * jumps back to the position before the last call of addVariation()
- 	 */
-
 	public function endVariation()
 	{
-		if (!$this->currentNode->isChild()) {
-			$this->currentNode = $this->currentNode->getMainlineMove();
-			return;
-		}
-		while ($this->currentNode != $this->currentNode->getParent()->getMainlineMove()) {
+		while (!$this->current->isMainlineContinuation()) {
 			$this->back();
-			if (!$this->currentNode->isChild()) {
-				$this->currentNode = $this->currentNode->getMainlineMove();
-				return;
-			}
 		}
 
-		$this->currentNode = $this->currentNode->getParent()->getMainlineMove();
+		if (!$this->current->isChild()) {
+			$this->current = reset($this->children)->getMainlineContinuation();
+			return;
+		}
+
+		$this->current = $this->current->getParent()->getMainlineContinuation();
 	}
 }

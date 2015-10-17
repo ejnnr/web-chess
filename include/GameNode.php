@@ -2,46 +2,68 @@
 
 class GameNodeException extends Exception {}
 
-/**
- * A class representing a node (i.e. a move) in a game of chess
- *
- * Uses https://github.com/nicmart/Tree
- */
-
-class GameNode implements Tree\Node\NodeInterface
+class GameNode
 {
-	use Tree\Node\NodeTrait
-   	{
-		__construct as traitConstruct;
-	}
-
-	public function __construct($move, array $children = [])
+	public function __construct(Move $move, GameNode $parent = null)
 	{
-		if (!($move instanceof Move)) {
-			throw new GameNodeException('node value is no instance of Move', 4);
+		$this->move = $move;
+		if (!empty($parent)) {
+			$this->attachTo($parent);
 		}
-
-		$this->traitConstruct($move, $children);
+		$this->children = [];
 	}
 
-	/**
- 	 * returns the first child, i.e. the main move
- 	 *
- 	 * @return GameNode the mainline move or false if there are no children
- 	 */
-
-	public function getMainlineMove()
+	public function positionAfter(Position $startingPosition)
 	{
-		$children = $this->getChildren();
-		return reset($children); // reset returns the first element of an array or false. See http://php.net/manual/en/function.reset.php
-	}
-
-	public function lastDescendant()
-	{
-		$current = $this;
-		while (!$current->isLeaf()) { // getLeaf returns true if a node has no children
-			$current = $current->getMainlineMove();
+		if (!$this->isChild()) {
+			$pos = clone $startingPosition;
+			return $pos->doMove($this->move);
 		}
-		return $current;
+		return $this->parent->positionAfter($startingPosition)->doMove($this->move);
+	}
+
+	public function addChild(GameNode $child)
+	{
+		$this->children[] = $child;
+	}
+
+	public function attachChild(GameNode $child)
+	{
+		$child->attachTo($this);
+		return $child;
+	}
+
+	public function attachTo(GameNode $parent)
+	{
+		$this->parent = $parent;
+		$this->parent->addChild($this);
+	}
+
+	public function addMove(Move $move)
+	{
+		return $this->attachChild(new GameNode($move));
+	}
+
+	public function getParent()
+	{
+		return $this->parent;
+	}
+
+	public function isChild()
+	{
+		return !empty($this->parent);
+	}
+
+	public function getMainlineContinuation()
+	{
+		return reset($this->children);
+	}
+
+	public function isMainlineContinuation()
+	{
+		if (!$this->isChild()) {
+			return true;
+		}
+		return $this == $this->parent->getMainlineContinuation();
 	}
 }
