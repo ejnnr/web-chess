@@ -50,7 +50,7 @@ class Game
 
 	public function endVariation()
 	{
-		while (!$this->current->isMainlineContinuation()) {
+		while ($this->current->isMainlineContinuation()) {
 			$this->back();
 		}
 
