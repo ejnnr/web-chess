@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the class Game
+ * This file contains the class Game and the corresponding exception class
  *
  * This file includes Position.php, Move.php and GameNode.php
  */
@@ -21,6 +21,11 @@ require_once 'Move.php';
 require_once 'GameNode.php';
 
 /**
+ * A class representing an exception thrown by Game
+ */
+class GameException extends Exception {}
+
+/**
  * A class representing a game of chess with variations.
  *
  */
@@ -33,6 +38,7 @@ class Game
 		}
 		$this->startingPosition = $startingPosition;
 		$this->children = [];
+		$this->headers = [];
 	}
 
 	/**
@@ -123,5 +129,55 @@ class Game
 		}
 
 		$this->current = $this->current->getParent()->getMainlineContinuation();
+	}
+
+	/**
+	 * set a header
+	 *
+	 * @param string $name
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function setHeader($name, $value)
+	{
+		if (!is_string($name)) {
+			throw new GameException('name must be a string', 4);
+		}
+
+		$this->headers[$name] = $value;
+	}
+
+	/**
+	 * get the value of a specific header
+	 *
+	 * @param mixed $name
+	 * @return mixed The value of the header
+	 */
+	public function getHeader($name)
+	{
+		return $this->headers[$name];
+	}
+
+	/**
+	 * get all headers as an array
+	 *
+	 * @return array An assoziative array of all the headers
+	 */
+	public function getHeaders()
+	{
+		return $this->headers;
+	}
+
+	/**
+	 * set several headers at once
+	 *
+	 * @param mixed[] $headers
+	 * @return void
+	 */
+	public function setHeaders($headers)
+	{
+		foreach ($headers as $name => $value) {
+			$this->setHeader($name, $value);
+		}
 	}
 }

@@ -66,4 +66,24 @@ class GameTest extends PHPUnit_Framework_TestCase
 		$game->endVariation();
 		$this->assertEquals(new Position('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2'), $game->getPosition());
 	}
+
+	public function testHeaders()
+	{
+		$game = new Game();
+		$game->setHeader('turn', 3);
+		$this->assertEquals(3, $game->getHeader('turn'));
+		$this->assertEquals(['turn' => 3], $game->getHeaders());
+		$game->setHeaders(['turn' => 2, 'site' => 'Berlin']);
+		$this->assertEquals(['turn' => 2, 'site' => 'Berlin'], $game->getHeaders());
+	}
+
+	/**
+ 	 * @expectedException     GameException
+ 	 * @expectedExceptionCode 4
+ 	 */
+	public function testSetInvalidHeader()
+	{
+		$game = new Game();
+		$game->setHeader(3, 23);
+	}
 }
