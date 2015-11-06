@@ -1373,4 +1373,13 @@ class Position
 	{
 		return ($this->turn ? 'w' : 'b');
 	}
+
+	public function isPromotingMove(Move $move)
+	{
+		if (!$this->isLegalMove($move)) {
+			throw new PositionException('move is illegal', 121);
+		}
+
+		return ($this->board[$move->getDeparture()] == 'p' && $move->getDestination() < 8) || ($this->board[$move->getDeparture()] == 'P' && $move->getDestination() > 55);
+	}
 }

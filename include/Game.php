@@ -31,6 +31,28 @@ class GameException extends Exception {}
  */
 class Game
 {
+
+	/**
+	 * startingPosition
+	 *
+	 * @var Position
+	 */
+	protected $startingPosition;
+
+	/**
+	 * children
+	 *
+	 * @var GameNode[]
+	 */
+	protected $children;
+
+	/**
+	 * headers
+	 *
+	 * @var mixed[]
+	 */
+	protected $headers;
+
 	public function __construct(Position $startingPosition = null)
 	{
 		if ($startingPosition === null) {
@@ -56,7 +78,7 @@ class Game
 			throw new Exception('Trying to add illegal Move');
 		}
 		if (empty($this->current)) { // pointer at starting position
-			$this->current = new GameNode($move);
+			$this->createCurrentNode($move);
 			$this->children[] = $this->current;
 			return;
 		}
@@ -179,5 +201,18 @@ class Game
 		foreach ($headers as $name => $value) {
 			$this->setHeader($name, $value);
 		}
+	}
+
+	/**
+	 * set current to a new GameNode
+	 *
+	 * This needs to be a seperate method because child classes might want to use other types of Nodes (e.g. JCF)
+	 *
+	 * @param Move $move
+	 * @return void
+	 */
+	protected function createCurrentNode(Move $move)
+	{
+		$this->current = new GameNode($move);
 	}
 }

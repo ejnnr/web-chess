@@ -29,6 +29,27 @@ class GameNodeException extends Exception {}
  */
 class GameNode
 {
+	/**
+	 * the move represented by a node
+	 *
+	 * @var Move
+	 */
+	protected $move;
+
+	/**
+	 * the parent node
+	 *
+	 * @var GameNode
+	 */
+	protected $parent;
+
+	/**
+	 * an array of child nodes
+	 *
+	 * @var GameNode[]
+	 */
+	protected $children;
+
 	public function __construct(Move $move, GameNode $parent = null)
 	{
 		$this->move = $move;
@@ -144,5 +165,35 @@ class GameNode
 			return true;
 		}
 		return $this == $this->parent->getMainlineContinuation();
+	}
+
+	/**
+	 * get the move of the node
+	 *
+	 * @return Move
+	 */
+	public function getMove()
+	{
+		return $this->move;
+	}
+
+	/**
+	 * get the child nodes as an array
+	 *
+	 * @return GameNode[]
+	 */
+	public function getChildren()
+	{
+		return $this->children;
+	}
+
+	/**
+	 * get whether the node has any child nodes
+	 *
+	 * @return bool
+	 */
+	public function hasChildren()
+	{
+		return sizeof($this->children) > 0;
 	}
 }

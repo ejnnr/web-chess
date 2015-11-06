@@ -19,6 +19,8 @@
             <file>./tests/PositionTest.php</file>
             <file>./tests/GameTest.php</file>
             <file>./tests/GameNodeTest.php</file>
+            <file>./tests/JCFGameTest.php</file>
+            <file>./tests/JCFGameNodeTest.php</file>
         </testsuite>
     </testsuites>
     <php>
