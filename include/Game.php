@@ -203,6 +203,18 @@ class Game
 		}
 	}
 
+	public function goToEndOfMainline()
+	{
+		if (empty($this->children)) {
+			return;
+		}
+
+		$this->current = reset($this->children);
+		while ($this->current->hasChildren()) {
+			$this->current = $this->current->getMainlineContinuation();
+		}
+	}
+
 	/**
 	 * set current to a new GameNode
 	 *
