@@ -23,6 +23,17 @@
             <file>./tests/JCFGameNodeTest.php</file>
         </testsuite>
     </testsuites>
+    <filter>
+  		<whitelist processUncoveredFilesFromWhitelist="true">
+    		<file>./include/square.php</file>
+    		<file>./include/Move.php</file>
+    		<file>./include/Position.php</file>
+    		<file>./include/GameNode.php</file>
+    		<file>./include/Game.php</file>
+    		<file>./include/JCFGameNode.php</file>
+    		<file>./include/JCFGame.php</file>
+  		</whitelist>
+	</filter>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
