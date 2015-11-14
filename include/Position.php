@@ -1097,10 +1097,10 @@ class Position
 
 				// update castling rights
 				if ($departure == SQUARE_H1) {
-					$this->castlings['K'] == false;
+					$this->castlings['K'] = false;
 				}
-				if ($departure == SQUARE_G1) {
-					$this->castlings['Q'] == false;
+				if ($departure == SQUARE_A1) {
+					$this->castlings['Q'] = false;
 				}
 				break;
 
@@ -1114,10 +1114,10 @@ class Position
 
 				// update castling rights
 				if ($departure == SQUARE_H8) {
-					$this->castlings['k'] == false;
+					$this->castlings['k'] = false;
 				}
 				if ($departure == SQUARE_A8) {
-					$this->castlings['q'] == false;
+					$this->castlings['q'] = false;
 				}
 				break;
 

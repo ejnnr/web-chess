@@ -288,6 +288,19 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('4k3/8/8/8/8/8/8/R3K2R w - - 0 1');
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'g1')));
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'c1')));
+
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$this->assertTrue($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertTrue($position->isLegalMove(new Move('e8', 'c8')));
+		
+		$position = new Position('r3k2r/8/8/8/4R3/8/8/4K3 b kq - 0 1');
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'c8')));
+		
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b - - 0 1');
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'c8')));
 	}
 	
 	public function testIsLegalLeavingKingInCheck()
@@ -324,6 +337,18 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQK2R w KQ - 4 6', $positionObject->getFEN());
 		$positionObject->doMove(new Move('e1', 'g1'));
 		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQ1RK1 b - - 5 6', $positionObject->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('h8', 'h7'));
+		$this->assertEquals('r3k3/7r/8/8/8/8/8/4K3 w q - 1 2', $position->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('e8', 'e7'));
+		$this->assertEquals('r6r/4k3/8/8/8/8/8/4K3 w - - 1 2', $position->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('a8', 'a7'));
+		$this->assertEquals('4k2r/r7/8/8/8/8/8/4K3 w k - 1 2', $position->getFEN());
 	}
 
 	public function testDoMovePromotion() {
