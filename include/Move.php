@@ -210,7 +210,7 @@ class Move
 		sort($this->NAGs); // sort array from lowest to highest
 
 		if (!is_string($comment)) {
-			throw new MoveException('__construct: comment is no string');
+			throw new MoveException('__construct: comment is no string', 4);
 		}
 
 		$this->comment = $comment;

@@ -26,14 +26,63 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 2
+ 	 */
+	public function testLoadFENEmptyArgument()
+	{
+		$position = new Position();
+		$position->loadFEN(NULL);
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 4
+ 	 */
+	public function testLoadFENBadArgumentType()
+	{
+		$position = new Position();
+		$position->loadFEN(34);
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 110
+ 	 */
+	public function testLoadInvalidFENSyntax()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/4K3 w - - 0 1');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 111
+ 	 */
+	public function testLoadFENCastlingFlagsMissing()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/8/4K3 w  - 0 1');
+	}
+
+	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 102
 	 */
-	public function testTooFewKings()
+	public function testMissingWhiteKing()
 	{
 		$position = new Position();
-		$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
-		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+		$position->loadFEN('4k3/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+	}
+
+	/**
+	 * @expectedException     PositionException
+	 * @expectedExceptionCode 102
+	 */
+	public function testMissingBlackKing()
+	{
+		$position = new Position();
+		$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1');
 	}
 
 	/**
@@ -44,7 +93,6 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	{
 		$position = new Position();
 		$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
-		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
@@ -55,7 +103,24 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	{
 		$position = new Position();
 		$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
-		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 106
+ 	 */
+	public function testInvalidEnPassantNoPawn()
+	{
+		$position = new Position('3k4/pppppppp/8/8/8/8/PPPPPPPP/3K4 w - c6 0 1');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 106
+ 	 */
+	public function testInvalidEnPassantWrongSideToMove()
+	{
+		$position = new Position('3k4/pp1ppppp/8/2p5/8/8/PPPPPPPP/3K4 b - c6 0 1');
 	}
 
 	/**
@@ -64,8 +129,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSideNotToMoveInCheck()
 	{
-	//	$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
-		$this->markTestIncomplete();
+		$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
 	}
 
 	/**
@@ -83,11 +147,10 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 112
 	 */
-	public function testInvalidFENSyntax()
+	public function testWrongNumberOfSquaresOnRank()
 	{
 		$position = new Position();
 		$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
-		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	public function testPreservePositionTooFewKings()
@@ -119,8 +182,11 @@ class PositionTest extends PHPUnit_Framework_TestCase
 
 	public function testPreservePositionSideNotToMoveInCheck()
 	{
-	//	$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
-		$this->markTestIncomplete();
+		$position = new Position();
+		try {
+			$position->loadFEN('7R/8/8/7k/8/8/8/K7 w - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	public function testPreservePositionPawnsOnBackRank()
@@ -167,6 +233,13 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		];
 		
 		$this->assertEquals($positionShouldBe, $position->getArray());
+	}
+
+	public function testReset()
+	{
+		$position = new Position('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1');
+		$position->reset();
+		$this->assertEquals(new Position, $position);
 	}
 
 	public function testIsLegalQueen()
@@ -308,6 +381,12 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('4k3/8/8/3rr3/8/8/4B3/4K3 w - - 0 1');
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'd1')));
 		$this->assertFalse($position->isLegalMove(new Move('e2', 'd1')));
+	}
+
+	public function testInCheck()
+	{
+		$position = new Position('7R/8/8/7k/8/8/8/K7 b - - 0 39');
+		$this->assertTrue($position->inCheck());
 	}
 
 	/**

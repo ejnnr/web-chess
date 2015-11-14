@@ -213,7 +213,7 @@ class Position
 		$regExResult = preg_match('#^([1-8KQRBNPkqrbnp]{1,8}/){7}[1-8KQRBNPkqrbnp]{1,8} [wb] (K?Q?k?q?|-) ([a-h][36]|-) [0-9]+ [0-9]+$#', $fen, $matches);
 
 		if ($regExResult === FALSE) { // an error occurred, this should never happen
-			throw new PositionException('function loadFEN: error parsing fen with preg_match', 1);
+			throw new PositionException('function loadFEN: error parsing fen with preg_match', 1); // @codeCoverageIgnore
 		}
 
 		if ($regExResult === 0) { // RegEx doesn't match
@@ -363,6 +363,10 @@ class Position
 
 		$turn = ($sections[1] == 'w');
 
+		if ($this->internalInCheck(!$turn, $boardTemp)) {
+			throw new PositionException('function loadFEN: Side not to move is in check', 104);
+		}
+
 		// set en passant square
 		if ($sections[3] != '-')
 		{
@@ -451,7 +455,7 @@ class Position
 			}
 		}
 		// should never happen
-		throw new PositionException('function internalInCheck: A king is missing. This is probably a bug.', 1);
+		throw new PositionException('function internalInCheck: A king is missing. This is probably a bug.', 1); // @codeCoverageIgnore
 	}
 
 	/**
@@ -462,12 +466,8 @@ class Position
 	 * @return boolean true if move is legal, false if not
 	 */
 
-	function isLegalMove($move)
+	function isLegalMove(Move $move)
 	{
-		if (!($move instanceof Move)) {
-			throw new PositionException('function isLegal: move is no instance of class Move', 4);
-		}
-
 		$departure = $move->getDeparture();
 		$destination = $move->getDestination();
 

@@ -9,6 +9,11 @@ class squareTest extends PHPUnit_Framework_TestCase
 		$this->assertSame(20, array2square(array(4, 2)));
 	}
 
+	public function testConversionOfArrayToIntegerBadArgumentType()
+	{
+		$this->assertFalse(array2square(223));
+	}
+
 	public function testConversionOfArrayToIntegerBadArrayLength()
 	{
 		$this->assertFalse(array2square(array()));
@@ -20,6 +25,7 @@ class squareTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(array2square(array('e', 't')));
 		$this->assertFalse(array2square(array('3', '4')));
 		$this->assertFalse(array2square(array(array(), array())));
+		$this->assertFalse(array2square(array(2, 9)));
 	}
 
 	public function testConversionOfValidStringToInteger()
@@ -82,6 +88,38 @@ class squareTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(square2string(0.5));
 		$this->assertFalse(square2string('5'));
 		$this->assertFalse(square2string("hello world"));
+	}
+
+	public function testValidationOfValidSquare()
+	{
+		$this->assertTrue(validateSquare(0));
+		$this->assertTrue(validateSquare(63));
+	}
+
+	public function testValidationOfInvalidSquare()
+	{
+		$this->assertFalse(validateSquare(-1));
+		$this->assertFalse(validateSquare(64));
+		$this->assertFalse(validateSquare('no number'));
+	}
+
+	public function testGetRankOfValidSquare()
+	{
+		$this->assertSame(3, getRank(27));
+		$this->assertSame(7, getRank(63));
+		$this->assertSame(1, getRank(8));
+	}
+
+	public function testGetFileOfValidSquare()
+	{
+		$this->assertSame(0, getFile(0));
+		$this->assertSame(7, getFile(47));
+	}
+
+	public function testGetFileAndRankOfInValidSquare()
+	{
+		$this->assertFalse(getRank(65));
+		$this->assertFalse(getFile('text'));
 	}
 }
 ?>

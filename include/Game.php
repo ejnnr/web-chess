@@ -75,7 +75,7 @@ class Game
 	{
 		// check if move is legal
 		if (!$this->getPosition()->isLegalMove($move)) {
-			throw new Exception('Trying to add illegal Move');
+			throw new GameException('Trying to add illegal Move', 140);
 		}
 		if (empty($this->current)) { // pointer at starting position
 			$this->createCurrentNode($move);
