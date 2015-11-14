@@ -89,6 +89,10 @@ class JCFGame extends Game implements JsonSerializable
 				$moveArray['NAGs'] = $move->getNAGs();
 			}
 
+			if (!empty($move->getComment())) {
+				$moveArray['comment'] = $move->getComment();
+			}
+
 			if ($child->hasChildren())
 			{
 				$moveArray['children'] = $this->generateMoveArray($child);
@@ -171,7 +175,13 @@ class JCFGame extends Game implements JsonSerializable
 	 */
 	protected function addMoveAndDescendants($moveArray)
 	{
-		$this->doMove(new Move($moveArray['from'], $moveArray['to'], (isset($moveArray['promotion']) ? $moveArray['promotion'] : PROMOTION_QUEEN),	(isset($moveArray['NAGs']) ? $moveArray['NAGs'] : [])));
+		$this->doMove(new Move(
+			$moveArray['from'],
+ 			$moveArray['to'],
+ 			(isset($moveArray['promotion']) ? $moveArray['promotion'] : PROMOTION_QUEEN),
+			(isset($moveArray['NAGs']) ? $moveArray['NAGs'] : []),
+			(isset($moveArray['comment']) ? $moveArray['comment'] : '')
+		));
 
 		if (isset($moveArray['children'])) {
 			foreach ($moveArray['children'] as $child) {
