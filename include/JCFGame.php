@@ -50,13 +50,19 @@ class JCFGame extends Game implements JsonSerializable
 				$moveArray['promotion'] = $move->getPromotion();
 			}
 
-			if (sizeof($move->getNAGs()) > 0)
-			{
+			if (sizeof($move->getNAGs()) > 0) {
 				$moveArray['NAGs'] = $move->getNAGs();
 			}
 
-			if ($child->hasChildren())
-			{
+			if (!empty($move->getComment())) {
+				$moveArray['comment'] = $move->getComment();
+			}
+
+			if (sizeof($child->getCommands()) > 0) {
+				$moveArray['commands'] = $child->getCommands();
+			}
+
+			if ($child->hasChildren()) {
 				$moveArray['children'] = $this->generateMoveArray($child);
 			}
 
@@ -91,6 +97,10 @@ class JCFGame extends Game implements JsonSerializable
 
 			if (!empty($move->getComment())) {
 				$moveArray['comment'] = $move->getComment();
+			}
+
+			if (sizeof($child->getCommands()) > 0) {
+				$moveArray['commands'] = $child->getCommands();
 			}
 
 			if ($child->hasChildren())
@@ -182,6 +192,12 @@ class JCFGame extends Game implements JsonSerializable
 			(isset($moveArray['NAGs']) ? $moveArray['NAGs'] : []),
 			(isset($moveArray['comment']) ? $moveArray['comment'] : '')
 		));
+
+		if (isset($moveArray['commands'])) {
+			foreach ($moveArray['commands'] as $command) {
+				$this->current->addCommand($command['command'], $command['params']);
+			}
+		}
 
 		if (isset($moveArray['children'])) {
 			foreach ($moveArray['children'] as $child) {
