@@ -13,7 +13,27 @@
         <testsuite name="Application Test Suite">
             <directory>./tests/</directory>
         </testsuite>
+        <testsuite name="Chess API">
+            <file>./tests/squareTest.php</file>
+            <file>./tests/MoveTest.php</file>
+            <file>./tests/PositionTest.php</file>
+            <file>./tests/GameTest.php</file>
+            <file>./tests/GameNodeTest.php</file>
+            <file>./tests/JCFGameTest.php</file>
+            <file>./tests/JCFGameNodeTest.php</file>
+        </testsuite>
     </testsuites>
+    <filter>
+  		<whitelist processUncoveredFilesFromWhitelist="true">
+    		<file>./include/square.php</file>
+    		<file>./include/Move.php</file>
+    		<file>./include/Position.php</file>
+    		<file>./include/GameNode.php</file>
+    		<file>./include/Game.php</file>
+    		<file>./include/JCFGameNode.php</file>
+    		<file>./include/JCFGame.php</file>
+  		</whitelist>
+	</filter>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>

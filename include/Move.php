@@ -99,7 +99,7 @@ class Move
 	 * @param int[]  $NAGs        an array of valid NAG values (integers from 0 to 255). It is not recommended to use 0 or any number higher than 139. See http://www6.chessclub.com/help/PGN-spec
 	 */
 
-	function __construct($departure, $destination, $promotion = PROMOTION_QUEEN, $NAGs = array())
+	function __construct($departure, $destination, $promotion = PROMOTION_QUEEN, $NAGs = array(), $comment = '')
 	{
 		// check if departure or destination exist
 		if ((!isset($departure))
@@ -208,6 +208,12 @@ class Move
 			}
 		}
 		sort($this->NAGs); // sort array from lowest to highest
+
+		if (!is_string($comment)) {
+			throw new MoveException('__construct: comment is no string', 4);
+		}
+
+		$this->comment = $comment;
 	}
 
 	/**
@@ -273,6 +279,13 @@ class Move
 	function getNAGs() {
 		return $this->NAGs;
 	}
-}
 
-?>
+	/**
+	 * Returns the comment on the move or an empty string
+	 *
+	 * @return string The comment or an empty string if no comment exists
+	 */
+	function getComment() {
+		return $this->comment;
+	}
+}

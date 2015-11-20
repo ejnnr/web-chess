@@ -16,9 +16,18 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	 * @expectedException     MoveException
 	 * @expectedExceptionCode 4
 	 */
-	public function testCreateMoveWrongArgumentType()
+	public function testCreateMoveWrongArgumentTypeDeparture()
 	{
-		$move = new Move(FALSE, TRUE);
+		$move = new Move(FALSE, 'd5');
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 4
+	 */
+	public function testCreateMoveWrongArgumentTypeDestination()
+	{
+		$move = new Move('e4', TRUE);
 	}
 
 	/**
@@ -43,9 +52,108 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	 * @expectedException     MoveException
 	 * @expectedExceptionCode 5
 	 */
+	public function testCreateMoveBadSquareValueIntegerDeparture()
+	{
+		$move = new Move(-5, 62);
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
+	public function testCreateMoveBadSquareValueStringDeparture()
+	{
+		$move = new Move('c9', 'h4');
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
+	public function testCreateMoveBadSquareValueArrayDeparture()
+	{
+		$move = new Move([2,8], [7, -1]);
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
+	public function testCreateMoveBadSquareValueIntegerDestination()
+	{
+		$move = new Move(34, 89);
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
+	public function testCreateMoveBadSquareValueStringDestination()
+	{
+		$move = new Move('c3', 'j4');
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
+	public function testCreateMoveBadSquareValueArrayDestination()
+	{
+		$move = new Move([2,7], [7, -1]);
+	}
+
+	public function testCreateMoveEmptyPromotion()
+	{
+		$move = new Move('c7', 'c8', NULL);
+		$this->assertSame(PROMOTION_QUEEN, $move->getPromotion());
+	}
+
+	public function testCreateMoveCharPromotion()
+	{
+		$move = new Move('a7', 'a8', 'Q');
+		$this->assertSame(PROMOTION_QUEEN, $move->getPromotion());
+		$move = new Move('a7', 'a8', 'R');
+		$this->assertSame(PROMOTION_ROOK, $move->getPromotion());
+		$move = new Move('a7', 'a8', 'B');
+		$this->assertSame(PROMOTION_BISHOP, $move->getPromotion());
+		$move = new Move('a7', 'a8', 'N');
+		$this->assertSame(PROMOTION_KNIGHT, $move->getPromotion());
+	}
+
+	/**
+ 	 * @expectedException     MoveException
+ 	 * @expectedExceptionCode 7
+ 	 */
+	public function testCreateMovePromotionOutOfRange()
+	{
+		$move = new Move('g2', 'g1', 5);
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 4
+	 */
+	public function testCreateMoveNAGNoArray()
+	{
+		$move = new Move('e2', 'e3', PROMOTION_QUEEN, 'string');
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 5
+	 */
 	public function testCreateDoubleNAG()
 	{
 		$move = new Move('e2', 'e3', PROMOTION_QUEEN, [1, 1, 3]);
+	}
+
+	/**
+	 * @expectedException     MoveException
+	 * @expectedExceptionCode 4
+	 */
+	public function testCreateMoveNAGNoInteger()
+	{
+		$move = new Move('e2', 'e3', PROMOTION_QUEEN, [2, 'test']);
 	}
 
 	/**
@@ -55,6 +163,15 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	public function testCreateNAGOutsideRange()
 	{
 		$move = new Move('e2', 'e3', PROMOTION_QUEEN, [1, 256, 3]);
+	}
+
+	/**
+ 	 * @expectedException     MoveException
+ 	 * @expectedExceptionCode 4
+ 	 */
+	public function testCreateMoveCommentNoString()
+	{
+		$move = new Move('e3', 'd5', PROMOTION_QUEEN, [], 3);
 	}
 
 	/**

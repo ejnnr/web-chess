@@ -22,6 +22,87 @@ define('SQUARE_FORMAT_STRING', 1);
 define('SQUARE_FORMAT_ARRAY', 2);
 
 /**
+ * The numeric value of a1
+ */
+define('SQUARE_A1', 0);
+
+/**
+ * The numeric value of b1
+ */
+define('SQUARE_B1', 1);
+
+/**
+ * The numeric value of c1
+ */
+define('SQUARE_C1', 2);
+
+/**
+ * The numeric value of d1
+ */
+define('SQUARE_D1', 3);
+
+/**
+ * The numeric value of e1
+ */
+define('SQUARE_E1', 4);
+
+/**
+ * The numeric value of f1
+ */
+define('SQUARE_F1', 5);
+
+/**
+ * The numeric value of g1
+ */
+define('SQUARE_G1', 6);
+
+/**
+ * The numeric value of h1
+ */
+define('SQUARE_H1', 7);
+
+
+/**
+ * The numeric value of a8
+ */
+define('SQUARE_A8', 56);
+
+/**
+ * The numeric value of b8
+ */
+define('SQUARE_B8', 57);
+
+/**
+ * The numeric value of c8
+ */
+define('SQUARE_C8', 58);
+
+/**
+ * The numeric value of d8
+ */
+define('SQUARE_D8', 59);
+
+/**
+ * The numeric value of e8
+ */
+define('SQUARE_E8', 60);
+
+/**
+ * The numeric value of f8
+ */
+define('SQUARE_F8', 61);
+
+/**
+ * The numeric value of g8
+ */
+define('SQUARE_G8', 62);
+
+/**
+ * The numeric value of h8
+ */
+define('SQUARE_H8', 63);
+
+/**
  * converts formats like array(1, 3) to an integer
  *
  * Be careful: this function can return 0 or false, so use === to check the result
@@ -73,7 +154,7 @@ function string2square ($square)
 	$regExpResult = preg_match('/[a-h][1-8]/', $square);
 
 	if ($regExpResult === FALSE) { // error occurred in preg_match
-		return FALSE;
+		return FALSE; // @codeCoverageIgnore
 	}
 
 	if ($regExpResult === 0) { // $square has no valid syntax
@@ -90,7 +171,8 @@ function string2square ($square)
 		case 'f': $fileNumber = 5; break;
 		case 'g': $fileNumber = 6; break;
 		case 'h': $fileNumber = 7; break;
-		default: return FALSE; // should actually never happen, since we already used preg_match
+		default: return FALSE; // @codeCoverageIgnore
+		                       // should actually never happen, since we already used preg_match
 	}
 
 	return $fileNumber + ((int)substr($square, 1, 1) - 1) * 8; // put together the return value; see phpdoc for more details
@@ -145,7 +227,8 @@ function square2string ($square)
 		case 5: $file = 'f'; break;
 		case 6: $file = 'g'; break;
 		case 7: $file = 'h'; break;
-		default: return FALSE; // should never happen
+		default: return FALSE; // @codeCoverageIgnore
+                               // should never happen
 	}
 
 	return $file . (string)((($square & 56) / 8 + 1)); // take the three bits where the rank is saved and divide by 8; hint: 56 is 2^5 + 2^4 + 2^3
@@ -203,4 +286,3 @@ function getFile($square)
 
 	return $square & 7;
 }
-?>

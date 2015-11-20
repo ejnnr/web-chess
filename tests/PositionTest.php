@@ -12,22 +12,115 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		return $position;
 	}
 
+	public function testCanCreatePositionWithoutArguments()
+	{
+		$position = new Position();
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testLoadFEN()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1');
+		$this->assertEquals('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1', $position->getFEN());
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 2
+ 	 */
+	public function testLoadFENEmptyArgument()
+	{
+		$position = new Position();
+		$position->loadFEN(NULL);
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 4
+ 	 */
+	public function testLoadFENBadArgumentType()
+	{
+		$position = new Position();
+		$position->loadFEN(34);
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 110
+ 	 */
+	public function testLoadInvalidFENSyntax()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/4K3 w - - 0 1');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 111
+ 	 */
+	public function testLoadFENCastlingFlagsMissing()
+	{
+		$position = new Position();
+		$position->loadFEN('4k3/8/8/8/3Q4/8/8/4K3 w  - 0 1');
+	}
+
 	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 102
 	 */
-	public function testTooFewKings()
+	public function testMissingWhiteKing()
 	{
-		$position = new Position('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+		$position = new Position();
+		$position->loadFEN('4k3/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+	}
+
+	/**
+	 * @expectedException     PositionException
+	 * @expectedExceptionCode 102
+	 */
+	public function testMissingBlackKing()
+	{
+		$position = new Position();
+		$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1');
 	}
 
 	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 103
 	 */
-	public function testTooManyPiecesOfOneKind()
+	public function testTooManyQueens()
 	{
-		$position = new Position('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+		$position = new Position();
+		$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+	}
+
+	/**
+	 * @expectedException     PositionException
+	 * @expectedExceptionCode 103
+	 */
+	public function testTooManyPromotedPieces()
+	{
+		$position = new Position();
+		$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 106
+ 	 */
+	public function testInvalidEnPassantNoPawn()
+	{
+		$position = new Position('3k4/pppppppp/8/8/8/8/PPPPPPPP/3K4 w - c6 0 1');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 106
+ 	 */
+	public function testInvalidEnPassantWrongSideToMove()
+	{
+		$position = new Position('3k4/pp1ppppp/8/2p5/8/8/PPPPPPPP/3K4 b - c6 0 1');
 	}
 
 	/**
@@ -36,8 +129,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSideNotToMoveInCheck()
 	{
-	//	$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
-		$this->markTestIncomplete();
+		$position = new Position('7R/8/8/7k/8/8/8/K7 w - - 0 39');
 	}
 
 	/**
@@ -46,16 +138,73 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPawnsOnBackRank()
 	{
-		$position = new Position('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		$position = new Position();
+		$position->loadFEN('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
 	/**
 	 * @expectedException     PositionException
 	 * @expectedExceptionCode 112
 	 */
-	public function testInvalidFENSyntax()
+	public function testWrongNumberOfSquaresOnRank()
 	{
-		$position = new Position('k/8/8/K/8/8/8/8 w - - 0 1');
+		$position = new Position();
+		$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
+	}
+
+	public function testPreservePositionTooFewKings()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionTooManyQueens()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionTooManyPromotedPieces()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionSideNotToMoveInCheck()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('7R/8/8/7k/8/8/8/K7 w - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionPawnsOnBackRank()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('p7/8/8/8/k7/8/7K/8 w - - 0 39');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
+	}
+
+	public function testPreservePositionInvalidFENSyntax()
+	{
+		$position = new Position();
+		try {
+			$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
+		} catch (Exception $e) {}
+		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 	
 	/**
@@ -71,7 +220,26 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetArray($positionObject)
 	{
-		$this->markTestIncomplete();
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$positionShouldBe = [
+			['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+			['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['', '', '', '', '', '', '', ''],
+			['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+			['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+		];
+		
+		$this->assertEquals($positionShouldBe, $position->getArray());
+	}
+
+	public function testReset()
+	{
+		$position = new Position('4k3/8/8/8/3Q4/8/8/4K3 w - - 0 1');
+		$position->reset();
+		$this->assertEquals(new Position, $position);
 	}
 
 	public function testIsLegalQueen()
@@ -193,6 +361,19 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('4k3/8/8/8/8/8/8/R3K2R w - - 0 1');
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'g1')));
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'c1')));
+
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$this->assertTrue($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertTrue($position->isLegalMove(new Move('e8', 'c8')));
+		
+		$position = new Position('r3k2r/8/8/8/4R3/8/8/4K3 b kq - 0 1');
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'c8')));
+		
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b - - 0 1');
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'g8')));
+		$this->assertFalse($position->isLegalMove(new Move('e8', 'c8')));
 	}
 	
 	public function testIsLegalLeavingKingInCheck()
@@ -200,6 +381,12 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position('4k3/8/8/3rr3/8/8/4B3/4K3 w - - 0 1');
 		$this->assertFalse($position->isLegalMove(new Move('e1', 'd1')));
 		$this->assertFalse($position->isLegalMove(new Move('e2', 'd1')));
+	}
+
+	public function testInCheck()
+	{
+		$position = new Position('7R/8/8/7k/8/8/8/K7 b - - 0 39');
+		$this->assertTrue($position->inCheck());
 	}
 
 	/**
@@ -229,6 +416,18 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQK2R w KQ - 4 6', $positionObject->getFEN());
 		$positionObject->doMove(new Move('e1', 'g1'));
 		$this->assertEquals('r1b2bnr/pp1kpppp/2n5/q7/2B5/5N2/PPPP1PPP/RNBQ1RK1 b - - 5 6', $positionObject->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('h8', 'h7'));
+		$this->assertEquals('r3k3/7r/8/8/8/8/8/4K3 w q - 1 2', $position->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('e8', 'e7'));
+		$this->assertEquals('r6r/4k3/8/8/8/8/8/4K3 w - - 1 2', $position->getFEN());
+
+		$position = new Position('r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1');
+		$position->doMove(new Move('a8', 'a7'));
+		$this->assertEquals('4k2r/r7/8/8/8/8/8/4K3 w k - 1 2', $position->getFEN());
 	}
 
 	public function testDoMovePromotion() {
@@ -242,6 +441,83 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new Move('a2', 'a4', PROMOTION_QUEEN, array(3, 20)), $position->parseSAN('a4!! $20'));
 		$position = new Position('r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4');
 		$this->assertEquals(new Move('e1', 'g1', PROMOTION_QUEEN, array(2, 74)), $position->parseSAN('O-O? $74'));
+	}
+
+	public function testParseSANWithDiambiguation()
+	{
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 w - - 3 20');
+		$this->assertEquals(new Move('f1', 'h2'), $position->parseSAN('N1h2'));
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 b - - 3 20');
+		$this->assertEquals(new Move('b8', 'd7'), $position->parseSAN('Nbd7'));
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 131
+ 	 */
+	public function testParseSANWithoutEnoughDisambiguation()
+	{
+		$position = new Position('rn3rk1/1bq1ppbp/p2p1np1/1p6/4PB2/2PB1N1P/PP2QPP1/R3RNK1 w - - 3 20');
+		$position->parseSAN('Nh2');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 132
+ 	 */
+	public function testParseIllegelSAN()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nf4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidPieceName()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Ge4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidDestination()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nj4');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidDisambiguation()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Njf3');
+	}
+
+	/**
+ 	 * @expectedException     PositionException
+ 	 * @expectedExceptionCode 130
+ 	 */
+	public function testParseSANInvalidAnnotation()
+	{
+		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+		$position->parseSAN('Nf3!!!!');
+	}
+
+	public function testPositionObjectsAreEqual()
+	{
+		$position1 = new Position('rnbqkb1r/pppppppp/5n2/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 1 2');
+		$position2 = new Position();
+		$position2->doMove(new Move('c2', 'c4'));
+		$position2->doMove(new Move('g8', 'f6'));
+		$this->assertEquals($position1, $position2);
 	}
 }
 
