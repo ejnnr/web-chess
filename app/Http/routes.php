@@ -17,8 +17,3 @@ Route::group(['prefix' => 'api'], function()
 	Route::resource('databases', 'DatabaseController', ['except' => ['create', 'edit']]);
 	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 });
-
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
