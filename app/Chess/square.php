@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Chess;
 
 /**
  * Contains functions and constants to work with squares
@@ -7,11 +7,11 @@
 /**
  * A square format that gives every square a number ranging from 0 to 63
  */
-define('SQUARE_FORMAT_INT', 0);
+define('App\Chess\SQUARE_FORMAT_INT', 0);
 /**
  * SAN square format, e.g. 'e4'
  */
-define('SQUARE_FORMAT_STRING', 1);
+define('App\Chess\SQUARE_FORMAT_STRING', 1);
 /**
  * A square formar where each sqaure is an array.
  *
@@ -19,88 +19,88 @@ define('SQUARE_FORMAT_STRING', 1);
  * Both file and rank range from 0 to 7.
  * For the file a is 0 and h is 7.
  */
-define('SQUARE_FORMAT_ARRAY', 2);
+define('App\Chess\SQUARE_FORMAT_ARRAY', 2);
 
 /**
  * The numeric value of a1
  */
-define('SQUARE_A1', 0);
+define('App\Chess\SQUARE_A1', 0);
 
 /**
  * The numeric value of b1
  */
-define('SQUARE_B1', 1);
+define('App\Chess\SQUARE_B1', 1);
 
 /**
  * The numeric value of c1
  */
-define('SQUARE_C1', 2);
+define('App\Chess\SQUARE_C1', 2);
 
 /**
  * The numeric value of d1
  */
-define('SQUARE_D1', 3);
+define('App\Chess\SQUARE_D1', 3);
 
 /**
  * The numeric value of e1
  */
-define('SQUARE_E1', 4);
+define('App\Chess\SQUARE_E1', 4);
 
 /**
  * The numeric value of f1
  */
-define('SQUARE_F1', 5);
+define('App\Chess\SQUARE_F1', 5);
 
 /**
  * The numeric value of g1
  */
-define('SQUARE_G1', 6);
+define('App\Chess\SQUARE_G1', 6);
 
 /**
  * The numeric value of h1
  */
-define('SQUARE_H1', 7);
+define('App\Chess\SQUARE_H1', 7);
 
 
 /**
  * The numeric value of a8
  */
-define('SQUARE_A8', 56);
+define('App\Chess\SQUARE_A8', 56);
 
 /**
  * The numeric value of b8
  */
-define('SQUARE_B8', 57);
+define('App\Chess\SQUARE_B8', 57);
 
 /**
  * The numeric value of c8
  */
-define('SQUARE_C8', 58);
+define('App\Chess\SQUARE_C8', 58);
 
 /**
  * The numeric value of d8
  */
-define('SQUARE_D8', 59);
+define('App\Chess\SQUARE_D8', 59);
 
 /**
  * The numeric value of e8
  */
-define('SQUARE_E8', 60);
+define('App\Chess\SQUARE_E8', 60);
 
 /**
  * The numeric value of f8
  */
-define('SQUARE_F8', 61);
+define('App\Chess\SQUARE_F8', 61);
 
 /**
  * The numeric value of g8
  */
-define('SQUARE_G8', 62);
+define('App\Chess\SQUARE_G8', 62);
 
 /**
  * The numeric value of h8
  */
-define('SQUARE_H8', 63);
+define('App\Chess\SQUARE_H8', 63);
 
 /**
  * converts formats like array(1, 3) to an integer

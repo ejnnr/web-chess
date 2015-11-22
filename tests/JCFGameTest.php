@@ -1,8 +1,6 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'include/JCFGame.php';
-
-class JCFGameTest extends PHPUnit_Framework_TestCase
+class JCFGameTest extends \TestCase
 {
 	public function testJsonSerialize()
 	{

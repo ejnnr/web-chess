@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Chess;
 /**
  * This file contains the class Game and the corresponding exception class
  *
@@ -6,24 +6,9 @@
  */
 
 /**
- * Include necessary files
- */
-require_once 'Position.php';
-
-/**
- * Include necessary files
- */
-require_once 'Move.php';
-
-/**
- * Include necessary files
- */
-require_once 'GameNode.php';
-
-/**
  * A class representing an exception thrown by Game
  */
-class GameException extends Exception {}
+class GameException extends \Exception {}
 
 /**
  * A class representing a game of chess with variations.

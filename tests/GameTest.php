@@ -1,13 +1,11 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'include/Game.php';
-
-class GameTest extends PHPUnit_Framework_TestCase
+class GameTest extends \TestCase
 {
 	public function testCreateGame()
 	{
 		$game = new Game();
-		$this->assertInstanceOf('Game', $game);
+		$this->assertInstanceOf('App\Chess\Game', $game);
 	}
 
 	public function testGetPosition()
@@ -30,7 +28,7 @@ class GameTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     GameException
+ 	 * @expectedException     App\Chess\GameException
  	 * @expectedExceptionCode 140
  	 */
 	public function testDoIllegalMove()
@@ -88,7 +86,7 @@ class GameTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     GameException
+ 	 * @expectedException     App\Chess\GameException
  	 * @expectedExceptionCode 4
  	 */
 	public function testSetInvalidHeader()

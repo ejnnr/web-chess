@@ -1,16 +1,13 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'JCFGameNode.php';
-
-
-class JCFGameException extends Exception {}
+class JCFGameException extends \Exception {}
 
 /**
  * A class representing a game in JCF
  *
  * @see Game
  */
-class JCFGame extends Game implements JsonSerializable
+class JCFGame extends Game implements \JsonSerializable
 {
 	/**
 	 * set current to a new GameNode

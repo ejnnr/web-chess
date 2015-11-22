@@ -1,19 +1,9 @@
-<?php
+<?php namespace App\Chess;
 /**
  * This file contains the class Position and the corresponding exception class.
  *
  * This file includes square.php and Move.php.
  */
-
-/**
- * Include necessary files
- */
-require_once 'square.php';
-
-/**
- * Include necessary files
- */
-require_once 'Move.php';
 
 /**
  * Represents an exception thrown by Position.
@@ -42,7 +32,7 @@ require_once 'Move.php';
  */
 
 
-class PositionException extends Exception {}
+class PositionException extends \Exception {}
 
 /**
  * Represents a position that could occur in a game of chess

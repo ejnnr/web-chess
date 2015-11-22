@@ -1,33 +1,28 @@
-<?php
+<?php namespace App\Chess;
 
 /**
  * Contains the classes Move and MoveException
  */
 
 /**
- * Include necessary files
- */
-require_once 'square.php';
-
-/**
  * Promotion value representing a promotion to a knight
  *
  * This is also used for no promotion.
  */
-define('PROMOTION_QUEEN', 1);
+define('App\Chess\PROMOTION_QUEEN', 1);
 /**
  * Promotion value representing a promotion to a knight
  */
-define('PROMOTION_ROOK', 2);
+define('App\Chess\PROMOTION_ROOK', 2);
 /**
  * Promotion value representing a promotion to a knight
  */
-define('PROMOTION_BISHOP', 3);
+define('App\Chess\PROMOTION_BISHOP', 3);
 
 /**
  * Promotion value representing a promotion to a knight
  */
-define('PROMOTION_KNIGHT', 4);
+define('App\Chess\PROMOTION_KNIGHT', 4);
 /**
  * A class respresenting a exception thrown by Move
  *
@@ -41,7 +36,7 @@ define('PROMOTION_KNIGHT', 4);
  *  7: Numerical argument outside of allowed range
  */
 
-class MoveException extends Exception {}
+class MoveException extends \Exception {}
 
 /**
  * A class respresenting a chess move.

@@ -1,13 +1,11 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'include/Position.php';
-
-class PositionTest extends PHPUnit_Framework_TestCase
+class PositionTest extends \TestCase
 {
 	public function testCreateValidPosition()
 	{
 		$position = new Position('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
-		$this->assertInstanceOf('Position', $position);
+		$this->assertInstanceOf('App\Chess\Position', $position);
 
 		return $position;
 	}
@@ -26,7 +24,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 2
  	 */
 	public function testLoadFENEmptyArgument()
@@ -36,7 +34,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 4
  	 */
 	public function testLoadFENBadArgumentType()
@@ -46,7 +44,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 110
  	 */
 	public function testLoadInvalidFENSyntax()
@@ -56,7 +54,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 111
  	 */
 	public function testLoadFENCastlingFlagsMissing()
@@ -66,7 +64,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 102
 	 */
 	public function testMissingWhiteKing()
@@ -76,7 +74,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 102
 	 */
 	public function testMissingBlackKing()
@@ -86,7 +84,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 103
 	 */
 	public function testTooManyQueens()
@@ -96,7 +94,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 103
 	 */
 	public function testTooManyPromotedPieces()
@@ -106,7 +104,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 106
  	 */
 	public function testInvalidEnPassantNoPawn()
@@ -115,7 +113,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 106
  	 */
 	public function testInvalidEnPassantWrongSideToMove()
@@ -124,7 +122,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 104
 	 */
 	public function testSideNotToMoveInCheck()
@@ -133,7 +131,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 105
 	 */
 	public function testPawnsOnBackRank()
@@ -144,7 +142,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     PositionException
+	 * @expectedException     App\Chess\PositionException
 	 * @expectedExceptionCode 112
 	 */
 	public function testWrongNumberOfSquaresOnRank()
@@ -158,7 +156,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
@@ -167,7 +165,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('8/QQQQQQQQ/QQ6/8/k7/7K/8/8 b - - 0 39');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
@@ -176,7 +174,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('8/1k3P2/4P1Q1/3P1N1B/2Q2B2/BPNB2Q1/P5K1/2R5 w - - 0 42');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
@@ -185,7 +183,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('7R/8/8/7k/8/8/8/K7 w - - 0 39');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
@@ -194,7 +192,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('p7/8/8/8/k7/8/7K/8 w - - 0 39');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 
@@ -203,7 +201,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 		$position = new Position();
 		try {
 			$position->loadFEN('k/8/8/K/8/8/8/8 w - - 0 1');
-		} catch (Exception $e) {}
+		} catch (\Exception $e) {}
 		$this->assertEquals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', $position->getFEN());
 	}
 	
@@ -452,7 +450,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 131
  	 */
 	public function testParseSANWithoutEnoughDisambiguation()
@@ -462,7 +460,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 132
  	 */
 	public function testParseIllegelSAN()
@@ -472,7 +470,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 130
  	 */
 	public function testParseSANInvalidPieceName()
@@ -482,7 +480,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 130
  	 */
 	public function testParseSANInvalidDestination()
@@ -492,7 +490,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 130
  	 */
 	public function testParseSANInvalidDisambiguation()
@@ -502,7 +500,7 @@ class PositionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     PositionException
+ 	 * @expectedException     App\Chess\PositionException
  	 * @expectedExceptionCode 130
  	 */
 	public function testParseSANInvalidAnnotation()

@@ -1,6 +1,6 @@
-<?php
+<?php namespace App\Chess;
 
-class JCFGameNodeException extends Exception {}
+class JCFGameNodeException extends \Exception {}
 
 /**
  * A class representing a node in a JCF game

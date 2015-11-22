@@ -1,13 +1,11 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'include/GameNode.php';
-
-class GameNodeTest extends PHPUnit_Framework_TestCase
+class GameNodeTest extends \TestCase
 {
 	public function testCreateGameNode()
 	{
 		$node = new GameNode(new Move('e2', 'e4'));
-		$this->assertInstanceOf('GameNode', $node);
+		$this->assertInstanceOf('App\Chess\GameNode', $node);
 	}
 
 	public function testGetMainline()

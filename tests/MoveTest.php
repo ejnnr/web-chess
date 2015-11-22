@@ -1,19 +1,18 @@
-<?php
-require_once 'include/Move.php';
+<?php namespace App\Chess;
 
-class MoveTest extends PHPUnit_Framework_TestCase
+class MoveTest extends \TestCase
 {
 	public function testCreateValidMove()
 	{
-		$this->assertInstanceOf('Move', new Move('a1', 'a2'));
+		$this->assertInstanceOf('App\Chess\Move', new Move('a1', 'a2'));
 		$move = new Move(0, 8, PROMOTION_QUEEN, array(16, 1));
-		$this->assertInstanceOf('Move', $move);
-		$this->assertInstanceOf('Move', new Move(array(0, 0), array(0, 1)));
+		$this->assertInstanceOf('App\Chess\Move', $move);
+		$this->assertInstanceOf('App\Chess\Move', new Move(array(0, 0), array(0, 1)));
 		return $move;
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 4
 	 */
 	public function testCreateMoveWrongArgumentTypeDeparture()
@@ -22,7 +21,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 4
 	 */
 	public function testCreateMoveWrongArgumentTypeDestination()
@@ -31,7 +30,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 4
 	 */
 	public function testCreateMoveWrongArgumentTypePromotion()
@@ -40,7 +39,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 2
 	 */
 	public function testCreateMoveNullArgument()
@@ -49,7 +48,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueIntegerDeparture()
@@ -58,7 +57,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueStringDeparture()
@@ -67,7 +66,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueArrayDeparture()
@@ -76,7 +75,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueIntegerDestination()
@@ -85,7 +84,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueStringDestination()
@@ -94,7 +93,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateMoveBadSquareValueArrayDestination()
@@ -121,7 +120,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     MoveException
+ 	 * @expectedException     App\Chess\MoveException
  	 * @expectedExceptionCode 7
  	 */
 	public function testCreateMovePromotionOutOfRange()
@@ -130,7 +129,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 4
 	 */
 	public function testCreateMoveNAGNoArray()
@@ -139,7 +138,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 5
 	 */
 	public function testCreateDoubleNAG()
@@ -148,7 +147,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 4
 	 */
 	public function testCreateMoveNAGNoInteger()
@@ -157,7 +156,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 7
 	 */
 	public function testCreateNAGOutsideRange()
@@ -166,7 +165,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
- 	 * @expectedException     MoveException
+ 	 * @expectedException     App\Chess\MoveException
  	 * @expectedExceptionCode 4
  	 */
 	public function testCreateMoveCommentNoString()
@@ -196,7 +195,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @depends testCreateValidMove
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 7
 	 */
 	public function testGetDepartureInvalidFormat(Move $move)
@@ -206,7 +205,7 @@ class MoveTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @depends testCreateValidMove
-	 * @expectedException     MoveException
+	 * @expectedException     App\Chess\MoveException
 	 * @expectedExceptionCode 7
 	 */
 	public function testGetDestinationInvalidFormat(Move $move)

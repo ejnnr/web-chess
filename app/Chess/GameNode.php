@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Chess;
 
 /**
  * This file contains the class GameNode and the corresponding exception class.
@@ -7,19 +7,9 @@
  */
 
 /**
- * Include necessary files
- */
-require_once 'Position.php';
-
-/**
- * Include necessary files
- */
-require_once 'Move.php';
-
-/**
  * A class representing an exception thrown by GameNode
  */
-class GameNodeException extends Exception {}
+class GameNodeException extends \Exception {}
 
 /**
  * A class representing a move in a game
@@ -67,6 +57,7 @@ class GameNode
 	 * @param Position $startingPosition The position the root node starts with
 	 * @return Position The position after the move
 	 */
+
 	public function positionAfter(Position $startingPosition)
 	{
 		if (!$this->isChild()) { // node has no parent

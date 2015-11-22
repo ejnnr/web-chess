@@ -1,8 +1,6 @@
-<?php
+<?php namespace App\Chess;
 
-require_once 'include/JCFGameNode.php';
-
-class JCFGameNodeTest extends PHPUnit_Framework_TestCase
+class JCFGameNodeTest extends \TestCase
 {
 	public function testCommands()
 	{
