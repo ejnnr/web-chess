@@ -16,6 +16,11 @@ class Database extends Model {
 		return $this->belongsTo('App\User', 'owner_id'); // use owner_id in databases
 	}
 
+	public function games()
+	{
+		return $this->hasMany('App\Game');
+	}
+
 	public function sharedWith()
 	{
 		return $this->belongsToMany('App\User', 'shared_databases')->withTimestamps()->withPivot('access_level');

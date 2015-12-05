@@ -29,6 +29,12 @@ class DatabaseTest extends TestCase
 		$this->assertEquals($user4id, $database->owner->id);
 	}
 
+	public function testGetDatabaseGames()
+	{
+		$database_id = App\Database::where('name', '=', 'private_database1')->first()->id;
+		$this->assertSame(1, App\Database::find($database_id)->games()->count());
+	}
+
 	public function testShareDatabase()
 	{
 		$user4id = App\User::where('name', '=', 'user4')->first()->id;

@@ -16,6 +16,7 @@ class TestingSeeder extends Seeder {
 
 		$this->call('TestingUserTableSeeder');
 		$this->call('TestingDatabaseTableSeeder');
+		$this->call('TestingGameTableSeeder');
 		$this->call('TestingSharedDatabasesPivotTableSeeder');
 	}
 
@@ -64,5 +65,23 @@ class TestingSharedDatabasesPivotTableSeeder extends Seeder {
 		$database = \App\Database::where('name', '=', 'shared_database2')->first();
 		$id = \App\User::where('name', '=', 'user4')->first()->id;
 		$database->share($id, 2);
+	}
+}
+
+
+class TestingGameTableSeeder extends Seeder {
+	public function run()
+	{
+        \DB::table('games')->delete();
+
+		$database1 = App\Database::where('name', '=', 'private_database1')->first()->id;
+		$database2 = App\Database::where('name', '=', 'shared_database1')->first()->id;
+		$database3 = App\Database::where('name', '=', 'shared_database2')->first()->id;
+		$database4 = App\Database::where('name', '=', 'public_database1')->first()->id;
+
+		\App\Game::create(['database_id' => $database1, 'bcf' => 'dummy text']);
+        \App\Game::create(['database_id' => $database2, 'bcf' => 'dummy text']);
+        \App\Game::create(['database_id' => $database3, 'bcf' => 'dummy text']);
+        \App\Game::create(['database_id' => $database4, 'bcf' => 'dummy text']);
 	}
 }
