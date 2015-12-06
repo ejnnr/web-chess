@@ -1,25 +1,15 @@
 <?php namespace App\Chess;
 
-class BCFConverterException extends \Exception {}
+class BCFGameException extends \Exception {}
 
-class BCFConverter
+class BCFGame extends JCFGame
 {
-	public function encodeJCF($jcf)
+	public function getBCF()
 	{
 
 	}
 
-	public function decodeToJCF($bcf)
-	{
-
-	}
-
-	public function decodeToGame($bcf)
-	{
-
-	}
-
-	public function encodeGame(Game $game)
+	public function loadBCF($bcf)
 	{
 
 	}
