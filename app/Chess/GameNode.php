@@ -187,4 +187,25 @@ class GameNode
 	{
 		return sizeof($this->children) > 0;
 	}
+
+	/**
+	 * get an array of all siblings
+	 *
+	 * Siblings are the children of the parent node except the node itself.
+	 *
+	 * @return GameNode[]
+	 */
+	public function getSiblings()
+	{
+		if (empty($this->parent)) {
+			return false;
+		}
+
+		$ret = $this->parent->getChildren();
+		foreach (array_keys($ret, $this, true) as $key) {
+			unset($ret[$key]);
+		}
+		
+		return $ret;
+	}
 }

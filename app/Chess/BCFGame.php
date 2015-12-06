@@ -6,7 +6,67 @@ class BCFGame extends JCFGame
 {
 	public function getBCF()
 	{
+		if (empty($this->children)) {
+			return '';
+		}
 
+		$firstChild = reset($this->children);
+
+		$ret = $this->encodeMove($firstChild->getMove(), $this->startingPosition->isPromotingMove($firstChild->getMove()));
+
+		foreach ($this->children as $child) {
+			if ($child === $firstChild) {
+				continue;
+			}
+
+			$ret .= dechex((1 << 7) + 2); // start variation
+			$ret .= $this->encodeNodewithoutSiblings($child);
+			$ret .= dechex((1 << 7) + 3); // end variation
+		}
+
+		if ($firstChild->hasChildren()) {
+ 		   	$ret .= $this->encodeNode($firstChild->getMainlineContinuation());
+		}
+
+		return $ret;
+	}
+
+	protected function encodeNode(JCFGameNode $node)
+   	{
+		if ($node->isChild()) {
+			$ret = $this->encodeMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
+		} else {
+			$ret = $this->encodeMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
+		}
+
+		if ($node->isChild()) {
+			foreach ($node->getSiblings() as $sibling) {
+				$ret .= dechex((1 << 7) + 2); // start variation
+				$ret .= $this->encodeNodewithoutSiblings($sibling);
+				$ret .= dechex((1 << 7) + 3); // end variation
+			}
+		}
+
+		if ($node->hasChildren()) {
+ 		   	$ret .= $this->encodeNode($node->getMainlineContinuation());
+		}
+
+		return $ret;
+	}
+
+	protected function encodeNodeWithoutSiblings(JCFGameNode $node)
+	{
+		if ($node->isChild()) {
+			$ret = $this->encodeMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
+		} else {
+			$ret = $this->encodeMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
+		}
+
+		if ($node->hasChildren()) {
+ 		   	$ret .= $this->encodeNode($node->getMainlineContinuation());
+		}
+
+		return $ret;
 	}
 
 	public function loadBCF($bcf)
@@ -33,6 +93,10 @@ class BCFGame extends JCFGame
 	public function encodeMove(Move $move, $promotion)
 	{
 		$ret = dechex($this->encodePlainMove($move, $promotion));
+
+		while (strlen($ret) < 4) {
+			$ret = '0' . $ret;
+		}
 
 		if (!empty($move->getNAGs())) {
 			
