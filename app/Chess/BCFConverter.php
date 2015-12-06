@@ -40,15 +40,33 @@ class BCFConverter
 		return $ret;
 	}
 
-	protected function encodeMove(Move $move, $promotion)
+	public function encodeMove(Move $move, $promotion)
 	{
-		$ret = $this->encodePlainMove($move, $promotion);
+		$ret = dechex($this->encodePlainMove($move, $promotion));
 
 		if (!empty($move->getNAGs())) {
-			$ret = $ret << 16;
-			$ret |= (1 << 15);
+			
+			foreach ($move->getNAGs() as $nag) {
+				$annotation = 0;
+				$annotation |= (1 << 15);
 
-			//TODO: actually add type of annotation (NAG) and value
+				$annotation |= (1 << 8);
+				$annotation |= $nag;
+				$ret .= dechex($annotation);
+			}
+		}
+
+		if (!empty($move->getComment())) {
+			$ret .= dechex((1 << 7) + 4);
+
+			foreach (str_split($move->getComment()) as $char) {
+				if (ord($char) < 16) {
+					$ret .= '0';
+				}
+				$ret .= dechex(ord($char));
+			}
+
+			$ret .= dechex((1 << 7) + 5);
 		}
 
 		return $ret;
