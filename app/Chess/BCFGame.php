@@ -157,6 +157,8 @@ class BCFGame extends JCFGame
 	 */
 	public function loadBCF($bcf)
 	{
+		$this->reset();
+
 		if (!is_string($bcf)) {
 			throw new BCFGameException('bcf must be of type string', 4);
 		}
@@ -193,7 +195,6 @@ class BCFGame extends JCFGame
 				$this->doMove($this->decodeMove($moveStr));
 				continue;
 			}
-			throw new BCFGameException('Problem!');
 		}
 	}
 

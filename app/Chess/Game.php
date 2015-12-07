@@ -212,4 +212,15 @@ class Game
 	{
 		$this->current = new GameNode($move);
 	}
+
+	/**
+	 * delete all the moves made and reset the game to its starting position
+	 *
+	 * @return void
+	 */
+	public function reset()
+	{
+		$this->children = [];
+		$this->current = null;
+	}
 }
