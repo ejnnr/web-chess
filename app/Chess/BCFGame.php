@@ -175,16 +175,13 @@ class BCFGame extends JCFGame
 						continue;
 					}
 					if (hexdec(substr($bcf, 0, 2)) == 0b10000100) { // comment
-						$moveStr .= substr($bcf, 0, 2);
-						$bcf = substr($bcf, 2);
+						$moveStr .= $this->popBytes($bcf);
 						
-						while ((substr($bcf, 0, 2) !=='00') && (strlen($bcf) > 0)) {
-							$moveStr .= substr($bcf, 0, 2);
-							$bcf = substr($bcf, 2);
+						while ((substr($bcf, 0, 2) !=='00') && (strlen($bcf) > 0)) { // until the comment end char ('00') appears or nothing is left
+							$moveStr .= $this->popBytes($bcf);
 						}
 						if (strlen($bcf) > 0) {
-							$moveStr .= substr($bcf, 0, 2);
-							$bcf = substr($bcf, 2);
+							$moveStr .= $this->popBytes($bcf);
 						}
 						continue;
 					}
@@ -194,7 +191,7 @@ class BCFGame extends JCFGame
 				continue;
 			}
 
-			switch (hexdec($current) & (0b1111111)) {
+			switch (hexdec($current) & (0b1111111)) { // it's no move, but which annotation type?
 			case 2: // variation start
 				$this->back();
 				break;
@@ -203,6 +200,7 @@ class BCFGame extends JCFGame
 				break;
 			default:
 				throw new BCFGameException("annotation type $current cannot be parsed");
+				// note that NAG and comments are parsed as soon as a move is found, so no need to cover them here
 			}
 		}
 	}
@@ -228,29 +226,26 @@ class BCFGame extends JCFGame
 		$annotations = substr($bcf, 4);
 
 		while (strlen($annotations > 0)) {
-			$current = substr($annotations, 0, 2);
+			$current = $this->popBytes($annotations);
 			$currentInt = hexdec($current);
-
-			$annotations = substr($annotations, 2);
 
 			if (!($currentInt & (1 << 7))) {
 				throw new BCFGameException('bcf contains more than one move', 5);
 			}
 
 			switch ($currentInt & 0b1111111) {
-			case 1:
-				$move->addNAG(hexdec(substr($annotations, 0, 2)));
-				$annotations = substr($annotations, 2);
+			case 1: // NAG
+				$move->addNAG(hexdec($this->popBytes($annotations)));
 				break;
-			case 4:
+			case 4: // comment
 				$charInt = hexdec(substr($annotations, 0, 2));
 				$comment = '';
-				while ($charInt !== 0 && strlen($annotations) > 0) {
+				while ($charInt !== 0 && strlen($annotations) > 0) { // until comment end or no more chars
 					$comment .= chr($charInt);
 					$annotations = substr($annotations, 2);
 					$charInt = hexdec(substr($annotations, 0, 2));
 				}
-				if (strlen($annotations) > 0) {
+				if (strlen($annotations) > 0) { // if the comment end char is still present, remove it
 					$annotations = substr($annotations, 2);
 				}
 				$move->setComment($comment);
