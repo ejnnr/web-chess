@@ -43,5 +43,17 @@ class BCFGameTest extends \TestCase
 		$game1->doMove(new Move('e7', 'e6', PROMOTION_QUEEN, [], 'This move is played the most often.'));
 		$game2->loadBCF($game1->getBCF());
 		$this->assertEquals($game1, $game2);
+
+		$game1->addVariation(new Move('g7', 'g6'));
+		$game1->doMove(new Move('g1', 'f3', PROMOTION_QUEEN, [], "White doesn't allow the Grunfeld yet."));
+		$game1->endVariation();
+		$game2->loadBCF($game1->getBCF());
+		$this->assertEquals($game1, $game2);
+
+		$game1->addVariation(new Move('c7', 'c5'));
+		$game1->doMove(new Move('b1', 'c3'));
+		$game1->endVariation();
+		$game2->loadBCF($game1->getBCF());
+		$this->assertEquals($game1, $game2);
 	}
 }

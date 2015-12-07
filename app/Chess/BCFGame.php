@@ -195,6 +195,17 @@ class BCFGame extends JCFGame
 				$this->doMove($this->decodeMove($moveStr));
 				continue;
 			}
+
+			switch (hexdec($current) & (0b1111111)) {
+			case 2: // variation start
+				$this->back();
+				break;
+			case 3: // variation end
+				$this->endVariation();
+				break;
+			default:
+				throw new BCFGameException("annotation type $current cannot be parsed");
+			}
 		}
 	}
 
