@@ -182,33 +182,9 @@ class Move
 		}
 		$this->promotion = $promotion;
 
-		// set NAGs
-		if (!is_array($NAGs)) {
-			throw new MoveException('__construct: NAGs is no array', 4);
-		}
+		$this->setNAGs($NAGs);
 
-		$this->NAGs = array();
-		foreach ($NAGs as $nag) {
-			if (!is_integer($nag)) {
-				throw new MoveException('__construct: NAG is no integer', 4);
-			}
-
-			if (!(0 <= $nag && $nag < 256)) { // note that NAGs above 140 aren't defined, but since some programs use them, they are also supported by web-chess
-				throw new MoveException('__construct: NAG is not in the allowed range', 7);
-			}
-			if (!in_array($nag, $this->NAGs)) { // don't add NAG if already present
-				$this->NAGs[] = $nag; // add NAG
-			} else {
-				throw new MoveException('__construct: ' . $nag . ' occurs more than once in NAGs', 5); // TODO: define new exception code?
-			}
-		}
-		sort($this->NAGs); // sort array from lowest to highest
-
-		if (!is_string($comment)) {
-			throw new MoveException('__construct: comment is no string', 4);
-		}
-
-		$this->comment = $comment;
+		$this->setComment($comment);
 	}
 
 	/**
@@ -282,5 +258,58 @@ class Move
 	 */
 	function getComment() {
 		return $this->comment;
+	}
+
+	/**
+	 * Set the comment
+	 *
+	 * @param string $comment
+	 * @return void
+	 */
+	function setComment($comment) {
+		if (!is_string($comment)) {
+			throw new MoveException('setComment: comment must be a string', 4);
+		}
+
+		$this->comment = $comment;
+	}
+
+	/**
+	 * overwrites the NAG array with the one given
+	 *
+	 * @param int[] $NAGs
+	 * @return void
+	 */
+	function setNAGs($NAGs) {
+		if (!is_array($NAGs)) {
+			throw new MoveException('setNAGs: NAGs is no array', 4);
+		}
+
+		$this->NAGs = array();
+		foreach ($NAGs as $nag) {
+			$this->addNAG($nag);
+		}
+		sort($this->NAGs); // sort array from lowest to highest
+	}
+
+	/**
+	 * Add one NAG and leave the rest intact
+	 *
+	 * @param int $NAG
+	 * @return void
+	 */
+	function addNAG($nag) {
+			if (!is_integer($nag)) {
+				throw new MoveException('addNAG: NAG is no integer', 4);
+			}
+
+			if (!(0 <= $nag && $nag < 256)) { // note that NAGs above 140 aren't defined, but since some programs use them, they are also supported by web-chess
+				throw new MoveException('addNAG: NAG is not in the allowed range', 7);
+			}
+			if (!in_array($nag, $this->NAGs)) { // don't add NAG if already present
+				$this->NAGs[] = $nag; // add NAG
+			} else {
+				throw new MoveException('addNAG: ' . $nag . ' is already present in NAGs', 5); // TODO: define new exception code?
+			}
 	}
 }

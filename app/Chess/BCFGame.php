@@ -83,17 +83,6 @@ class BCFGame extends JCFGame
 	}
 
 	/**
-	 * load a game in BCF
-	 *
-	 * @param string $bcf The game in hex representation
-	 * @return void
-	 */
-	public function loadBCF($bcf)
-	{
-
-	}
-
-	/**
 	 * encodes a Move object ignoring NAGs/comments
 	 *
 	 * @param Move $move
@@ -154,9 +143,141 @@ class BCFGame extends JCFGame
 				$ret .= dechex(ord($char));
 			}
 
-			$ret .= dechex((1 << 7) + 5); // end comment
+			$ret .= '00'; // end comment;
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * load a game in BCF
+	 *
+	 * @param string $bcf The game in hex representation
+	 * @return void
+	 */
+	public function loadBCF($bcf)
+	{
+		if (!is_string($bcf)) {
+			throw new BCFGameException('bcf must be of type string', 4);
+		}
+
+		while (strlen($bcf) > 0) {
+			$current = substr($bcf, 0, 2);
+			$bcf = substr($bcf, 2);
+
+			if (!(hexdec($current) & (1 << 7))) { // move
+				$moveStr = $current . substr($bcf, 0, 2);
+				$bcf = substr($bcf, 2);
+				while (strlen($bcf) > 0) {
+					if (hexdec(substr($bcf, 0, 2)) == 0b10000001) { // NAG
+						$moveStr .= substr($bcf, 0, 4);
+						$bcf = substr($bcf, 4);
+						continue;
+					}
+					if (hexdec(substr($bcf, 0, 2)) == 0b10000100) { // comment
+						$moveStr .= substr($bcf, 0, 2);
+						$bcf = substr($bcf, 2);
+						
+						while ((substr($bcf, 0, 2) !=='00') && (strlen($bcf) > 0)) {
+							$moveStr .= substr($bcf, 0, 2);
+							$bcf = substr($bcf, 2);
+						}
+						if (strlen($bcf) > 0) {
+							$moveStr .= substr($bcf, 0, 2);
+							$bcf = substr($bcf, 2);
+						}
+						continue;
+					}
+					break;
+				}
+				$this->doMove($this->decodeMove($moveStr));
+				continue;
+			}
+			throw new BCFGameException('Problem!');
+		}
+	}
+
+	/**
+	 * decode a move in BCF
+	 *
+	 * @param string $bcf The move in hex representation
+	 * @return Move
+	 */
+	public function decodeMove($bcf)
+	{
+		if (!is_string($bcf)) {
+			throw new BCFGameException('bcf must be of type string', 4);
+		}
+
+		if (strlen($bcf) < 4) {
+			throw new BCFGameException('bcf must have a length of at least two', 5);
+		}
+
+		$move = $this->decodePlainMove(substr($bcf, 0, 4)); // since the string is in hexadecimal format, the first two bytes are the first 4 chars
+
+		$annotations = substr($bcf, 4);
+
+		while (strlen($annotations > 0)) {
+			$current = substr($annotations, 0, 2);
+			$currentInt = hexdec($current);
+
+			$annotations = substr($annotations, 2);
+
+			if (!($currentInt & (1 << 7))) {
+				throw new BCFGameException('bcf contains more than one move', 5);
+			}
+
+			switch ($currentInt & 0b1111111) {
+			case 1:
+				$move->addNAG(hexdec(substr($annotations, 0, 2)));
+				$annotations = substr($annotations, 2);
+				break;
+			case 4:
+				$charInt = hexdec(substr($annotations, 0, 2));
+				$comment = '';
+				while ($charInt !== 0 && strlen($annotations) > 0) {
+					$comment .= chr($charInt);
+					$annotations = substr($annotations, 2);
+					$charInt = hexdec(substr($annotations, 0, 2));
+				}
+				if (strlen($annotations) > 0) {
+					$annotations = substr($annotations, 2);
+				}
+				$move->setComment($comment);
+				break;
+			default:
+				throw new BCFGameException("annotation $charInt can't be parsed by this method", 5);
+			}
+		}
+
+		return $move;
+	}
+
+	protected function decodePlainMove($bcf)
+	{
+		if (!is_string($bcf)) {
+			throw new BCFGameException('bcf must be of type string', 4);
+		}
+
+		if (!strlen($bcf) == 4) {
+			throw new BCFGameException('bcf must have a length of two bytes. Use decodeMove() to decode annotated moves.', 5);
+		}
+
+		$moveInt = hexdec($bcf);
+
+		if ($moveInt & (1 << 15)) {
+			throw new BCFGameException('bcf must be a valid bcf move, however it starts with 1');
+		}
+
+		$departure = ($moveInt & (0b111111 << 8)) >> 8;
+		$destination = $moveInt & 0b111111;
+
+		$promoting = $moveInt & (1 << 14);
+
+	//	if ($promoting) {
+			$promotionPiece = ((($moveInt & (0b11 << 6)) >> 6) + 1);
+	//	}
+
+		return new Move($departure, $destination, $promotionPiece);
 	}
 }
