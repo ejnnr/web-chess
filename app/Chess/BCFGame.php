@@ -164,16 +164,14 @@ class BCFGame extends JCFGame
 		}
 
 		while (strlen($bcf) > 0) {
-			$current = substr($bcf, 0, 2);
-			$bcf = substr($bcf, 2);
+			$current = $this->popBytes($bcf);
 
 			if (!(hexdec($current) & (1 << 7))) { // move
-				$moveStr = $current . substr($bcf, 0, 2);
-				$bcf = substr($bcf, 2);
+				$moveStr = $current . $this->popBytes($bcf);
+
 				while (strlen($bcf) > 0) {
 					if (hexdec(substr($bcf, 0, 2)) == 0b10000001) { // NAG
-						$moveStr .= substr($bcf, 0, 4);
-						$bcf = substr($bcf, 4);
+						$moveStr .= $this->popBytes($bcf, 2);
 						continue;
 					}
 					if (hexdec(substr($bcf, 0, 2)) == 0b10000100) { // comment
@@ -291,5 +289,19 @@ class BCFGame extends JCFGame
 	//	}
 
 		return new Move($departure, $destination, $promotionPiece);
+	}
+
+	/**
+	 * returns the first 2 * count chars and removes them from the string
+	 *
+	 * @param string $hexString
+	 * @param int $count
+	 * @return string
+	 */
+	protected function popBytes(&$hexString, $count = 1)
+	{
+		$ret = substr($hexString, 0, 2 * $count);
+		$hexString = substr($hexString, 2 * $count);
+		return $ret;
 	}
 }
