@@ -68,7 +68,6 @@ class TestingSharedDatabasesPivotTableSeeder extends Seeder {
 	}
 }
 
-
 class TestingGameTableSeeder extends Seeder {
 	public function run()
 	{

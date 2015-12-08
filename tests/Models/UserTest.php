@@ -38,4 +38,10 @@ class UserTest extends TestCase
 		$user = App\User::where('name', '=', 'user4')->first();
 		$this->assertEquals(1, $user->databases()->count());
 	}
+
+	public function testGetGames() {
+		$count = App\User::first()->games()->count();
+		App\User::first()->databases()->first()->games()->save(new App\Game(['bcf' => 'hello world']));
+		$this->assertSame($count + 1, App\User::first()->games()->count());
+	}
 }

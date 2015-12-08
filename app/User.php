@@ -47,4 +47,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	{
 		return $this->belongsToMany('App\Database', 'shared_databases')->withTimestamps()->withPivot('access_level');
 	}
+
+	public function games()
+	{
+		return $this->hasManyThrough('App\Game', 'App\Database', 'owner_id', 'database_id');
+	}
+
+	public function sharedGames()
+	{
+		return $this->belongsToMany('App\Game', 'shared_games')->withTimestamps()->withPivot('access_level');
+	}
 }

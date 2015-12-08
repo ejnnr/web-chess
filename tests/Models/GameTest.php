@@ -34,4 +34,13 @@ class GameTest extends TestCase
 		$game = App\Game::where('database_id', '=', 1)->first();
 		$this->assertEquals(1, $game->database->id);
 	}
+
+	public function testShareGame()
+	{
+		$count = App\User::first()->sharedGames->count();
+		$count2 = App\Game::first()->sharedWith->count();
+		App\Game::first()->share(App\User::first()->id, 2);
+		$this->assertSame($count + 1, App\User::first()->sharedGames->count());
+		$this->assertSame($count + 1, App\Game::first()->sharedWith->count());
+	}
 }
