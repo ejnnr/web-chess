@@ -138,6 +138,11 @@ return [
 		'Illuminate\Broadcasting\BroadcastServiceProvider',
 
 		/*
+ 		 * 3rd-party Service Providers...
+ 		 */
+		'Prettus\Repository\Providers\RepositoryServiceProvider',
+
+		/*
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',

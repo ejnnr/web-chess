@@ -14,39 +14,39 @@ class GameTest extends TestCase
 
 	public function testCreateGame()
 	{
-		$game = new App\Game();
-		$this->assertInstanceOf(App\Game::class, $game);
+		$game = new App\Entities\Game();
+		$this->assertInstanceOf(App\Entities\Game::class, $game);
 	}
 
 	public function testSaveGame()
 	{
-		$count = App\Game::all()->count();
-		$game = new App\Game();
-		$game->database_id = App\Database::all()->first()->id;
+		$count = App\Entities\Game::all()->count();
+		$game = new App\Entities\Game();
+		$game->database_id = App\Entities\Database::all()->first()->id;
 		$game->bcf = 'Some dummy data';
 		$game->save();
 
-		$this->assertSame(($count + 1), App\Game::all()->count());
+		$this->assertSame(($count + 1), App\Entities\Game::all()->count());
 	}
 
 	public function testGetDatabase()
 	{
-		$game = App\Game::where('database_id', '=', 1)->first();
+		$game = App\Entities\Game::where('database_id', '=', 1)->first();
 		$this->assertEquals(1, $game->database->id);
 	}
 
 	public function testShareGame()
 	{
-		$count = App\User::first()->sharedGames->count();
-		$count2 = App\Game::first()->sharedWith->count();
-		App\Game::first()->share(App\User::first()->id, 2);
-		$this->assertSame($count + 1, App\User::first()->sharedGames->count());
-		$this->assertSame($count + 1, App\Game::first()->sharedWith->count());
+		$count = App\Entities\User::first()->sharedGames->count();
+		$count2 = App\Entities\Game::first()->sharedWith->count();
+		App\Entities\Game::first()->share(App\Entities\User::first()->id, 2);
+		$this->assertSame($count + 1, App\Entities\User::first()->sharedGames->count());
+		$this->assertSame($count + 1, App\Entities\Game::first()->sharedWith->count());
 	}
 
 	public function testGameAttribute()
 	{
-		$model = new App\Game();
+		$model = new App\Entities\Game();
 		$this->assertInstanceOf(App\Chess\BCFGame::class, $model->game);
 		$game = new App\Chess\BCFGame();
 		$game->doMove(new App\Chess\Move('b2', 'b3'));
