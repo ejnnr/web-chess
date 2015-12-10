@@ -43,4 +43,15 @@ class GameTest extends TestCase
 		$this->assertSame($count + 1, App\User::first()->sharedGames->count());
 		$this->assertSame($count + 1, App\Game::first()->sharedWith->count());
 	}
+
+	public function testGameAttribute()
+	{
+		$model = new App\Game();
+		$this->assertInstanceOf(App\Chess\BCFGame::class, $model->game);
+		$game = new App\Chess\BCFGame();
+		$game->doMove(new App\Chess\Move('b2', 'b3'));
+		$model->game = $game;
+		$this->assertEquals($game, $model->game);
+		$this->assertEquals($game->getBCF(), $model->bcf);
+	}
 }

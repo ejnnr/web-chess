@@ -22,4 +22,16 @@ class Game extends Model
 	{
 		$this->sharedWith()->attach($userId, ['access_level' => $accessLevel]);
 	}
+
+	public function setGameAttribute(Chess\BCFGame $game)
+	{
+		$this->bcf = $game->getBCF();
+	}
+	
+	public function getGameAttribute()
+	{
+		$game = \App::make(Chess\BCFGame::class);
+		$game->loadBCF(isset($this->bcf) ? $this->bcf : '');
+		return $game;
+	}
 }
