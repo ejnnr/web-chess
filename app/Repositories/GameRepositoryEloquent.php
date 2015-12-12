@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\GameRepository;
+use App\Repositories\ExtendedRepository;
 use App\Entities\Game;
 
 /**
  * Class GameRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class GameRepositoryEloquent extends BaseRepository implements GameRepository
+class GameRepositoryEloquent extends ExtendedRepository implements GameRepository
 {
     /**
      * Specify Model class name
@@ -30,4 +30,14 @@ class GameRepositoryEloquent extends BaseRepository implements GameRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+	/**
+	 * return the presenter to use for this repository
+	 *
+	 * @return string
+	 */
+	public function presenter()
+	{
+		return 'App\Presenters\GamePresenter';
+	}
 }

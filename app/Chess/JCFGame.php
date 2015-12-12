@@ -23,6 +23,19 @@ class JCFGame extends Game implements \JsonSerializable
 	}
 
 	/**
+	 * returns the JCF representations of the game
+	 *
+	 * There's no difference between calling json_encode($game) and $game->getJCF().
+	 * This method is just for convienience.
+	 *
+	 * @return string
+	 */
+	public function getJCF()
+	{
+		return json_encode($this);
+	}
+
+	/**
 	 * returns a representation of the class that can be parsed by json_encode()
 	 *
 	 * This means you can just write `json_encode(new JCFGame())` and will get the game in JCF

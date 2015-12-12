@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\DatabaseRepository;
+use App\Repositories\ExtendedRepository;
 use App\Entities\Database;
 
 /**
  * Class DatabaseRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class DatabaseRepositoryEloquent extends BaseRepository implements DatabaseRepository
+class DatabaseRepositoryEloquent extends ExtendedRepository implements DatabaseRepository
 {
     /**
      * Specify Model class name
@@ -30,4 +30,14 @@ class DatabaseRepositoryEloquent extends BaseRepository implements DatabaseRepos
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+	/**
+	 * return the presenter to use for this repository
+	 *
+	 * @return string
+	 */
+	public function presenter()
+	{
+		return 'App\Presenters\DatabasePresenter';
+	}
 }

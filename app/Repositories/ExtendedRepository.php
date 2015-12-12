@@ -1,0 +1,13 @@
+<?php namespace App\Repositories;
+
+use Prettus\Repository\Eloquent\BaseRepository;
+
+abstract class ExtendedRepository extends BaseRepository
+{
+    public function includeRelations($relations)
+    {
+        $this->presenter->parseIncludes($relations);
+        return $this;
+    }
+
+}
