@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Transformers;
+
+use League\Fractal\TransformerAbstract;
+use App\Entities\Database;
+
+/**
+ * Class DatabaseTransformer
+ * @package namespace App\Transformers;
+ */
+class DatabaseTransformer extends TransformerAbstract
+{
+
+    /**
+     * Transform the \Database entity
+     * @param \Database $model
+     *
+     * @return array
+     */
+    public function transform(Database $model)
+    {
+        return [
+            'id'         => (int) $model->id,
+			'name'       => $model->name,
+			'owner_id'   => $model->owner_id,
+            'created_at' => $model->created_at->toIso8601String(),
+            'updated_at' => $model->updated_at->toIso8601String()
+        ];
+    }
+}
+
