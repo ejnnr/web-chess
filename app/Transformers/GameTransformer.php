@@ -32,7 +32,7 @@ class GameTransformer extends TransformerAbstract
         return array_filter([
             'id'         => isset($model->id)         ? (int) $model->id                      : null,
 			'database_id'=> isset($model->database_id) ? $model->database_id                  : null,
-			'jcf'        => isset($model->game)       ? $model->game->getJCF()                : null,
+			'jcf'        => isset($model->game)       ? $model->game->jsonSerialize()         : null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
         ]);
