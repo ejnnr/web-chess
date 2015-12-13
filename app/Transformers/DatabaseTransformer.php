@@ -20,12 +20,12 @@ class DatabaseTransformer extends TransformerAbstract
      */
     public function transform(Database $model)
     {
-        return [
-            'id'         => (int) $model->id,
-			'name'       => $model->name,
-			'owner_id'   => $model->owner_id,
-            'created_at' => $model->created_at->toIso8601String(),
-            'updated_at' => $model->updated_at->toIso8601String()
-        ];
+        return array_filter([
+            'id'         => isset($model->id)         ? (int) $model->id                      : null,
+			'name'       => isset($model->name)       ? $model->name                          : null,
+			'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
+            'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
+            'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
+        ]);
     }
 }

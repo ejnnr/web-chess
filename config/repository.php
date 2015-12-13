@@ -205,7 +205,7 @@ return [
         'params'=>[
             'search'        =>'search',
             'searchFields'  =>'searchFields',
-            'filter'        =>'filter',
+            'filter'        =>'select',
             'orderBy'       =>'orderBy',
             'sortedBy'      =>'direction',
             'with'          =>'with'
