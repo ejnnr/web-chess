@@ -3,9 +3,29 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Repositories\DatabaseRepository;
+
 use Illuminate\Http\Request;
 
 class DatabaseController extends Controller {
+
+	/**
+	 * The Database Repository
+	 *
+	 * @var DatabaseRepository
+	 */
+	protected $databases;
+
+	/**
+	 * Instantiate a new DatabaseController
+	 *
+	 * @param DatabaseRepository $databaseRepo
+	 * @return void
+	 */
+	public function __construct(DatabaseRepository $databaseRepo)
+	{
+		$this->databases = $databaseRepo;
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -14,7 +34,7 @@ class DatabaseController extends Controller {
 	 */
 	public function index()
 	{
-		//
+		return $this->databases->all();
 	}
 
 	/**
@@ -22,9 +42,9 @@ class DatabaseController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		return $this->databases->create($request->json('data'));
 	}
 
 	/**
@@ -35,7 +55,7 @@ class DatabaseController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		return $this->databases->find($id);
 	}
 
 	/**
@@ -44,9 +64,9 @@ class DatabaseController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Request $request, $id)
 	{
-		//
+		return $this->databases->update($request->json('data'), $id);
 	}
 
 	/**
@@ -57,7 +77,11 @@ class DatabaseController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		if ($this->databases->delete($id)) {
+			return response('', 204);
+		}
+
+		return response('', 500);
 	}
 
 }
