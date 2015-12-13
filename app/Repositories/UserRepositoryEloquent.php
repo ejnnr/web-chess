@@ -13,6 +13,11 @@ use App\Entities\User;
  */
 class UserRepositoryEloquent extends ExtendedRepository implements UserRepository
 {
+	protected $fieldSearchable = [
+		'name' => 'like',
+		'email',
+	];
+
     /**
      * Specify Model class name
      *

@@ -13,6 +13,11 @@ use App\Entities\Database;
  */
 class DatabaseRepositoryEloquent extends ExtendedRepository implements DatabaseRepository
 {
+	protected $fieldSearchable = [
+		'name' => 'like',
+		'owner_id',
+	];
+
     /**
      * Specify Model class name
      *

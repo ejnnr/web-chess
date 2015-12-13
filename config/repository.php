@@ -207,7 +207,7 @@ return [
             'searchFields'  =>'searchFields',
             'filter'        =>'filter',
             'orderBy'       =>'orderBy',
-            'sortedBy'      =>'sortedBy',
+            'sortedBy'      =>'direction',
             'with'          =>'with'
         ]
     ],
