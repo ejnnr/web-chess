@@ -1,5 +1,6 @@
 <?php namespace App\Presenters;
 
+use Request;
 use Prettus\Repository\Presenter\FractalPresenter;
 
 abstract class ExtendedFractalPresenter extends FractalPresenter
@@ -10,11 +11,11 @@ abstract class ExtendedFractalPresenter extends FractalPresenter
         $paramIncludes  = config('repository.fractal.params.include','include');
 
         if ( $request->has( $paramIncludes ) ) {
-            $includes = array_merge($includes, explode(',', $paramIncludes));
+            $includes = array_merge($includes, explode(',', Request::input($paramIncludes)));
         }
 
         $this->fractal->parseIncludes($includes);
 
         return $this;
-    }
+  	}
 }
