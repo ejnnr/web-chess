@@ -11,6 +11,15 @@ use App\Entities\Game;
  */
 class GameTransformer extends TransformerAbstract
 {
+	/**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'database',
+    ];
+
 
     /**
      * Transform the \Game entity
@@ -28,4 +37,15 @@ class GameTransformer extends TransformerAbstract
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
         ]);
     }
+
+	/**
+	 * Include Database
+	 *
+	 * @param Game $game
+	 * @return League\Fractal\ItemResource
+	 */
+	public function includeDatabase(Game $game)
+	{
+		return $this->item($game->database, new DatabaseTransformer);
+	}
 }

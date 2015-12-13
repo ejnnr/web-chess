@@ -11,6 +11,15 @@ use App\Entities\Database;
  */
 class DatabaseTransformer extends TransformerAbstract
 {
+	/**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'owner',
+		'games'
+    ];
 
     /**
      * Transform the \Database entity
@@ -28,4 +37,26 @@ class DatabaseTransformer extends TransformerAbstract
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
         ]);
     }
+
+	/**
+	 * Include owner
+	 *
+	 * @param Database $database
+	 * @return League/Fractal/ItemResource
+	 */
+	public function includeOwner(Database $database)
+	{
+		return $this->item($database->owner, new UserTransformer);
+	}
+
+	/**
+	 * Include Games
+	 *
+	 * @param Database $database
+	 * @return League/Fractal/CollectionResource
+	 */
+	public function includeGames(Database $database)
+	{
+		return $this->collection($database->games, new GameTransformer);
+	}
 }
