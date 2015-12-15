@@ -12,7 +12,10 @@
 */
 Route::get('/', 'MainController@index');
 
-Route::group(['prefix' => 'api'], function()
+Route::group([
+	'prefix' => 'api',
+	'middleware' => ['jsonApi']
+], function()
 {
 	Route::resource('databases', 'DatabaseController', ['except' => ['create', 'edit']]);
 	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);

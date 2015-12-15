@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Repositories\DatabaseRepository;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreDatabaseRequest;
+use App\Http\Requests\UpdateDatabaseRequest;
 
 class DatabaseController extends Controller {
 
@@ -42,7 +44,7 @@ class DatabaseController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(StoreDatabaseRequest $request)
 	{
 		return $this->databases->create($request->json('data'));
 	}
@@ -64,7 +66,7 @@ class DatabaseController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function update(UpdateDatabaseRequest $request, $id)
 	{
 		return $this->databases->update($request->json('data'), $id);
 	}

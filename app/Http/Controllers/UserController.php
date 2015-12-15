@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller {
 
@@ -42,7 +44,7 @@ class UserController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(StoreUserRequest $request)
 	{
 		return $this->users->create($request->json('data'));
 	}
@@ -64,7 +66,7 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function update(UpdateUserRequest $request, $id)
 	{
 		return $this->users->update($request->json('data'), $id);
 	}

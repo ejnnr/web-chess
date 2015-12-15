@@ -9,6 +9,9 @@ use App\Repositories\GameRepository;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\StoreGameRequest;
+use App\Http\Requests\UpdateGameRequest;
+
 class GameController extends Controller
 {
 	/**
@@ -45,7 +48,7 @@ class GameController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreGameRequest $request)
     {
 		$this->games->create($request->json('data'));
     }
@@ -68,7 +71,7 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateGameRequest $request, $id)
     {
         $this->games->update($request->json('data'), $id);
     }
