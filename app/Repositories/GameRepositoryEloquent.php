@@ -13,9 +13,7 @@ use App\Entities\Game;
  */
 class GameRepositoryEloquent extends ExtendedRepository implements GameRepository
 {
-	protected $fieldSearchable = [
-		'database_id',
-	];
+	protected $fieldSearchable = [];
 
     /**
      * Specify Model class name

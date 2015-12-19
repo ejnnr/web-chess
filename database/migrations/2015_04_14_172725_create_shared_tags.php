@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSharedDatabases extends Migration {
+class CreateSharedTags extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,10 @@ class CreateSharedDatabases extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('shared_databases', function(Blueprint $table)
+		Schema::create('shared_tags', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('database_id');
+			$table->integer('tag_id');
 			$table->integer('user_id');
 			$table->integer('access_level');
 			$table->timestamps();
@@ -29,7 +29,7 @@ class CreateSharedDatabases extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('shared_databases');
+		Schema::drop('shared_tags');
 	}
 
 }

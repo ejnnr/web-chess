@@ -15,9 +15,10 @@ class DatabaseSeeder extends Seeder {
 		Model::unguard();
 
 		$this->call('UserTableSeeder');
-		$this->call('DatabaseTableSeeder');
-		$this->call('SharedDatabasesPivotTableSeeder');
+		$this->call('TagTableSeeder');
+		$this->call('SharedTagsPivotTableSeeder');
 		$this->call('GameTableSeeder');
+		$this->call('GameTagTableSeeder');
 	}
 
 }
@@ -33,22 +34,22 @@ class UserTableSeeder extends Seeder {
 
 }
 
-class DatabaseTableSeeder extends Seeder {
+class TagTableSeeder extends Seeder {
 	public function run()
 	{
-        \DB::table('databases')->delete();
+        \DB::table('tags')->delete();
 
-		factory(App\Entities\Database::class, 4)->create();
+		factory(App\Entities\Tag::class, 4)->create();
 	}
 }
 
-class SharedDatabasesPivotTableSeeder extends Seeder {
+class SharedTagsPivotTableSeeder extends Seeder {
 	public function run()
 	{
-        \DB::table('shared_databases')->delete();
+        \DB::table('shared_tags')->delete();
 
-		$database = \App\Database::first();
-		$database->share(App\Entities\User::orderByRaw("RAND()")->first()->id, 3);
+		$tag = \App\Entities\Tag::first();
+		$tag->share(App\Entities\User::first()->id, 3);
 	}
 }
 
@@ -59,5 +60,18 @@ class GameTableSeeder extends Seeder
         \DB::table('games')->delete();
 
 		factory(App\Entities\Game::class, 4)->create();
+	}
+}
+
+class GameTagTableSeeder extends Seeder
+{
+	public function run()
+	{
+		\DB::table('game_tag')->delete();
+
+		$ids = App\Entities\Tag::all(['id'])->modelKeys();
+		foreach (App\Entities\Game::all()->all() as $game) {
+			$game->tags()->attach($ids[mt_rand(0, count($ids) - 1)]);
+		}
 	}
 }

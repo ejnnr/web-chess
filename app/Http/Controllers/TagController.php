@@ -3,30 +3,30 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Repositories\DatabaseRepository;
+use App\Repositories\TagRepository;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreDatabaseRequest;
-use App\Http\Requests\UpdateDatabaseRequest;
+use App\Http\Requests\StoreTagRequest;
+use App\Http\Requests\UpdateTagRequest;
 
-class DatabaseController extends Controller {
+class TagController extends Controller {
 
 	/**
-	 * The Database Repository
+	 * The Tag Repository
 	 *
-	 * @var DatabaseRepository
+	 * @var TagRepository
 	 */
-	protected $databases;
+	protected $tags;
 
 	/**
-	 * Instantiate a new DatabaseController
+	 * Instantiate a new TagController
 	 *
-	 * @param DatabaseRepository $databaseRepo
+	 * @param TagRepository $tagRepo
 	 * @return void
 	 */
-	public function __construct(DatabaseRepository $databaseRepo)
+	public function __construct(TagRepository $tagRepo)
 	{
-		$this->databases = $databaseRepo;
+		$this->tags = $tagRepo;
 	}
 
 	/**
@@ -36,7 +36,7 @@ class DatabaseController extends Controller {
 	 */
 	public function index()
 	{
-		return $this->databases->all();
+		return $this->tags->all();
 	}
 
 	/**
@@ -44,9 +44,9 @@ class DatabaseController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(StoreDatabaseRequest $request)
+	public function store(StoreTagRequest $request)
 	{
-		return $this->databases->create($request->json('data'));
+		return $this->tags->create($request->json('data'));
 	}
 
 	/**
@@ -57,7 +57,7 @@ class DatabaseController extends Controller {
 	 */
 	public function show($id)
 	{
-		return $this->databases->find($id);
+		return $this->tags->find($id);
 	}
 
 	/**
@@ -66,9 +66,9 @@ class DatabaseController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(UpdateDatabaseRequest $request, $id)
+	public function update(UpdateTagRequest $request, $id)
 	{
-		return $this->databases->update($request->json('data'), $id);
+		return $this->tags->update($request->json('data'), $id);
 	}
 
 	/**
@@ -79,7 +79,7 @@ class DatabaseController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		if ($this->databases->delete($id)) {
+		if ($this->tags->delete($id)) {
 			return response('', 204);
 		}
 

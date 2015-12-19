@@ -3,13 +3,13 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Entities\Database;
+use App\Entities\Tag;
 
 /**
- * Class DatabaseTransformer
+ * Class TagTransformer
  * @package namespace App\Transformers;
  */
-class DatabaseTransformer extends TransformerAbstract
+class TagTransformer extends TransformerAbstract
 {
 	/**
      * List of resources possible to include
@@ -22,12 +22,12 @@ class DatabaseTransformer extends TransformerAbstract
     ];
 
     /**
-     * Transform the \Database entity
-     * @param \Database $model
+     * Transform the \Tag entity
+     * @param \Tag $model
      *
      * @return array
      */
-    public function transform(Database $model)
+    public function transform(Tag $model)
     {
         return array_filter([
             'id'         => isset($model->id)         ? (int) $model->id                      : null,
@@ -41,22 +41,22 @@ class DatabaseTransformer extends TransformerAbstract
 	/**
 	 * Include owner
 	 *
-	 * @param Database $database
+	 * @param Tag $tag
 	 * @return League/Fractal/ItemResource
 	 */
-	public function includeOwner(Database $database)
+	public function includeOwner(Tag $tag)
 	{
-		return $this->item($database->owner, new UserTransformer);
+		return $this->item($tag->owner, new UserTransformer);
 	}
 
 	/**
 	 * Include Games
 	 *
-	 * @param Database $database
+	 * @param Tag $tag
 	 * @return League/Fractal/CollectionResource
 	 */
-	public function includeGames(Database $database)
+	public function includeGames(Tag $tag)
 	{
-		return $this->collection($database->games, new GameTransformer);
+		return $this->collection($tag->games, new GameTransformer);
 	}
 }

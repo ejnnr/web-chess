@@ -17,7 +17,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'databases'
+        'tags'
     ];
 
     /**
@@ -38,13 +38,13 @@ class UserTransformer extends TransformerAbstract
     }
 
 	/**
-	 * Include Databases
+	 * Include Tags
 	 *
 	 * @param User $user
 	 * @return League/Fractal/CollectionResource
 	 */
 	public function includeDatabases(User $user)
 	{
-		return $this->collection($user->databases, new DatabaseTransformer);
+		return $this->collection($user->tags, new TagTransformer);
 	}
 }

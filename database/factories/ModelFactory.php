@@ -19,21 +19,21 @@ $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Entities\Database::class, function (Faker\Generator $faker) {
+$factory->define(App\Entities\Tag::class, function (Faker\Generator $faker) {
+	$ids = App\Entities\User::all(['id'])->modelKeys();
     return [
         'name' => $faker->userName,
-		// attach the database to a random user:
-		'owner_id' => App\Entities\User::orderByRaw("RAND()")->first()->id,
+		// attach the tag to a random user
+		'owner_id' => $ids[mt_rand(0, count($ids) - 1)],
 		'public' => rand(0,1)
     ];
 });
 
-$factory->define(App\Entities\Database::class, function (Faker\Generator $faker, App\Chess\BCFGame $game) {
+$factory->define(App\Entities\Game::class, function (Faker\Generator $faker) {
+	$game = app(App\Chess\BCFGame::class);
 	$game->doMove(new App\Chess\Move('e2', 'e4'));
 
     return [
-		// attach the game to a random database:
-		'database_id' => App\Entities\Database::orderByRaw("RAND()")->first()->id,
 		'bcf' => $game->getBCF()
     ];
 });

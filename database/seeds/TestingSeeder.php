@@ -56,10 +56,10 @@ class TestingDatabaseTableSeeder extends Seeder {
 	}
 }
 
-class TestingSharedDatabasesPivotTableSeeder extends Seeder {
+class TestingSharedTagsPivotTableSeeder extends Seeder {
 	public function run()
 	{
-        \DB::table('shared_databases')->delete();
+        \DB::table('shared_tags')->delete();
 
 		$database = Database::where('name', '=', 'shared_database1')->first();
 		$id = User::where('name', '=', 'user2')->first()->id;

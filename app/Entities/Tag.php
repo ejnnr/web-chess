@@ -1,19 +1,21 @@
-<?php namespace App\Entities;
+<?php
+
+namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-class Database extends Model implements Transformable
+class Tag extends Model implements Transformable
 {
-	use TransformableTrait;
+    use TransformableTrait;
 
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['owner_id', 'public', 'name'];
+    protected $fillable = ['owner_id', 'name', 'public'];
 
 	public function owner()
 	{
@@ -22,12 +24,12 @@ class Database extends Model implements Transformable
 
 	public function games()
 	{
-		return $this->hasMany('App\Entities\Game');
+		return $this->belongsToMany('App\Entities\Game')->withTimestamps();
 	}
 
 	public function sharedWith()
 	{
-		return $this->belongsToMany('App\Entities\User', 'shared_databases')->withTimestamps()->withPivot('access_level');
+		return $this->belongsToMany('App\Entities\User', 'shared_tags')->withTimestamps()->withPivot('access_level');
 	}
 
 	public function share($userId, $accessLevel)
