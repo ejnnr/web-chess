@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('UserTableSeeder');
 		$this->call('DatabaseTableSeeder');
 		$this->call('SharedDatabasesPivotTableSeeder');
+		$this->call('GameTableSeeder');
 	}
 
 }
@@ -27,10 +28,7 @@ class UserTableSeeder extends Seeder {
     {
         \DB::table('users')->delete();
 
-        \App\User::create(['name' => 'user1', 'email' => 'foo@bar.com', 'password' => 'password']);
-        \App\User::create(['name' => 'user2', 'email' => 'test@bar.com', 'password' => '123456']);
-        \App\User::create(['name' => 'user3', 'email' => 'user3@bar.com', 'password' => 'test']);
-        \App\User::create(['name' => 'user4', 'email' => 'user4@bar.com', 'password' => 'user4']);
+		factory(App\Entities\User::class, 4)->create();
     }
 
 }
@@ -40,14 +38,7 @@ class DatabaseTableSeeder extends Seeder {
 	{
         \DB::table('databases')->delete();
 
-		$user1 = App\User::where('name', '=', 'user1')->first()->id;
-		$user2 = App\User::where('name', '=', 'user2')->first()->id;
-		$user3 = App\User::where('name', '=', 'user3')->first()->id;
-		$user4 = App\User::where('name', '=', 'user4')->first()->id;
-
-        \App\Database::create(['name' => 'sample database', 'owner_id' => $user1, 'public' => FALSE]);
-        \App\Database::create(['name' => 'my games', 'owner_id' => $user2, 'public' => FALSE]);
-        \App\Database::create(['name' => 'grandmaster games', 'owner_id' => $user3, 'public' => TRUE]);
+		factory(App\Entities\Database::class, 4)->create();
 	}
 }
 
@@ -56,12 +47,17 @@ class SharedDatabasesPivotTableSeeder extends Seeder {
 	{
         \DB::table('shared_databases')->delete();
 
-		$database = \App\Database::where('name', '=', 'sample database')->first();
-		$id = \App\User::where('name', '=', 'user2')->first()->id;
-		$database->share($id, 3);
+		$database = \App\Database::first();
+		$database->share(App\Entities\User::orderByRaw("RAND()")->first()->id, 3);
+	}
+}
 
-		$database = \App\Database::where('name', '=', 'my games')->first();
-		$id = \App\User::where('name', '=', 'user4')->first()->id;
-		$database->share($id, 2);
+class GameTableSeeder extends Seeder
+{
+	public function run()
+	{
+        \DB::table('games')->delete();
+
+		factory(App\Entities\Game::class, 4)->create();
 	}
 }
