@@ -14,6 +14,7 @@ class CreateGamesTable extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
+			$table->integer('owner_id')->unsigned();
 			$table->binary('bcf');
             $table->timestamps();
         });

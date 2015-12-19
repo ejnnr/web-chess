@@ -9,11 +9,16 @@ class Game extends Model implements Transformable
 {
 	use TransformableTrait;
 
-    protected $fillable = ['bcf'];
+    protected $fillable = ['bcf', 'owner_id'];
 
 	public function tags()
 	{
 		return $this->belongsToMany('App\Entities\Tag')->withTimestamps();
+	}
+
+	public function owner()
+	{
+		return $this->belongsTo('App\Entities\User', 'owner_id'); // use owner_id in databases
 	}
 
 	public function sharedWith()

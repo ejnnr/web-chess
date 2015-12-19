@@ -18,7 +18,8 @@ class GameTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'tags',
-		'shared_with'
+		'shared_with',
+		'owner'
     ];
 
 
@@ -32,7 +33,7 @@ class GameTransformer extends TransformerAbstract
     {
         return array_filter([
             'id'         => isset($model->id)         ? (int) $model->id                      : null,
-			'database_id'=> isset($model->database_id) ? $model->database_id                  : null,
+			'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
 			'jcf'        => isset($model->game)       ? $model->game->jsonSerialize()         : null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
@@ -51,7 +52,7 @@ class GameTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * IncludeSharedWith
+	 * Include SharedWith
 	 *
 	 * @param Game $game
 	 * @return League\Fractal\CollectionResource
@@ -59,5 +60,16 @@ class GameTransformer extends TransformerAbstract
 	public function includeSharedWith(Game $game)
 	{
 		return $this->collection($game->sharedWith, new UserTransformer);
+	}
+
+	/**
+	 * Include Owner
+	 *
+	 * @param Game $game
+	 * @return League\Fractal\ItemResource
+	 */
+	public function includeOwner(Game $game)
+	{
+		return $this->item($game->owner, new UserTransformer);
 	}
 }

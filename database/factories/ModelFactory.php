@@ -32,8 +32,10 @@ $factory->define(App\Entities\Tag::class, function (Faker\Generator $faker) {
 $factory->define(App\Entities\Game::class, function (Faker\Generator $faker) {
 	$game = app(App\Chess\BCFGame::class);
 	$game->doMove(new App\Chess\Move('e2', 'e4'));
+	$ids = App\Entities\User::all(['id'])->modelKeys();
 
     return [
+		'owner_id' => $ids[mt_rand(0, count($ids) - 1)],
 		'bcf' => $game->getBCF()
     ];
 });

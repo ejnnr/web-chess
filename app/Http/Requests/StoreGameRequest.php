@@ -24,8 +24,8 @@ class StoreGameRequest extends Request
     public function rules()
     {
         return [
-            'data.database_id' => 'required|integer|min:1',
 			'data.bcf' => 'required|string'
+			'data.owner_id' => 'required|integer|min:1|exists:users,id',
         ];
     }
 }

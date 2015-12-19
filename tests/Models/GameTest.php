@@ -23,6 +23,7 @@ class GameTest extends TestCase
 		$count = App\Entities\Game::all()->count();
 		$game = new App\Entities\Game();
 		$game->bcf = 'Some dummy data';
+		$game->owner_id = App\Entities\User::first()->id;
 		$game->save();
 
 		$this->assertSame(($count + 1), App\Entities\Game::all()->count());

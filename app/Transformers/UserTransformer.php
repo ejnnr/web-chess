@@ -17,7 +17,8 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'tags'
+        'tags',
+		'games'
     ];
 
     /**
@@ -46,5 +47,16 @@ class UserTransformer extends TransformerAbstract
 	public function includeTags(User $user)
 	{
 		return $this->collection($user->tags, new TagTransformer);
+	}
+
+	/**
+	 * Include Games
+	 *
+	 * @param User $user
+	 * @return League/Fractal/CollectionResource
+	 */
+	public function includeGames(User $user)
+	{
+		return $this->collection($user->games, new GameTransformer);
 	}
 }
