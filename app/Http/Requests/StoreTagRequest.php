@@ -25,7 +25,7 @@ class StoreTagRequest extends Request
     {
         return [
             'data.name' => 'required|string|max:255',
-			'data.owner_id' => 'required|integer|min:1',
+			'data.owner_id' => 'required|integer|min:1|exists:users,id',
 			'data.public' => 'required|integer|min:0|max:255'
         ];
     }
