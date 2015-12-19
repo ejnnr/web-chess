@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
+use App\Repositories\ExtendedRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\TagRepository;
 use App\Entities\Tag;
@@ -11,7 +11,7 @@ use App\Entities\Tag;
  * Class TagRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class TagRepositoryEloquent extends BaseRepository implements TagRepository
+class TagRepositoryEloquent extends ExtendedRepository implements TagRepository
 {
 	protected $fieldSearchable = [
 		'name' => 'like',
@@ -35,4 +35,14 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+	/**
+	 * return the presenter to use for this repository
+	 *
+	 * @return string
+	 */
+	public function presenter()
+	{
+		return 'App\Presenters\TagPresenter';
+	}
 }

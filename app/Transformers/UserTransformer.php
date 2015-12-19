@@ -43,7 +43,7 @@ class UserTransformer extends TransformerAbstract
 	 * @param User $user
 	 * @return League/Fractal/CollectionResource
 	 */
-	public function includeDatabases(User $user)
+	public function includeTags(User $user)
 	{
 		return $this->collection($user->tags, new TagTransformer);
 	}
