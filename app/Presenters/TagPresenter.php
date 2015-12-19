@@ -2,15 +2,15 @@
 
 namespace App\Presenters;
 
-use App\Transformers\DatabaseTransformer;
-use App\Presenters\ExtendedFractalPresenter;
+use App\Transformers\TagTransformer;
+use Prettus\Repository\Presenter\FractalPresenter;
 
 /**
- * Class DatabasePresenter
+ * Class TagPresenter
  *
  * @package namespace App\Presenters;
  */
-class DatabasePresenter extends ExtendedFractalPresenter
+class TagPresenter extends FractalPresenter
 {
     /**
      * Transformer
@@ -19,6 +19,6 @@ class DatabasePresenter extends ExtendedFractalPresenter
      */
     public function getTransformer()
     {
-        return new DatabaseTransformer();
+        return new TagTransformer();
     }
 }

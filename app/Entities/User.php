@@ -41,19 +41,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		$this->attributes['password'] = \Hash::make($password);
 	}
 
-	public function databases()
+	public function tags()
 	{
-		return $this->hasMany('App\Entities\Database', 'owner_id');
+		return $this->hasMany('App\Entities\Tag', 'owner_id');
 	}
 
-	public function sharedDatabases()
+	public function sharedTags()
 	{
-		return $this->belongsToMany('App\Entities\Database', 'shared_databases')->withTimestamps()->withPivot('access_level');
-	}
-
-	public function games()
-	{
-		return $this->hasManyThrough('App\Entities\Game', 'App\Entities\Database', 'owner_id', 'database_id');
+		return $this->belongsToMany('App\Entities\Tag', 'shared_tags')->withTimestamps()->withPivot('access_level');
 	}
 
 	public function sharedGames()

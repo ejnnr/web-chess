@@ -17,7 +17,7 @@ class GameTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'database',
+        'tags',
     ];
 
 
@@ -39,13 +39,13 @@ class GameTransformer extends TransformerAbstract
     }
 
 	/**
-	 * Include Database
+	 * Include Tags
 	 *
 	 * @param Game $game
 	 * @return League\Fractal\ItemResource
 	 */
 	public function includeDatabase(Game $game)
 	{
-		return $this->item($game->database, new DatabaseTransformer);
+		return $this->collection($game->tags, new TagTransformer);
 	}
 }

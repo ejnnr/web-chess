@@ -9,7 +9,7 @@ class GameTest extends TestCase
 	public function setUp() {
 		parent::setUp();
 		Artisan::call('migrate');
-		$this->seed('TestingSeeder');
+		$this->seed('DatabaseSeeder');
 	}
 
 	public function testCreateGame()
@@ -22,17 +22,16 @@ class GameTest extends TestCase
 	{
 		$count = App\Entities\Game::all()->count();
 		$game = new App\Entities\Game();
-		$game->database_id = App\Entities\Database::all()->first()->id;
 		$game->bcf = 'Some dummy data';
 		$game->save();
 
 		$this->assertSame(($count + 1), App\Entities\Game::all()->count());
 	}
 
-	public function testGetDatabase()
+	public function testGetTags()
 	{
-		$game = App\Entities\Game::where('database_id', '=', 1)->first();
-		$this->assertEquals(1, $game->database->id);
+		$game = App\Entities\Game::first();
+		$this->assertInstanceOf(App\Entities\Tag::class, $game->tags()->first());
 	}
 
 	public function testShareGame()

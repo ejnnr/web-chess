@@ -31,7 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Repositories\UserRepository', 'App\Repositories\UserRepositoryEloquent');
-        $this->app->bind('App\Repositories\DatabaseRepository', 'App\Repositories\DatabaseRepositoryEloquent');
+        $this->app->bind('App\Repositories\TagRepository', 'App\Repositories\TagRepositoryEloquent');
         $this->app->bind('App\Repositories\GameRepository', 'App\Repositories\GameRepositoryEloquent');
     }
 
@@ -44,7 +44,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         return [
 			'App\Repositories\UserRepository',
-			'App\Repositories\DatabaseRepository',
+			'App\Repositories\TagRepository',
 			'App\Repositories\GameRepository',
 		];
     }

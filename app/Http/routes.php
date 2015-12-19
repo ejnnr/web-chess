@@ -17,7 +17,7 @@ Route::group([
 	'middleware' => ['jsonApi']
 ], function()
 {
-	Route::resource('databases', 'DatabaseController', ['except' => ['create', 'edit']]);
+	Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
 	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 	Route::resource('games', 'GameController', ['except' => ['create', 'edit']]);
 });

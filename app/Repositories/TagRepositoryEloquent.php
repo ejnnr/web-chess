@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
+use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\DatabaseRepository;
-use App\Repositories\ExtendedRepository;
-use App\Entities\Database;
+use App\Repositories\TagRepository;
+use App\Entities\Tag;
 
 /**
- * Class DatabaseRepositoryEloquent
+ * Class TagRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class DatabaseRepositoryEloquent extends ExtendedRepository implements DatabaseRepository
+class TagRepositoryEloquent extends BaseRepository implements TagRepository
 {
 	protected $fieldSearchable = [
 		'name' => 'like',
@@ -25,7 +25,7 @@ class DatabaseRepositoryEloquent extends ExtendedRepository implements DatabaseR
      */
     public function model()
     {
-        return Database::class;
+        return Tag::class;
     }
 
     /**
@@ -35,14 +35,4 @@ class DatabaseRepositoryEloquent extends ExtendedRepository implements DatabaseR
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-
-	/**
-	 * return the presenter to use for this repository
-	 *
-	 * @return string
-	 */
-	public function presenter()
-	{
-		return 'App\Presenters\DatabasePresenter';
-	}
 }
