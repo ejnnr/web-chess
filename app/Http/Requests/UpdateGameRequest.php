@@ -25,7 +25,6 @@ class UpdateGameRequest extends Request
     {
         return [
 			'data.bcf' => 'string'
-			'data.owner_id' => 'integer|min:1|exists:users,id',
         ];
     }
 }

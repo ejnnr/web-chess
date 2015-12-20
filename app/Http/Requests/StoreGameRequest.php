@@ -25,7 +25,6 @@ class StoreGameRequest extends Request
     {
         return [
 			'data.bcf' => 'required|string',
-			'data.owner_id' => 'required|integer|min:1|exists:users,id',
         ];
     }
 }

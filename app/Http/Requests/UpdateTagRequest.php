@@ -25,7 +25,6 @@ class UpdateTagRequest extends Request
     {
         return [
             'data.name' => 'string|max:255',
-			'data.owner_id' => 'integer|min:1|exists:users,id',
 			'data.public' => 'integer|min:0|max:255'
         ];
     }

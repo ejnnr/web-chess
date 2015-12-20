@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Auth;
 
 use App\Repositories\TagRepository;
 
@@ -47,7 +48,7 @@ class TagController extends Controller {
 	public function store(StoreTagRequest $request)
 	{
 		$this->authorize();
-		return $this->tags->create($request->json('data'));
+		return $this->tags->create(array_merge($request->json('data'), ['owner_id' => Auth::user()->id));
 	}
 
 	/**
@@ -72,7 +73,7 @@ class TagController extends Controller {
 	public function update(UpdateTagRequest $request, $id)
 	{
 		$this->authorize($this->tags->skipPresenter()->find($id));
-		return $this->tags->update($request->json('data'), $id);
+		return $this->tags->update(array_merge($request->json('data'), ['owner_id' => Auth::user()->id), $id);
 	}
 
 	/**

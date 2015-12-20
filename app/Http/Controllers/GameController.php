@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 use App\Repositories\GameRepository;
 
@@ -53,7 +54,7 @@ class GameController extends Controller
     public function store(StoreGameRequest $request)
     {
 		$this->authorize('store', Game::class);
-		$this->games->create($request->json('data'));
+		return $this->games->create(array_merge($request->json('data'), ['owner_id' => Auth::user()->id]));
     }
 
     /**
@@ -79,7 +80,7 @@ class GameController extends Controller
     public function update(UpdateGameRequest $request, $id)
     {
 		$this->authorize($this->games->skipPresenter()->find($id));
-        $this->games->update($request->json('data'), $id);
+		return $this->games->update(array_merge($request->json('data'), ['owner_id' => Auth::user()->id), $id);
     }
 
     /**
