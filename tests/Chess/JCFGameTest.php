@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class JCFGameTest extends \TestCase
+class JCFGameTest extends \PHPUnit_Framework_TestCase
 {
 	public function testJsonSerialize()
 	{

@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class PositionTest extends \TestCase
+class PositionTest extends \PHPUnit_Framework_TestCase
 {
 	public function testCreateValidPosition()
 	{

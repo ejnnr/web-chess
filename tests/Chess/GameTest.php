@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class GameTest extends \TestCase
+class GameTest extends \PHPUnit_Framework_TestCase
 {
 	public function testCreateGame()
 	{

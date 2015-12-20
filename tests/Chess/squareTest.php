@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class squareTest extends \TestCase
+class squareTest extends \PHPUnit_Framework_TestCase
 {
 	public function testConversionOfValidArrayToInteger()
 	{

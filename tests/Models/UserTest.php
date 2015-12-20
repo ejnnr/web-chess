@@ -1,13 +1,11 @@
 <?php
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 class UserTest extends TestCase
 {
-	public function setUp()
-	{
-		parent::setUp();
-		\Artisan::call('migrate');
-		$this->seed('DatabaseSeeder');
-	}
+	use DatabaseTransactions;
 
 	public function testCreateUser() {
 		$user = new App\Entities\User();

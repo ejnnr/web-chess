@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class JCFGameNodeTest extends \TestCase
+class JCFGameNodeTest extends \PHPUnit_Framework_TestCase
 {
 	public function testCommands()
 	{

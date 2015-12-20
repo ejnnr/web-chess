@@ -1,6 +1,6 @@
 <?php namespace App\Chess;
 
-class MoveTest extends \TestCase
+class MoveTest extends \PHPUnit_Framework_TestCase
 {
 	public function testCreateValidMove()
 	{
