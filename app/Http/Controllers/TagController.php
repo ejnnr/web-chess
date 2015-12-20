@@ -48,7 +48,7 @@ class TagController extends Controller {
 	public function store(StoreTagRequest $request)
 	{
 		$this->authorize();
-		return $this->tags->create(array_merge($request->json('data'), ['owner_id' => Auth::user()->id));
+		return $this->tags->create(array_merge($request->json('data'), ['owner_id' => Auth::user()->id]));
 	}
 
 	/**
