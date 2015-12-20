@@ -80,7 +80,9 @@ class GameController extends Controller
     public function update(UpdateGameRequest $request, $id)
     {
 		$this->authorize($this->games->skipPresenter()->find($id));
-		return $this->games->update(array_merge($request->json('data'), ['owner_id' => Auth::user()->id), $id);
+		$data = $request->json('data');
+		unset($data['owner_id']);
+		return $this->games->update($request->json('data'), $id);
     }
 
     /**

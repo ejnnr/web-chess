@@ -73,7 +73,9 @@ class TagController extends Controller {
 	public function update(UpdateTagRequest $request, $id)
 	{
 		$this->authorize($this->tags->skipPresenter()->find($id));
-		return $this->tags->update(array_merge($request->json('data'), ['owner_id' => Auth::user()->id), $id);
+		$data = $request->json('data');
+		unset($data['owner_id']);
+		return $this->tags->update($request->json('data'), $id);
 	}
 
 	/**
