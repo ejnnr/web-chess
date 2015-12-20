@@ -30,6 +30,8 @@ class UserTableSeeder extends Seeder {
         \DB::table('users')->delete();
 
 		factory(App\Entities\User::class, 4)->create();
+
+		App\Entities\User::create(['name' => 'root', 'email' => 'root@root.org', 'password' => 'root']);
     }
 
 }
