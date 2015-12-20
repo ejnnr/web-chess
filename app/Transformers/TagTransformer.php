@@ -18,7 +18,8 @@ class TagTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'owner',
-		'games'
+		'games',
+		'shared_with',
     ];
 
     /**
@@ -58,5 +59,16 @@ class TagTransformer extends TransformerAbstract
 	public function includeGames(Tag $tag)
 	{
 		return $this->collection($tag->games, new GameTransformer);
+	}
+
+	/**
+	 * Include SharedWith
+	 *
+	 * @param Tag $tag
+	 * @return League/Fractal/CollectionResource
+	 */
+	public function includeSharedWith(Tag $tag)
+	{
+		return $this->collection($tag->sharedWith, new UserTransformer);
 	}
 }
