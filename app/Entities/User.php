@@ -7,13 +7,13 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
+use Prettus\Repository\Contracts\Presentable;
+use Prettus\Repository\Traits\PresentableTrait;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, Transformable
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, Presentable
 {
 
-	use Authenticatable, Authorizable, CanResetPassword, TransformableTrait;
+	use Authenticatable, Authorizable, CanResetPassword, PresentableTrait;
 
 	/**
 	 * The database table used by the model.

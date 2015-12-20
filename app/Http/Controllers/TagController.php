@@ -46,6 +46,7 @@ class TagController extends Controller {
 	 */
 	public function store(StoreTagRequest $request)
 	{
+		$this->authorize();
 		return $this->tags->create($request->json('data'));
 	}
 
@@ -57,7 +58,9 @@ class TagController extends Controller {
 	 */
 	public function show($id)
 	{
-		return $this->tags->find($id);
+		$tag = $this->tags->skipPresenter()->find($id);
+		$this->authorize($tag);
+		return $tag->presenter();
 	}
 
 	/**
@@ -68,6 +71,7 @@ class TagController extends Controller {
 	 */
 	public function update(UpdateTagRequest $request, $id)
 	{
+		$this->authorize($this->tags->skipPresenter()->find($id));
 		return $this->tags->update($request->json('data'), $id);
 	}
 
@@ -79,6 +83,7 @@ class TagController extends Controller {
 	 */
 	public function destroy($id)
 	{
+		$this->authorize($this->tags->skipPresenter()->find($id));
 		if ($this->tags->delete($id)) {
 			return response('', 204);
 		}

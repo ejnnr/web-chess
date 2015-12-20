@@ -46,6 +46,7 @@ class UserController extends Controller {
 	 */
 	public function store(StoreUserRequest $request)
 	{
+		$this->authorize();
 		return $this->users->create($request->json('data'));
 	}
 
@@ -57,7 +58,9 @@ class UserController extends Controller {
 	 */
 	public function show($id)
 	{
-		return $this->users->find($id);
+		$user = $this->users->skipPresenter()->find($id);
+		$this->authorize($user);
+		return $user->presenter();
 	}
 
 	/**
@@ -68,6 +71,7 @@ class UserController extends Controller {
 	 */
 	public function update(UpdateUserRequest $request, $id)
 	{
+		$this->authorize($this->users->skipPresenter()->find($id));
 		return $this->users->update($request->json('data'), $id);
 	}
 
@@ -79,6 +83,7 @@ class UserController extends Controller {
 	 */
 	public function destroy($id)
 	{
+		$this->authorize($this->users->skipPresenter()->find($id));
 		if ($this->users->delete($id)) {
 			return response('', 204);
 		}

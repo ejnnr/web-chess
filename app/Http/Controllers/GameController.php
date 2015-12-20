@@ -50,6 +50,7 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
+		$this->authorize();
 		$this->games->create($request->json('data'));
     }
 
@@ -61,7 +62,9 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $this->games->find($id);
+        $game = $this->games->skipPresenter()->find($id);
+		$this->authorize($game);
+		return $game->presenter();
     }
 
     /**
@@ -73,6 +76,7 @@ class GameController extends Controller
      */
     public function update(UpdateGameRequest $request, $id)
     {
+		$this->authorize($this->games->skipPresenter()->find($id));
         $this->games->update($request->json('data'), $id);
     }
 
@@ -84,6 +88,7 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
+		$this->authorize($this->games->skipPresenter()->find($id));
 		if ($this->games->delete($id)) {
 			return response('', 204);
 		}
