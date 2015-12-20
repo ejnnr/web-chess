@@ -29,16 +29,28 @@ class TagPolicy
 
 	public function update(User $user, Tag $tag)
 	{
-		return $tag->owner_id === $user->id;
+		if ($tag->owner_id === $user->id) {
+			return true;
+		}
+
+		return in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2;
 	}
 
 	public function destroy(User $user, Tag $tag)
 	{
-		return $tag->owner_id === $user->id;
+		if ($tag->owner_id === $user->id) {
+			return true;
+		}
+
+		return in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2;
 	}
 
 	public function show(User $user, Tag $tag)
 	{
-		return $tag->owner_id === $user->id;
+		if ($tag->owner_id === $user->id) {
+			return true;
+		}
+
+		return in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 0;
 	}
 }

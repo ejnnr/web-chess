@@ -29,16 +29,46 @@ class GamePolicy
 
 	public function update(User $user, Game $game)
 	{
-		return $game->owner_id === $user->id;
+		if ($game->owner_id === $user->id) {
+			return true;
+		}
+
+		foreach ($game->tags as $tag) {
+			if (in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2) {
+				return true;
+			}
+		}
+
+		return in_array($user->id, $game->sharedWith->modelKeys()) && $game->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2;
 	}
 
 	public function destroy(User $user, Game $game)
 	{
-		return $game->owner_id === $user->id;
+		if ($game->owner_id === $user->id) {
+			return true;
+		}
+
+		foreach ($game->tags as $tag) {
+			if (in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2) {
+				return true;
+			}
+		}
+
+		return in_array($user->id, $game->sharedWith->modelKeys()) && $game->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 2;
 	}
 
 	public function show(User $user, Game $game)
 	{
-		return $game->owner_id === $user->id;
+		if ($game->owner_id === $user->id) {
+			return true;
+		}
+
+		foreach ($game->tags as $tag) {
+			if (in_array($user->id, $tag->sharedWith->modelKeys()) && $tag->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 0) {
+				return true;
+			}
+		}
+
+		return in_array($user->id, $game->sharedWith->modelKeys()) && $game->sharedWith()->where('user_id', '=', $user->id)->first()->pivot->access_level > 0;
 	}
 }

@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
 
+use App\Entities\Game;
+
 class GameController extends Controller
 {
 	/**
@@ -50,7 +52,7 @@ class GameController extends Controller
      */
     public function store(StoreGameRequest $request)
     {
-		$this->authorize();
+		$this->authorize('store', Game::class);
 		$this->games->create($request->json('data'));
     }
 
