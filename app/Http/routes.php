@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -20,4 +22,10 @@ Route::group([
 	Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
 	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 	Route::resource('games', 'GameController', ['except' => ['create', 'edit']]);
+	Route::get('user', function() {
+		return app(UserController::class)->show(Auth::user()->id);
+	});
+	Route::match(['put', 'patch'], 'user', function() {
+		return app(UserController::class)->update(Auth::user()->id);
+	});
 });
