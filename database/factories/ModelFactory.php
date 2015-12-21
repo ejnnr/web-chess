@@ -25,7 +25,7 @@ $factory->define(App\Entities\Tag::class, function (Faker\Generator $faker) {
         'name' => $faker->userName,
 		// attach the tag to a random user
 		'owner_id' => $ids[mt_rand(0, count($ids) - 1)],
-		'public' => rand(0,1)
+		'public' => rand(0,3)
     ];
 });
 
@@ -36,6 +36,7 @@ $factory->define(App\Entities\Game::class, function (Faker\Generator $faker) {
 
     return [
 		'owner_id' => $ids[mt_rand(0, count($ids) - 1)],
-		'bcf' => $game->getBCF()
+		'bcf' => $game->getBCF(),
+		'public' => rand(0,3)
     ];
 });

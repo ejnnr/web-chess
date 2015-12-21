@@ -62,7 +62,9 @@ class TagController extends Controller {
 	public function show($id)
 	{
 		$tag = $this->tags->skipPresenter()->find($id);
-		$this->authorize($tag);
+		if ($tag->public < 1) {
+			$this->authorize($tag);
+		}
 		return $tag->presenter();
 	}
 
@@ -74,7 +76,10 @@ class TagController extends Controller {
 	 */
 	public function update(UpdateTagRequest $request, $id)
 	{
-		$this->authorize($this->tags->skipPresenter()->find($id));
+		$tag = $this->tags->skipPresenter()->find($id);
+		if ($tag->public < 3) {
+			$this->authorize($tag);
+		}
 		$data = $request->json('data');
 		unset($data['owner_id']);
 		return $this->tags->update($request->json('data'), $id);
@@ -88,7 +93,10 @@ class TagController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$this->authorize($this->tags->skipPresenter()->find($id));
+		$tag = $this->tags->skipPresenter()->find($id);
+		if ($tag->public < 3) {
+			$this->authorize($tag);
+		}
 		if ($this->tags->delete($id)) {
 			return response('', 204);
 		}

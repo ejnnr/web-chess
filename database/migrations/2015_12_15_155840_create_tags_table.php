@@ -16,7 +16,7 @@ class CreateTagsTable extends Migration
             $table->increments('id');
 			$table->integer('owner_id')->unsigned();
 			$table->string('name', 255);
-			$table->tinyInteger('public');
+			$table->tinyInteger('public')->unsigned();
             $table->timestamps();
         });
     }

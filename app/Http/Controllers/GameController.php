@@ -68,7 +68,9 @@ class GameController extends Controller
     public function show($id)
     {
         $game = $this->games->skipPresenter()->find($id);
-		$this->authorize($game);
+		if ($game->public < 1) {
+			$this->authorize($game);
+		}
 		return $game->presenter();
     }
 
@@ -81,10 +83,13 @@ class GameController extends Controller
      */
     public function update(UpdateGameRequest $request, $id)
     {
-		$this->authorize($this->games->skipPresenter()->find($id));
+        $game = $this->games->skipPresenter()->find($id);
+		if ($game->public < 3) {
+			$this->authorize($game);
+		}
 		$data = $request->json('data');
 		unset($data['owner_id']);
-		return $this->games->update($request->json('data'), $id);
+		return $this->games->skipPresenter(false)->update($request->json('data'), $id);
     }
 
     /**
@@ -95,7 +100,11 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-		$this->authorize($this->games->skipPresenter()->find($id));
+        $game = $this->games->skipPresenter()->find($id);
+		if ($game->public < 3) {
+			$this->authorize($game);
+		}
+
 		if ($this->games->delete($id)) {
 			return response('', 204);
 		}

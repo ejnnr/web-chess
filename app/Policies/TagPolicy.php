@@ -29,6 +29,10 @@ class TagPolicy
 
 	public function update(User $user, Tag $tag)
 	{
+		if ($tag->public > 2) {
+			return true;
+		}
+
 		if ($tag->owner_id === $user->id) {
 			return true;
 		}
@@ -38,6 +42,10 @@ class TagPolicy
 
 	public function destroy(User $user, Tag $tag)
 	{
+		if ($tag->public > 2) {
+			return true;
+		}
+
 		if ($tag->owner_id === $user->id) {
 			return true;
 		}
@@ -47,6 +55,10 @@ class TagPolicy
 
 	public function show(User $user, Tag $tag)
 	{
+		if ($tag->public > 0) {
+			return true;
+		}
+
 		if ($tag->owner_id === $user->id) {
 			return true;
 		}

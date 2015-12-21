@@ -29,6 +29,10 @@ class GamePolicy
 
 	public function update(User $user, Game $game)
 	{
+		if ($game->public > 2) {
+			return true;
+		}
+
 		if ($game->owner_id === $user->id) {
 			return true;
 		}
@@ -44,6 +48,10 @@ class GamePolicy
 
 	public function destroy(User $user, Game $game)
 	{
+		if ($game->public > 2) {
+			return true;
+		}
+
 		if ($game->owner_id === $user->id) {
 			return true;
 		}
@@ -59,6 +67,10 @@ class GamePolicy
 
 	public function show(User $user, Game $game)
 	{
+		if ($game->public > 0) {
+			return true;
+		}
+
 		if ($game->owner_id === $user->id) {
 			return true;
 		}
