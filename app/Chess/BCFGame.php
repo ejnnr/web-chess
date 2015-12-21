@@ -35,7 +35,7 @@ class BCFGame extends JCFGame
 			                                                                   // Note that the other children are handled as siblings in the next cycle
 		}
 
-		return $ret;
+		return hex2bin($ret);
 	}
 
 	/**
@@ -162,6 +162,8 @@ class BCFGame extends JCFGame
 		if (!is_string($bcf)) {
 			throw new BCFGameException('bcf must be of type string', 4);
 		}
+
+		$bcf = bin2hex($bcf);
 
 		while (strlen($bcf) > 0) {
 			$current = $this->popBytes($bcf);
