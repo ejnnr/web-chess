@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 
 use App\Repositories\TagRepository;
+use App\Filters\VisibleFilter;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTagRequest;
@@ -35,8 +36,9 @@ class TagController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(VisibleFilter $filter)
 	{
+		$this->tags->addFilter($filter);
 		return $this->tags->all();
 	}
 

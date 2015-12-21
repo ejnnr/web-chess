@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 
 use App\Repositories\GameRepository;
+use App\Filters\VisibleFilter;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -40,8 +41,9 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(VisibleFilter $filter)
     {
+		$this->games->addFilter($filter);
 		return $this->games->all();
     }
 
