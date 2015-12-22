@@ -23,9 +23,15 @@ Route::group([
 	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 	Route::resource('games', 'GameController', ['except' => ['create', 'edit']]);
 	Route::get('user', function() {
+		if (!Auth::check()) {
+			abort(401);
+		}
 		return app(UserController::class)->show(Auth::user()->id);
 	});
 	Route::match(['put', 'patch'], 'user', function() {
+		if (!Auth::check()) {
+			abort(401);
+		}
 		return app(UserController::class)->update(Auth::user()->id);
 	});
 });
