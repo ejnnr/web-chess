@@ -161,6 +161,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 		'App\Providers\AuthServiceProvider',
 		'App\Providers\RepositoryServiceProvider',
+		'App\Providers\CustomValidationServiceProvider',
 	],
 
 	/*

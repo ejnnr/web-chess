@@ -24,7 +24,7 @@ class UpdateGameRequest extends Request
     public function rules()
     {
         return [
-			'data.bcf' => 'string'
+			'data.jcf' => 'jcf'
         ];
     }
 }

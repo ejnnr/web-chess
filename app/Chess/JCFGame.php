@@ -132,7 +132,13 @@ class JCFGame extends Game implements \JsonSerializable
 	 */
 	public function loadJCF($jcf)
 	{
-		$arr = json_decode($jcf, true);
+		if (is_string($jcf)) {
+			$arr = json_decode($jcf, true);
+		} elseif (is_array($jcf)) {
+			$arr = $jcf;
+		} else {
+			throw new JCFGameException('jcf must be either of type string or of type array', 4);
+		}
 
 		if (is_null($arr))
 		{
@@ -156,6 +162,8 @@ class JCFGame extends Game implements \JsonSerializable
 		}
 
 		$this->goToEndOfMainline();
+		
+		return $this;
 	}
 
 	/**

@@ -65,9 +65,11 @@ class Game
 		if (empty($this->current)) { // pointer at starting position
 			$this->createCurrentNode($move);
 			$this->children[] = $this->current;
-			return;
+			return $this;
 		}
 		$this->current = $this->current->addMove($move);
+		
+		return $this;
 	}
 
 	/**

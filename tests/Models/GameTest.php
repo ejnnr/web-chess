@@ -18,7 +18,7 @@ class GameTest extends TestCase
 	{
 		$count = App\Entities\Game::all()->count();
 		$game = new App\Entities\Game();
-		$game->bcf = 'Some dummy data';
+		$game->jcf = app(App\Chess\JCFGame::class)->doMove(new App\Chess\Move('e2', 'e4'))->getJCF();
 		$game->owner_id = App\Entities\User::first()->id;
 		$game->public = 2;
 		$game->save();

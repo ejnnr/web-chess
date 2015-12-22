@@ -205,6 +205,8 @@ class BCFGame extends JCFGame
 				// note that NAG and comments are parsed as soon as a move is found, so no need to cover them here
 			}
 		}
+
+		return $this;
 	}
 
 	/**

@@ -9,7 +9,7 @@ class Game extends Model implements Presentable
 {
 	use PresentableTrait;
 
-    protected $fillable = ['bcf', 'owner_id'];
+    protected $fillable = ['jcf', 'owner_id'];
 
 	public function tags()
 	{
@@ -41,5 +41,15 @@ class Game extends Model implements Presentable
 		$game = \App::make(BCFGame::class);
 		$game->loadBCF(isset($this->bcf) ? $this->bcf : '');
 		return $game;
+	}
+
+	public function setJCFAttribute($jcf)
+	{
+		$this->bcf = app(BCFGame::class)->loadJCF($jcf)->getBCF();
+	}
+
+	public function getJCFAttribute()
+	{
+		return app(BCFGame::class)->loadBCF($this->bcf)->getJCF();
 	}
 }
