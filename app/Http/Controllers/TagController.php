@@ -21,6 +21,13 @@ class TagController extends Controller {
 	protected $tags;
 
 	/**
+	 * The name of the presenter to use for summary representation
+	 *
+	 * @var string
+	 */
+	protected $summaryPresenter = 'App\Presenters\TagSummaryPresenter';
+
+	/**
 	 * Instantiate a new TagController
 	 *
 	 * @param TagRepository $tagRepo
@@ -39,6 +46,7 @@ class TagController extends Controller {
 	public function index(VisibleFilter $filter)
 	{
 		$this->tags->addFilter($filter);
+		$this->tags->setPresenter($this->summaryPresenter);
 		return $this->tags->all();
 	}
 

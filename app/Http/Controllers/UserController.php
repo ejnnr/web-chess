@@ -19,6 +19,13 @@ class UserController extends Controller {
 	protected $users;
 
 	/**
+	 * The name of the presenter to use for summary representation
+	 *
+	 * @var string
+	 */
+	protected $summaryPresenter = 'App\Presenters\UserSummaryPresenter';
+
+	/**
 	 * Instantiate a new UserController
 	 *
 	 * @param UserRepository $userRepo
@@ -36,6 +43,7 @@ class UserController extends Controller {
 	 */
 	public function index()
 	{
+		$this->users->setPresenter($this->summaryPresenter);
 		return $this->users->all();
 	}
 

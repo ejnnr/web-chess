@@ -26,6 +26,13 @@ class GameController extends Controller
 	protected $games;
 
 	/**
+	 * The name of the presenter to use for summary representation
+	 *
+	 * @var string
+	 */
+	protected $summaryPresenter = 'App\Presenters\GameSummaryPresenter';
+
+	/**
 	 * Instantiate a new GameController
 	 *
 	 * @param GameRepository $gameRepo
@@ -43,6 +50,7 @@ class GameController extends Controller
      */
     public function index(VisibleFilter $filter)
     {
+		$this->games->setPresenter($this->summaryPresenter);
 		$this->games->addFilter($filter);
 		return $this->games->all();
     }
