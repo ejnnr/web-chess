@@ -24,7 +24,7 @@ class UpdateTagRequest extends Request
     public function rules()
     {
         return [
-            'data.name' => 'string|max:255',
+            'data.name' => 'string|max:255|unique:tags,name,' . $this->route('tags') . ',id,owner_id,' . $userId,
 			'data.public' => 'integer|min:0|max:255'
         ];
     }
