@@ -6,6 +6,7 @@ use Auth;
 
 use App\Repositories\TagRepository;
 use App\Filters\VisibleFilter;
+use App\Entities\Tag;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTagRequest;
@@ -57,7 +58,7 @@ class TagController extends Controller {
 	 */
 	public function store(StoreTagRequest $request)
 	{
-		$this->authorize();
+		$this->authorize('store', Tag::class);
 		return $this->tags->create(array_merge($request->json('data'), ['owner_id' => Auth::user()->id]));
 	}
 

@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Repositories\UserRepository;
+use APp\Entities\User;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
@@ -54,7 +55,7 @@ class UserController extends Controller {
 	 */
 	public function store(StoreUserRequest $request)
 	{
-		$this->authorize();
+		$this->authorize('store', User::class);
 		return $this->users->create($request->json('data'));
 	}
 
