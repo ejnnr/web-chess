@@ -34,4 +34,8 @@ Route::group([
 		}
 		return app(UserController::class)->update(Auth::user()->id);
 	});
+
+	Route::get('games/{games}/tags', 'GameTagController@index');
+	Route::post('games/{games}/tags', 'GameTagController@store');
+	Route::delete('games/{games}/tags/{tags}', 'GameTagController@destroy');
 });
