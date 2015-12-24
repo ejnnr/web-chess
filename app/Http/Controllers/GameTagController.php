@@ -63,7 +63,7 @@ class GameTagController extends Controller
 		if ($game->public < 3) {
 			$this->authorize('update', $game);
 		}
-		if (is_null($game->tags()->find((int)$request->json('data')))) {
+		if (!is_null($game->tags()->find((int)$request->json('data')))) {
 			return response(422, 'A game cannot be tagged with the same tag twice.');
 		}
 		return $game->tags()->attach((int)$request->json('data'));
