@@ -58,7 +58,7 @@ class TagTransformer extends TransformerAbstract
 	 */
 	public function includeGames(Tag $tag)
 	{
-		return $this->collection($tag->games, new GameTransformer);
+		return $this->collection($tag->games, new GameSummaryTransformer);
 	}
 
 	/**
@@ -69,6 +69,6 @@ class TagTransformer extends TransformerAbstract
 	 */
 	public function includeSharedWith(Tag $tag)
 	{
-		return $this->collection($tag->sharedWith, new UserTransformer);
+		return $this->collection($tag->sharedWith, new UserSummaryTransformer);
 	}
 }

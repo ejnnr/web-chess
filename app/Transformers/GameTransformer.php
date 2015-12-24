@@ -48,7 +48,7 @@ class GameTransformer extends TransformerAbstract
 	 */
 	public function includeTags(Game $game)
 	{
-		return $this->collection($game->tags, new TagTransformer);
+		return $this->collection($game->tags, new TagSummaryTransformer);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class GameTransformer extends TransformerAbstract
 	 */
 	public function includeSharedWith(Game $game)
 	{
-		return $this->collection($game->sharedWith, new UserTransformer);
+		return $this->collection($game->sharedWith, new UserSummaryTransformer);
 	}
 
 	/**
