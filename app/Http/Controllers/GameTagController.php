@@ -66,6 +66,9 @@ class GameTagController extends Controller
 		if (!is_null($game->tags()->find((int)$request->json('data')))) {
 			return response(422, 'A game cannot be tagged with the same tag twice.');
 		}
+		if ($this->tags->find((int)$request->json('data'))->owner_id !== $game->owner_id) {	// since find is findOrFail, this checks whether the tag exists
+			return response(422, 'The tag must belong to the owner of the game.');
+		}
 		return $game->tags()->attach((int)$request->json('data'));
 	}
 
