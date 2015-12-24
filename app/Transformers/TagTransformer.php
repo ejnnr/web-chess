@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use Gate;
 use League\Fractal\TransformerAbstract;
 use App\Entities\Tag;
 
@@ -47,7 +48,11 @@ class TagTransformer extends TransformerAbstract
 	 */
 	public function includeOwner(Tag $tag)
 	{
-		return $this->item($tag->owner, new UserTransformer);
+		if (Gate::allows('show', $tag->owner)) {
+			return $this->item($tag->owner, new UserTransformer);
+		}
+
+		return $this->item($tag->owner, new UserSummaryTransformer);
 	}
 
 	/**
@@ -58,6 +63,7 @@ class TagTransformer extends TransformerAbstract
 	 */
 	public function includeGames(Tag $tag)
 	{
+		// no authorization check needed
 		return $this->collection($tag->games, new GameSummaryTransformer);
 	}
 
@@ -69,6 +75,7 @@ class TagTransformer extends TransformerAbstract
 	 */
 	public function includeSharedWith(Tag $tag)
 	{
+		// no authorization needed because UserSummaryTransformer is used
 		return $this->collection($tag->sharedWith, new UserSummaryTransformer);
 	}
 }

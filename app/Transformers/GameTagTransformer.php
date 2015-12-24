@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use Gate;
 use League\Fractal\TransformerAbstract;
 use App\Entities\Tag;
 
@@ -45,6 +46,10 @@ class GameTagTransformer extends TransformerAbstract
 	 */
 	public function includeOwner(Tag $tag)
 	{
-		return $this->item($tag->owner, new UserTransformer);
+		if (Gate::allows('show', $tag->owner)) {
+			return $this->item($tag->owner, new UserTransformer);
+		}
+
+		return $this->item($tag->owner, new UserSummaryTransformer);
 	}
 }
