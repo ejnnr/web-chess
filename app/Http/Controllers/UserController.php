@@ -1,10 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use Gate;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Repositories\UserRepository;
-use APp\Entities\User;
+use App\Entities\User;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
@@ -55,8 +57,7 @@ class UserController extends Controller {
 	 */
 	public function store(StoreUserRequest $request)
 	{
-		$this->authorize('store', User::class);
-		return $this->users->create($request->json('data'));
+		return response($this->users->create($request->json('data')), 201);
 	}
 
 	/**
@@ -68,8 +69,11 @@ class UserController extends Controller {
 	public function show($id)
 	{
 		$user = $this->users->skipPresenter()->find($id);
-		$this->authorize($user);
-		return $user->presenter();
+		if (Gate::allows('show', $user)) {
+			return $user->presenter();
+		} else {
+			return $user->setPresenter(app($this->summaryPresenter))->presenter();
+		}
 	}
 
 	/**
@@ -81,7 +85,8 @@ class UserController extends Controller {
 	public function update(UpdateUserRequest $request, $id)
 	{
 		$this->authorize($this->users->skipPresenter()->find($id));
-		return $this->users->update($request->json('data'), $id);
+		$this->users->skipPresenter(false);
+		return response($this->users->update($request->json('data'), $id), 200);
 	}
 
 	/**
