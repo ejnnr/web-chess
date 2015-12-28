@@ -9,7 +9,12 @@ class Game extends Model implements Presentable
 {
 	use PresentableTrait;
 
-    protected $fillable = ['jcf', 'owner_id'];
+    protected $fillable = ['jcf', 'owner_id', 'public'];
+
+	protected $casts = [
+		'owner_id' => 'integer',
+		'public' => 'integer',
+	];
 
 	public function tags()
 	{

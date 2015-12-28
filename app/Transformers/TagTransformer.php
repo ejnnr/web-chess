@@ -34,10 +34,13 @@ class TagTransformer extends TransformerAbstract
         return array_filter([
             'id'         => isset($model->id)         ? (int) $model->id                      : null,
 			'name'       => isset($model->name)       ? $model->name                          : null,
+			'public'     => isset($model->public)     ? (int) $model->public                        : null,
 			'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null
-        ]);
+        ], function($v) {
+			return !is_null($v);
+		});
     }
 
 	/**

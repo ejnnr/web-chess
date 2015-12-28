@@ -11,6 +11,16 @@ class Tag extends Model implements Presentable
     use PresentableTrait;
 
 	/**
+	 * The way attributes will be cast when accessed
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'owner_id' => 'integer',
+		'public' => 'integer',
+	];
+
+	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array

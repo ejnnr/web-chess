@@ -24,7 +24,8 @@ class StoreGameRequest extends Request
     public function rules()
     {
         return [
-			'data.jcf' => 'required|jcf'
+			'data.jcf' => 'required|jcf',
+			'data.public' => 'required|integer',
         ];
     }
 }

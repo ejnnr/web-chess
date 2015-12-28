@@ -97,7 +97,7 @@ class GameController extends Controller
 		}
 		$data = $request->json('data');
 		unset($data['owner_id']);
-		return $this->games->skipPresenter(false)->update($request->json('data'), $id);
+		return $this->games->skipPresenter(false)->update($data, $id);
     }
 
     /**

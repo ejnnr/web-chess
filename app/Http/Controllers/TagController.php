@@ -91,7 +91,7 @@ class TagController extends Controller {
 		}
 		$data = $request->json('data');
 		unset($data['owner_id']);
-		return $this->tags->update($request->json('data'), $id);
+		return $this->tags->skipPresenter(false)->update($data, $id);
 	}
 
 	/**
