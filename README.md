@@ -2,6 +2,7 @@ web-chess
 ================
 Develop:
 [![Build Status](https://travis-ci.org/jupiter24/web-chess.svg?branch=develop)](https://travis-ci.org/jupiter24/web-chess)
+[![StyleCI](https://styleci.io/repos/26176931/shield)](https://styleci.io/repos/26176931)
 Master:
 [![Build Status](https://travis-ci.org/jupiter24/web-chess.svg?branch=master)](https://travis-ci.org/jupiter24/web-chess)
 
