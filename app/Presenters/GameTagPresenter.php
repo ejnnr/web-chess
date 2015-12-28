@@ -3,17 +3,14 @@
 namespace App\Presenters;
 
 use App\Transformers\GameTagTransformer;
-use App\Presenters\ExtendedFractalPresenter;
 
 /**
- * Class GameTagPresenter
- *
- * @package namespace App\Presenters;
+ * Class GameTagPresenter.
  */
 class GameTagPresenter extends ExtendedFractalPresenter
 {
     /**
-     * Transformer
+     * Transformer.
      *
      * @return \League\Fractal\TransformerAbstract
      */

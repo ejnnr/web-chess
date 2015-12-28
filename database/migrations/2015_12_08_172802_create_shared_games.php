@@ -13,11 +13,11 @@ class CreateSharedGames extends Migration
     public function up()
     {
         Schema::create('shared_games', function (Blueprint $table) {
-			$table->increments('id');
-			$table->integer('game_id');
-			$table->integer('user_id');
-			$table->integer('access_level');
-			$table->timestamps();
+            $table->increments('id');
+            $table->integer('game_id');
+            $table->integer('user_id');
+            $table->integer('access_level');
+            $table->timestamps();
         });
     }
 

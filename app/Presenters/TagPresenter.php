@@ -6,14 +6,12 @@ use App\Transformers\TagTransformer;
 use Prettus\Repository\Presenter\FractalPresenter;
 
 /**
- * Class TagPresenter
- *
- * @package namespace App\Presenters;
+ * Class TagPresenter.
  */
 class TagPresenter extends FractalPresenter
 {
     /**
-     * Transformer
+     * Transformer.
      *
      * @return \League\Fractal\TransformerAbstract
      */

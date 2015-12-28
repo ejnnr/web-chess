@@ -1,228 +1,231 @@
 <?php namespace App\Chess;
 
-class JCFGameException extends \Exception {}
+class JCFGameException extends \Exception
+{
+}
 
 /**
- * A class representing a game in JCF
+ * A class representing a game in JCF.
  *
  * @see Game
  */
 class JCFGame extends Game implements \JsonSerializable
 {
-	/**
-	 * set current to a new GameNode
-	 *
-	 * This overwrites the parent method to use JCFGameNode instead of GameNode
-	 *
-	 * @param Move $move
-	 * @return void
-	 */
-	protected function createCurrentNode(Move $move)
-	{
-		$this->current = new JCFGameNode($move);
-	}
+    /**
+     * set current to a new GameNode.
+     *
+     * This overwrites the parent method to use JCFGameNode instead of GameNode
+     *
+     * @param Move $move
+     *
+     * @return void
+     */
+    protected function createCurrentNode(Move $move)
+    {
+        $this->current = new JCFGameNode($move);
+    }
 
-	/**
-	 * returns the JCF representations of the game
-	 *
-	 * There's no difference between calling json_encode($game) and $game->getJCF().
-	 * This method is just for convienience.
-	 *
-	 * @return string
-	 */
-	public function getJCF()
-	{
-		return json_encode($this);
-	}
+    /**
+     * returns the JCF representations of the game.
+     *
+     * There's no difference between calling json_encode($game) and $game->getJCF().
+     * This method is just for convienience.
+     *
+     * @return string
+     */
+    public function getJCF()
+    {
+        return json_encode($this);
+    }
 
-	/**
-	 * returns a representation of the class that can be parsed by json_encode()
-	 *
-	 * This means you can just write `json_encode(new JCFGame())` and will get the game in JCF
-	 *
-	 * @return mixed[]
-	 */
-	public function jsonSerialize()
-	{
-		$ret = [];
+    /**
+     * returns a representation of the class that can be parsed by json_encode().
+     *
+     * This means you can just write `json_encode(new JCFGame())` and will get the game in JCF
+     *
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        $ret = [];
 
-		$ret['meta'] = $this->getHeaders();
+        $ret['meta'] = $this->getHeaders();
 
-		$ret['moves'] = [];
+        $ret['moves'] = [];
 
-		foreach ($this->children as $child)
-		{
-			$move = $child->getMove();
-			$moveArray = ['from' => $move->getDeparture(SQUARE_FORMAT_STRING),
-			              'to'   => $move->getDestination(SQUARE_FORMAT_STRING)];
+        foreach ($this->children as $child) {
+            $move = $child->getMove();
+            $moveArray = ['from' => $move->getDeparture(SQUARE_FORMAT_STRING),
+                          'to'   => $move->getDestination(SQUARE_FORMAT_STRING), ];
 
-			if ($this->startingPosition->isPromotingMove($move)) {
-				$moveArray['promotion'] = $move->getPromotion();
-			}
+            if ($this->startingPosition->isPromotingMove($move)) {
+                $moveArray['promotion'] = $move->getPromotion();
+            }
 
-			if (sizeof($move->getNAGs()) > 0) {
-				$moveArray['NAGs'] = $move->getNAGs();
-			}
+            if (count($move->getNAGs()) > 0) {
+                $moveArray['NAGs'] = $move->getNAGs();
+            }
 
-			if (!empty($move->getComment())) {
-				$moveArray['comment'] = $move->getComment();
-			}
+            if (!empty($move->getComment())) {
+                $moveArray['comment'] = $move->getComment();
+            }
 
-			if (sizeof($child->getCommands()) > 0) {
-				$moveArray['commands'] = $child->getCommands();
-			}
+            if (count($child->getCommands()) > 0) {
+                $moveArray['commands'] = $child->getCommands();
+            }
 
-			if ($child->hasChildren()) {
-				$moveArray['children'] = $this->generateMoveArray($child);
-			}
+            if ($child->hasChildren()) {
+                $moveArray['children'] = $this->generateMoveArray($child);
+            }
 
-			$ret['moves'][] = $moveArray;
- 		}
+            $ret['moves'][] = $moveArray;
+        }
 
-		return $ret;
-	}
+        return $ret;
+    }
 
-	/**
-	 * get the tree structure of root and its descendants as an array
-	 *
-	 * @param JCFGameNode $root
-	 * @return array
-	 */
-	protected function generateMoveArray(JCFGameNode $root)
-	{
-		foreach ($root->getChildren() as $child)
-		{
-			$move = $child->getMove();
-			$moveArray = ['from' => $move->getDeparture(SQUARE_FORMAT_STRING),
-			              'to'   => $move->getDestination(SQUARE_FORMAT_STRING)];
+    /**
+     * get the tree structure of root and its descendants as an array.
+     *
+     * @param JCFGameNode $root
+     *
+     * @return array
+     */
+    protected function generateMoveArray(JCFGameNode $root)
+    {
+        foreach ($root->getChildren() as $child) {
+            $move = $child->getMove();
+            $moveArray = ['from' => $move->getDeparture(SQUARE_FORMAT_STRING),
+                          'to'   => $move->getDestination(SQUARE_FORMAT_STRING), ];
 
-			if ($root->positionAfter($this->startingPosition)->isPromotingMove($move)) {
-				$moveArray['promotion'] = $move->getPromotion();
-			}
+            if ($root->positionAfter($this->startingPosition)->isPromotingMove($move)) {
+                $moveArray['promotion'] = $move->getPromotion();
+            }
 
-			if (sizeof($move->getNAGs()) > 0)
-			{
-				$moveArray['NAGs'] = $move->getNAGs();
-			}
+            if (count($move->getNAGs()) > 0) {
+                $moveArray['NAGs'] = $move->getNAGs();
+            }
 
-			if (!empty($move->getComment())) {
-				$moveArray['comment'] = $move->getComment();
-			}
+            if (!empty($move->getComment())) {
+                $moveArray['comment'] = $move->getComment();
+            }
 
-			if (sizeof($child->getCommands()) > 0) {
-				$moveArray['commands'] = $child->getCommands();
-			}
+            if (count($child->getCommands()) > 0) {
+                $moveArray['commands'] = $child->getCommands();
+            }
 
-			if ($child->hasChildren())
-			{
-				$moveArray['children'] = $this->generateMoveArray($child);
-			}
+            if ($child->hasChildren()) {
+                $moveArray['children'] = $this->generateMoveArray($child);
+            }
 
-			$ret[] = $moveArray;
- 		}
+            $ret[] = $moveArray;
+        }
 
-		return $ret;
-	}
+        return $ret;
+    }
 
-	/**
-	 * load a jcf string
-	 *
-	 * @param string $jcf String in JCF
-	 * @return void
-	 */
-	public function loadJCF($jcf)
-	{
-		if (is_string($jcf)) {
-			$arr = json_decode($jcf, true);
-		} elseif (is_array($jcf)) {
-			$arr = $jcf;
-		} else {
-			throw new JCFGameException('jcf must be either of type string or of type array', 4);
-		}
+    /**
+     * load a jcf string.
+     *
+     * @param string $jcf String in JCF
+     *
+     * @return void
+     */
+    public function loadJCF($jcf)
+    {
+        if (is_string($jcf)) {
+            $arr = json_decode($jcf, true);
+        } elseif (is_array($jcf)) {
+            $arr = $jcf;
+        } else {
+            throw new JCFGameException('jcf must be either of type string or of type array', 4);
+        }
 
-		if (is_null($arr))
-		{
-			throw new JCFGameException('invalid  JSON: json_last_error():' . json_last_error(), 151);
-		}
+        if (is_null($arr)) {
+            throw new JCFGameException('invalid  JSON: json_last_error():'.json_last_error(), 151);
+        }
 
-		if (!isset($arr['moves'])) {
-			throw new JCFGameException('invalid JCF: no move list found', 152);
-		}
+        if (!isset($arr['moves'])) {
+            throw new JCFGameException('invalid JCF: no move list found', 152);
+        }
 
-		if (isset($arr['meta'])) {
-			$this->setHeaders($arr['meta']);
-		}
+        if (isset($arr['meta'])) {
+            $this->setHeaders($arr['meta']);
+        }
 
-		foreach ($arr['moves'] as $move) {
-			if (!$this->validateMoveArray($move)) {
-				throw new JCFGameException('invalid JCF: move has invalid syntax', 153);
-			}
+        foreach ($arr['moves'] as $move) {
+            if (!$this->validateMoveArray($move)) {
+                throw new JCFGameException('invalid JCF: move has invalid syntax', 153);
+            }
 
-			$this->addMoveAndDescendants($move);
-		}
+            $this->addMoveAndDescendants($move);
+        }
 
-		$this->goToEndOfMainline();
-		
-		return $this;
-	}
+        $this->goToEndOfMainline();
 
-	/**
-	 * validate a JCF move array
-	 *
-	 * @param array $move A move with childen in JCF
-	 * @return bool true if valid, fals if not
-	 */
-	protected function validateMoveArray($move)
-	{
-		if (!isset($move['from']) || !isset($move['to'])) {
-			return false;
-		}
-		
-		if (string2square($move['from']) === false || string2square($move['to']) === false) { // string2square returns false on invalid input
-			return false;
-		}
+        return $this;
+    }
 
-		if (isset($move['children'])) {
-			foreach ($move['children'] as $child) {
-				if (!$this->validateMoveArray($child)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+    /**
+     * validate a JCF move array.
+     *
+     * @param array $move A move with childen in JCF
+     *
+     * @return bool true if valid, fals if not
+     */
+    protected function validateMoveArray($move)
+    {
+        if (!isset($move['from']) || !isset($move['to'])) {
+            return false;
+        }
 
-	/**
-	 * add a JCF move array with children to the game
-	 *
-	 * No validation is done inside this method. So if you use it, validate the move array with validateMoveArray() first!
-	 * Otherwise the results are undefined.
-	 *
-	 * @param array $move
-	 * @return void
-	 */
-	protected function addMoveAndDescendants($moveArray)
-	{
-		$this->doMove(new Move(
-			$moveArray['from'],
- 			$moveArray['to'],
- 			(isset($moveArray['promotion']) ? $moveArray['promotion'] : PROMOTION_QUEEN),
-			(isset($moveArray['NAGs']) ? $moveArray['NAGs'] : []),
-			(isset($moveArray['comment']) ? $moveArray['comment'] : '')
-		));
+        if (string2square($move['from']) === false || string2square($move['to']) === false) { // string2square returns false on invalid input
+            return false;
+        }
 
-		if (isset($moveArray['commands'])) {
-			foreach ($moveArray['commands'] as $command) {
-				$this->current->addCommand($command['command'], $command['params']);
-			}
-		}
+        if (isset($move['children'])) {
+            foreach ($move['children'] as $child) {
+                if (!$this->validateMoveArray($child)) {
+                    return false;
+                }
+            }
+        }
 
-		if (isset($moveArray['children'])) {
-			foreach ($moveArray['children'] as $child) {
-				$this->addMoveAndDescendants($child);
-			}
-		}
+        return true;
+    }
 
-		$this->back();
-	}
+    /**
+     * add a JCF move array with children to the game.
+     *
+     * No validation is done inside this method. So if you use it, validate the move array with validateMoveArray() first!
+     * Otherwise the results are undefined.
+     *
+     * @param array $move
+     *
+     * @return void
+     */
+    protected function addMoveAndDescendants($moveArray)
+    {
+        $this->doMove(new Move(
+            $moveArray['from'],
+            $moveArray['to'],
+            (isset($moveArray['promotion']) ? $moveArray['promotion'] : PROMOTION_QUEEN),
+            (isset($moveArray['NAGs']) ? $moveArray['NAGs'] : []),
+            (isset($moveArray['comment']) ? $moveArray['comment'] : '')
+        ));
+
+        if (isset($moveArray['commands'])) {
+            foreach ($moveArray['commands'] as $command) {
+                $this->current->addCommand($command['command'], $command['params']);
+            }
+        }
+
+        if (isset($moveArray['children'])) {
+            foreach ($moveArray['children'] as $child) {
+                $this->addMoveAndDescendants($child);
+            }
+        }
+
+        $this->back();
+    }
 }

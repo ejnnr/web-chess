@@ -16,16 +16,16 @@ class CustomValidationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-		Validator::extend('jcf', function($attribute, $value, $parameters, $validator) {
-			$game = app(JCFGame::class);
-			try {
-				$game->loadJCF($value);
-			} catch (Exception $e) {
-				return false;
-			}
+        Validator::extend('jcf', function ($attribute, $value, $parameters, $validator) {
+            $game = app(JCFGame::class);
+            try {
+                $game->loadJCF($value);
+            } catch (Exception $e) {
+                return false;
+            }
 
-			return true;
-		});
+            return true;
+        });
     }
 
     /**

@@ -14,12 +14,12 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('owner_id')->unsigned();
-			$table->string('name', 255);
-			$table->tinyInteger('public')->unsigned();
+            $table->integer('owner_id')->unsigned();
+            $table->string('name', 255);
+            $table->tinyInteger('public')->unsigned();
             $table->timestamps();
 
-			$table->unique(['owner_id', 'name']);
+            $table->unique(['owner_id', 'name']);
         });
     }
 

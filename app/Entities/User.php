@@ -12,52 +12,51 @@ use Prettus\Repository\Traits\PresentableTrait;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, Presentable
 {
+    use Authenticatable, Authorizable, CanResetPassword, PresentableTrait;
 
-	use Authenticatable, Authorizable, CanResetPassword, PresentableTrait;
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'users';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'email', 'password'];
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['name', 'email', 'password'];
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token'];
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = ['password', 'remember_token'];
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = \Hash::make($password);
+    }
 
-	public function setPasswordAttribute($password)
-	{
-		$this->attributes['password'] = \Hash::make($password);
-	}
+    public function tags()
+    {
+        return $this->hasMany('App\Entities\Tag', 'owner_id');
+    }
 
-	public function tags()
-	{
-		return $this->hasMany('App\Entities\Tag', 'owner_id');
-	}
+    public function sharedTags()
+    {
+        return $this->belongsToMany('App\Entities\Tag', 'shared_tags')->withTimestamps()->withPivot('access_level');
+    }
 
-	public function sharedTags()
-	{
-		return $this->belongsToMany('App\Entities\Tag', 'shared_tags')->withTimestamps()->withPivot('access_level');
-	}
+    public function sharedGames()
+    {
+        return $this->belongsToMany('App\Entities\Game', 'shared_games')->withTimestamps()->withPivot('access_level');
+    }
 
-	public function sharedGames()
-	{
-		return $this->belongsToMany('App\Entities\Game', 'shared_games')->withTimestamps()->withPivot('access_level');
-	}
-
-	public function games()
-	{
-		return $this->hasMany('App\Entities\Tag', 'owner_id');
-	}
+    public function games()
+    {
+        return $this->hasMany('App\Entities\Tag', 'owner_id');
+    }
 }

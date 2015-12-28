@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class StoreUserRequest extends Request
 {
     /**
@@ -24,9 +22,9 @@ class StoreUserRequest extends Request
     public function rules()
     {
         return [
-            'data.name' => 'required|alpha_dash|max:255|unique:users,name',
-			'data.email' => 'required|email|max:255|unique:users,email',
-			'data.password' => 'required|string|max:60'
+            'data.name'     => 'required|alpha_dash|max:255|unique:users,name',
+            'data.email'    => 'required|email|max:255|unique:users,email',
+            'data.password' => 'required|string|max:60',
         ];
     }
 }

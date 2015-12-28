@@ -1,279 +1,277 @@
 <?php namespace App;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends \TestCase
 {
-	use DatabaseTransactions;
+    use DatabaseTransactions;
 
-	public function testIndexUsers()
-	{
-		$this->json('GET', 'api/users')
-			->seeJsonStructure([
-				'data' => [
-					0 => [
-						'id',
-						'name',
-						'created_at'
-					]
-				]
-			]);
-		$this->assertResponseOk();
-		$this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
-			json_decode($this->getResponse()->content(), true)['data'][0]['created_at']); // assert that created_at is ISO 8601
-	}
+    public function testIndexUsers()
+    {
+        $this->json('GET', 'api/users')
+            ->seeJsonStructure([
+                'data' => [
+                    0 => [
+                        'id',
+                        'name',
+                        'created_at',
+                    ],
+                ],
+            ]);
+        $this->assertResponseOk();
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data'][0]['created_at']); // assert that created_at is ISO 8601
+    }
 
-	public function testShowUserUnauthenticated()
-	{
-		$this->json('GET', 'api/users/1')
-			->seeJsonStructure([
-				'data' => [
-					'id',
-					'name',
-					'created_at'
-				]
-			]);
-		$this->assertResponseOk();
-		$this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
-			json_decode($this->getResponse()->content(), true)['data']['created_at']); // assert that created_at is ISO 8601
-	}
+    public function testShowUserUnauthenticated()
+    {
+        $this->json('GET', 'api/users/1')
+            ->seeJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'created_at',
+                ],
+            ]);
+        $this->assertResponseOk();
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data']['created_at']); // assert that created_at is ISO 8601
+    }
 
-	public function testShowUserAuthenticated()
-	{
-		$user = factory(Entities\User::class)->create();
-		$this->actingAs($user)
-			->json('GET', 'api/users/' . $user->id)
-			->seeJsonStructure([
-				'data' => [
-					'id',
-					'name',
-					'email',
-					'created_at',
-					'updated_at'
-				]
-			]);
-		$this->assertResponseOk();
-		$this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
-			json_decode($this->getResponse()->content(), true)['data']['created_at']); // assert that created_at is ISO 8601
-		$this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
-			json_decode($this->getResponse()->content(), true)['data']['updated_at']); // assert that updated_at is ISO 8601
+    public function testShowUserAuthenticated()
+    {
+        $user = factory(Entities\User::class)->create();
+        $this->actingAs($user)
+            ->json('GET', 'api/users/'.$user->id)
+            ->seeJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]);
+        $this->assertResponseOk();
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data']['created_at']); // assert that created_at is ISO 8601
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data']['updated_at']); // assert that updated_at is ISO 8601
 
-		// non-existing:
-		$this->json('GET', 'api/users/999999999999');
-		$this->assertResponseStatus(404);
-	}
+        // non-existing:
+        $this->json('GET', 'api/users/999999999999');
+        $this->assertResponseStatus(404);
+    }
 
-	public function testStoreUser()
-	{
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_1',
-				'email' => 'test_user_1@example.org',
-				'password' => 'password'
-			]])
-			->seeJsonStructure([
-				'data' => [
-					'id',
-					'name',
-					'email',
-					'created_at',
-					'updated_at'
-				]
-			]);
-		$this->assertResponseStatus(201);
+    public function testStoreUser()
+    {
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_1',
+                'email'    => 'test_user_1@example.org',
+                'password' => 'password',
+            ], ])
+            ->seeJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]);
+        $this->assertResponseStatus(201);
 
-		// check if it was actually created:
-		$this->assertSame('test_user_1', Entities\User::findOrFail(json_decode($this->getResponse()->content(), true)['data']['id'])
-			->name);
+        // check if it was actually created:
+        $this->assertSame('test_user_1', Entities\User::findOrFail(json_decode($this->getResponse()->content(), true)['data']['id'])
+            ->name);
 
-		// check name uniqueness:
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_1',
-				'email' => 'test_user_2@example.org',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
-		
-		// check email uniqueness:
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_2',
-				'email' => 'test_user_1@example.org',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
+        // check name uniqueness:
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_1',
+                'email'    => 'test_user_2@example.org',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-		// check email validation
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_2',
-				'email' => 'test_user_2@example',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
+        // check email uniqueness:
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_2',
+                'email'    => 'test_user_1@example.org',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-		// check name validation
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test user 2',
-				'email' => 'test_user_2@example.org',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
+        // check email validation
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_2',
+                'email'    => 'test_user_2@example',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-		// check name required
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'email' => 'test_user_2@example.org',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
+        // check name validation
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test user 2',
+                'email'    => 'test_user_2@example.org',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-		// check email required
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_2',
-				'password' => 'password'
-			]]);
-		$this->assertResponseStatus(422);
+        // check name required
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'email'    => 'test_user_2@example.org',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-		// check password required
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_2',
-				'email' => 'test_user_2@example.org',
-			]]);
-		$this->assertResponseStatus(422);
-	}
+        // check email required
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_2',
+                'password' => 'password',
+            ], ]);
+        $this->assertResponseStatus(422);
 
-	public function testDeleteUser()
-	{
-		// unauthenticated
-		
-		$userId = Entities\User::first()->id;
-		$this->json('DELETE', 'api/users/' . $userId);
-		$this->assertResponseStatus(401);
+        // check password required
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'  => 'test_user_2',
+                'email' => 'test_user_2@example.org',
+            ], ]);
+        $this->assertResponseStatus(422);
+    }
 
-		$this->assertNotNull(Entities\User::find($userId));
+    public function testDeleteUser()
+    {
+        // unauthenticated
 
-		// valid:
+        $userId = Entities\User::first()->id;
+        $this->json('DELETE', 'api/users/'.$userId);
+        $this->assertResponseStatus(401);
 
-		$this->json('POST', 'api/users', [
-			'data' => [
-				'name' => 'test_user_1',
-				'email' => 'test_user_1@example.org',
-				'password' => 'password'
-			]]);
-		$userId = json_decode($this->getResponse()->content(), true)['data']['id'];
-		$this->actingAs(Entities\User::findOrFail($userId))
-			->json('DELETE', 'api/users/' . $userId);
-		$this->assertResponseStatus(204);
+        $this->assertNotNull(Entities\User::find($userId));
 
-		$this->assertNull(Entities\User::find($userId));
-		
-		// non-existing:
-		$this->json('DELETE', 'api/games/' . $userId);
-		$this->assertResponseStatus(404);
+        // valid:
 
-		// unauthorized:
-		
-		$userId = Entities\User::first()->id;
-		$this->json('DELETE', 'api/users/' . $userId);
-		$this->assertResponseStatus(403); // still acting as newly created user
+        $this->json('POST', 'api/users', [
+            'data' => [
+                'name'     => 'test_user_1',
+                'email'    => 'test_user_1@example.org',
+                'password' => 'password',
+            ], ]);
+        $userId = json_decode($this->getResponse()->content(), true)['data']['id'];
+        $this->actingAs(Entities\User::findOrFail($userId))
+            ->json('DELETE', 'api/users/'.$userId);
+        $this->assertResponseStatus(204);
 
-		$this->assertNotNull(Entities\User::find($userId));
-	}
+        $this->assertNull(Entities\User::find($userId));
 
-	public function testUpdateUser()
-	{
-		// unauthenticated:
+        // non-existing:
+        $this->json('DELETE', 'api/games/'.$userId);
+        $this->assertResponseStatus(404);
 
-		$userId = Entities\User::first()->id;
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => 'new_user_name'
-			]]);
-		$this->assertResponseStatus(401);
+        // unauthorized:
 
-		// unauthorized:
+        $userId = Entities\User::first()->id;
+        $this->json('DELETE', 'api/users/'.$userId);
+        $this->assertResponseStatus(403); // still acting as newly created user
 
-		$user = factory(Entities\User::class)->create();
-		$this->actingAs($user)
-			->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => 'new_user_name'
-			]]);
-		$this->assertResponseStatus(403);
+        $this->assertNotNull(Entities\User::find($userId));
+    }
 
-		// valid:
+    public function testUpdateUser()
+    {
+        // unauthenticated:
 
-		$userId = $user->id;
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => 'new_user_name',
-				'email' => 'new_email@example.org'
-			]])
-			->seeJsonStructure([
-				'data' => [
-					'id',
-					'name',
-					'email',
-					'created_at',
-					'updated_at'
-				]
-			]);
-		$this->seeJson(['name' => 'new_user_name']);
-		$this->assertResponseOk();
-		$user = $user->fresh(); // reload model to see changes
-		$this->assertSame('new_user_name', $user->name);
+        $userId = Entities\User::first()->id;
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name' => 'new_user_name',
+            ], ]);
+        $this->assertResponseStatus(401);
 
-		// non-existing:
-		$this->json('PATCH', 'api/users/999999999999');
-		$this->assertResponseStatus(404);
+        // unauthorized:
 
-		// check name uniqueness with same name:
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => 'new_user_name'
-			]]);
-		$this->assertResponseStatus(200);
-		
-		// check email uniqueness with same email:
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'email' => 'new_email@example.org'
-			]]);
-		$this->assertResponseStatus(200);
+        $user = factory(Entities\User::class)->create();
+        $this->actingAs($user)
+            ->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name' => 'new_user_name',
+            ], ]);
+        $this->assertResponseStatus(403);
 
-		// check name uniqueness with different name:
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => Entities\User::first()->name
-			]]);
-		$this->assertResponseStatus(422);
-		
-		// check email uniqueness with different email:
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'email' => Entities\User::first()->email
-			]]);
-		$this->assertResponseStatus(422);
+        // valid:
 
-		// check email validation
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'email' => 'new_email@.org'
-			]]);
-		$this->assertResponseStatus(422);
+        $userId = $user->id;
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name'  => 'new_user_name',
+                'email' => 'new_email@example.org',
+            ], ])
+            ->seeJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]);
+        $this->seeJson(['name' => 'new_user_name']);
+        $this->assertResponseOk();
+        $user = $user->fresh(); // reload model to see changes
+        $this->assertSame('new_user_name', $user->name);
 
-		// check name validation
-		$this->json('PATCH', 'api/users/' . $userId, [
-			'data' => [
-				'name' => 'Hello World'
-			]]);
-		$this->assertResponseStatus(422);
-	}
+        // non-existing:
+        $this->json('PATCH', 'api/users/999999999999');
+        $this->assertResponseStatus(404);
+
+        // check name uniqueness with same name:
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name' => 'new_user_name',
+            ], ]);
+        $this->assertResponseStatus(200);
+
+        // check email uniqueness with same email:
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'email' => 'new_email@example.org',
+            ], ]);
+        $this->assertResponseStatus(200);
+
+        // check name uniqueness with different name:
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name' => Entities\User::first()->name,
+            ], ]);
+        $this->assertResponseStatus(422);
+
+        // check email uniqueness with different email:
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'email' => Entities\User::first()->email,
+            ], ]);
+        $this->assertResponseStatus(422);
+
+        // check email validation
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'email' => 'new_email@.org',
+            ], ]);
+        $this->assertResponseStatus(422);
+
+        // check name validation
+        $this->json('PATCH', 'api/users/'.$userId, [
+            'data' => [
+                'name' => 'Hello World',
+            ], ]);
+        $this->assertResponseStatus(422);
+    }
 }

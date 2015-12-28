@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class UpdateUserRequest extends Request
 {
     /**
@@ -13,7 +11,7 @@ class UpdateUserRequest extends Request
      */
     public function authorize()
     {
-		return true;
+        return true;
     }
 
     /**
@@ -24,9 +22,9 @@ class UpdateUserRequest extends Request
     public function rules()
     {
         return [
-            'data.name' => 'alpha_dash|max:255|unique:users,name,' . $this->route('users'),
-			'data.email' => 'email|max:255|unique:users,email,' . $this->route('users'),
-			'data.password' => 'string|max:60'
+            'data.name'     => 'alpha_dash|max:255|unique:users,name,'.$this->route('users'),
+            'data.email'    => 'email|max:255|unique:users,email,'.$this->route('users'),
+            'data.password' => 'string|max:60',
         ];
     }
 }

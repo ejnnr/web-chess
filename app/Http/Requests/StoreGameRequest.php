@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
-
 class StoreGameRequest extends Request
 {
     /**
@@ -24,8 +22,8 @@ class StoreGameRequest extends Request
     public function rules()
     {
         return [
-			'data.jcf' => 'required|jcf',
-			'data.public' => 'required|integer',
+            'data.jcf'    => 'required|jcf',
+            'data.public' => 'required|integer',
         ];
     }
 }
