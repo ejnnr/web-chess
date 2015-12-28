@@ -18,4 +18,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 		return $app;
 	}
 
+	/**
+	 * Get the response created by the last call
+	 *
+	 * @return Response
+	 */
+	public function getResponse()
+	{
+		return $this->response;
+	}
+
 }

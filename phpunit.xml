@@ -19,6 +19,9 @@
         <testsuite name="Models">
         	<directory>./tests/Models/</directory>
         </testsuite>
+        <testsuite name="REST API">
+        	<directory>./tests/RestApi/</directory>
+        </testsuite>
     </testsuites>
     <filter>
   		<whitelist processUncoveredFilesFromWhitelist="true">
