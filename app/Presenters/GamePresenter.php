@@ -3,17 +3,14 @@
 namespace App\Presenters;
 
 use App\Transformers\GameTransformer;
-use App\Presenters\ExtendedFractalPresenter;
 
 /**
- * Class GamePresenter
- *
- * @package namespace App\Presenters;
+ * Class GamePresenter.
  */
 class GamePresenter extends ExtendedFractalPresenter
 {
     /**
-     * Transformer
+     * Transformer.
      *
      * @return \League\Fractal\TransformerAbstract
      */

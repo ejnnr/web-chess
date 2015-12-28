@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-	/**
+    /**
      * Indicates if loading of the provider is deferred.
      *
      * @var bool
@@ -35,7 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\GameRepository', 'App\Repositories\GameRepositoryEloquent');
     }
 
-	/**
+    /**
      * Get the services provided by the provider.
      *
      * @return array
@@ -43,9 +43,9 @@ class RepositoryServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-			'App\Repositories\UserRepository',
-			'App\Repositories\TagRepository',
-			'App\Repositories\GameRepository',
-		];
+            'App\Repositories\UserRepository',
+            'App\Repositories\TagRepository',
+            'App\Repositories\GameRepository',
+        ];
     }
 }

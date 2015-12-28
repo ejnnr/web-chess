@@ -2,24 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Repositories\ExtendedRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\TagRepository;
 use App\Entities\Tag;
 
 /**
- * Class TagRepositoryEloquent
- * @package namespace App\Repositories;
+ * Class TagRepositoryEloquent.
  */
 class TagRepositoryEloquent extends ExtendedRepository implements TagRepository
 {
-	protected $fieldSearchable = [
-		'name' => 'like',
-		'owner_id',
-	];
+    protected $fieldSearchable = [
+        'name' => 'like',
+        'owner_id',
+    ];
 
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
@@ -29,20 +26,20 @@ class TagRepositoryEloquent extends ExtendedRepository implements TagRepository
     }
 
     /**
-     * Boot up the repository, pushing criteria
+     * Boot up the repository, pushing criteria.
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-	/**
-	 * return the presenter to use for this repository
-	 *
-	 * @return string
-	 */
-	public function presenter()
-	{
-		return 'App\Presenters\TagPresenter';
-	}
+    /**
+     * return the presenter to use for this repository.
+     *
+     * @return string
+     */
+    public function presenter()
+    {
+        return 'App\Presenters\TagPresenter';
+    }
 }

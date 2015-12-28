@@ -15,27 +15,28 @@ use App\Http\Controllers\UserController;
 Route::get('/', 'MainController@index');
 
 Route::group([
-	'prefix' => 'api',
-	'middleware' => ['jsonApi']
-], function()
-{
-	Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
-	Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
-	Route::resource('games', 'GameController', ['except' => ['create', 'edit']]);
-	Route::get('user', function() {
-		if (!Auth::check()) {
-			abort(401);
-		}
-		return app(UserController::class)->show(Auth::user()->id);
-	});
-	Route::match(['put', 'patch'], 'user', function() {
-		if (!Auth::check()) {
-			abort(401);
-		}
-		return app(UserController::class)->update(Auth::user()->id);
-	});
+    'prefix'     => 'api',
+    'middleware' => ['jsonApi'],
+], function () {
+    Route::resource('tags', 'TagController', ['except' => ['create', 'edit']]);
+    Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
+    Route::resource('games', 'GameController', ['except' => ['create', 'edit']]);
+    Route::get('user', function () {
+        if (!Auth::check()) {
+            abort(401);
+        }
 
-	Route::get('games/{games}/tags', 'GameTagController@index');
-	Route::post('games/{games}/tags', 'GameTagController@store');
-	Route::delete('games/{games}/tags/{tags}', 'GameTagController@destroy');
+        return app(UserController::class)->show(Auth::user()->id);
+    });
+    Route::match(['put', 'patch'], 'user', function () {
+        if (!Auth::check()) {
+            abort(401);
+        }
+
+        return app(UserController::class)->update(Auth::user()->id);
+    });
+
+    Route::get('games/{games}/tags', 'GameTagController@index');
+    Route::post('games/{games}/tags', 'GameTagController@store');
+    Route::delete('games/{games}/tags/{tags}', 'GameTagController@destroy');
 });

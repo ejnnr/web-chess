@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
 use App\Entities\User;
 use App\Entities\Tag;
 use App\Entities\Game;
@@ -14,21 +13,22 @@ use App\Policies\GamePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
-	/**
+    /**
      * The policy mappings for the application.
      *
      * @var array
      */
     protected $policies = [
-		User::class => UserPolicy::class,
-		Tag::class => TagPolicy::class,
-		Game::class => GamePolicy::class,
+        User::class => UserPolicy::class,
+        Tag::class  => TagPolicy::class,
+        Game::class => GamePolicy::class,
     ];
 
-	/**
+    /**
      * Register any application authentication / authorization services.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+     * @param \Illuminate\Contracts\Auth\Access\Gate $gate
+     *
      * @return void
      */
     public function boot(GateContract $gate)

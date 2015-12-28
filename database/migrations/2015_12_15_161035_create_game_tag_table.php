@@ -14,8 +14,8 @@ class CreateGameTagTable extends Migration
     {
         Schema::create('game_tag', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('game_id')->unsigned();
-			$table->integer('tag_id')->unsigned();
+            $table->integer('game_id')->unsigned();
+            $table->integer('tag_id')->unsigned();
             $table->timestamps();
         });
     }

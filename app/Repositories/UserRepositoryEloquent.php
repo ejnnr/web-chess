@@ -3,23 +3,20 @@
 namespace App\Repositories;
 
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\ExtendedRepository;
-use App\Repositories\UserRepository;
 use App\Entities\User;
 
 /**
- * Class UserRepositoryEloquent
- * @package namespace App\Repositories;
+ * Class UserRepositoryEloquent.
  */
 class UserRepositoryEloquent extends ExtendedRepository implements UserRepository
 {
-	protected $fieldSearchable = [
-		'name' => 'like',
-		'email',
-	];
+    protected $fieldSearchable = [
+        'name' => 'like',
+        'email',
+    ];
 
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
@@ -29,20 +26,20 @@ class UserRepositoryEloquent extends ExtendedRepository implements UserRepositor
     }
 
     /**
-     * Boot up the repository, pushing criteria
+     * Boot up the repository, pushing criteria.
      */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-	/**
-	 * return the presenter to use for this repository
-	 *
-	 * @return string
-	 */
-	public function presenter()
-	{
-		return 'App\Presenters\UserPresenter';
-	}
+    /**
+     * return the presenter to use for this repository.
+     *
+     * @return string
+     */
+    public function presenter()
+    {
+        return 'App\Presenters\UserPresenter';
+    }
 }

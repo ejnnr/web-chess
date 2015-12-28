@@ -6,14 +6,12 @@ use App\Transformers\GameSummaryTransformer;
 use Prettus\Repository\Presenter\FractalPresenter;
 
 /**
- * Class GameSummaryPresenter
- *
- * @package namespace App\Presenters;
+ * Class GameSummaryPresenter.
  */
 class GameSummaryPresenter extends FractalPresenter
 {
     /**
-     * Transformer
+     * Transformer.
      *
      * @return \League\Fractal\TransformerAbstract
      */
