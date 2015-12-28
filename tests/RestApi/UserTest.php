@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Entities\User;
 
 class UserTest extends \TestCase
 {
@@ -61,6 +62,47 @@ class UserTest extends \TestCase
         // non-existing:
         $this->json('GET', 'api/users/999999999999');
         $this->assertResponseStatus(404);
+    }
+
+    public function testShowCurrentUser()
+    {
+        $this->json('GET', 'api/user')
+            ->assertResponseStatus(401);
+        $this->actingAs(User::first())
+            ->json('GET', 'api/user')
+            ->seeJsonstructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]);
+        $this->assertResponseOk();
+    }
+
+    public function testUpdateCurrentUser()
+    {
+        $this->json('PATCH', 'api/user')
+            ->assertResponseStatus(401);
+        $this->actingAs(User::first())
+            ->json('PATCH', 'api/user', [
+                'data' => [
+                    'name' => 'new_user_name',
+                ],
+            ])
+            ->seeJsonstructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+            ]);
+        $this->assertResponseOk();
+        $this->assertSame('new_user_name', User::first()->name);
     }
 
     public function testStoreUser()

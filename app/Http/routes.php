@@ -26,14 +26,14 @@ Route::group([
             abort(401);
         }
 
-        return app(UserController::class)->show(Auth::user()->id);
+        return app()->call([app(UserController::class), 'show'], ['id' => Auth::user()->id]);
     });
     Route::match(['put', 'patch'], 'user', function () {
         if (!Auth::check()) {
             abort(401);
         }
 
-        return app(UserController::class)->update(Auth::user()->id);
+        return app()->call([app(UserController::class), 'update'], ['id' => Auth::user()->id]);
     });
 
     Route::get('games/{games}/tags', 'GameTagController@index');
