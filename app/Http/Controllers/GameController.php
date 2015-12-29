@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Repositories\GameRepository;
 use App\Criteria\VisibleGameCriterion;
+use App\Criteria\GameHasTagRequestCriterion;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
 use App\Entities\Game;
@@ -42,10 +43,11 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(VisibleGameCriterion $criterion)
+    public function index(VisibleGameCriterion $visibleCriterion, GameHasTagRequestCriterion $hasTagCriterion)
     {
         $this->games->setPresenter($this->summaryPresenter);
-        $this->games->pushCriteria($criterion);
+        $this->games->pushCriteria($visibleCriterion);
+        $this->games->pushCriteria($hasTagCriterion);
 
         return $this->games->paginate();
     }

@@ -24,16 +24,18 @@ class VisibleTagCriterion implements CriteriaInterface
         } else {
             $userId = 0;
         }
-        $model = $model
-            ->where('owner_id', '=', $userId)
-            ->orWhereExists(function($query) use ($userId) {
-                $query->select(DB::raw(1))
-                    ->from('shared_tags')
-                    ->whereRaw('tag_id = tags.id')
-                    ->where('user_id', '=', $userId)
-                    ->where('access_level', '>', 0);
-            })
-            ->orWhere('public', '>', 0);
+        $model = $model->where(function($query) use ($userId) {
+            $query
+                ->where('owner_id', '=', $userId)
+                ->orWhereExists(function($query) use ($userId) {
+                    $query->select(DB::raw(1))
+                        ->from('shared_tags')
+                        ->whereRaw('tag_id = tags.id')
+                        ->where('user_id', '=', $userId)
+                        ->where('access_level', '>', 0);
+                })
+                ->orWhere('public', '>', 0);
+        });
         return $model;
     }
 }
