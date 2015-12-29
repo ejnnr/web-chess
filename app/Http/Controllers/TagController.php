@@ -2,7 +2,7 @@
 
 use Auth;
 use App\Repositories\TagRepository;
-use App\Filters\VisibleFilter;
+use App\Criteria\VisibleTagCriterion;
 use App\Entities\Tag;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
@@ -40,9 +40,9 @@ class TagController extends Controller
      *
      * @return Response
      */
-    public function index(VisibleFilter $filter)
+    public function index(VisibleTagCriterion $criterion)
     {
-        $this->tags->addFilter($filter);
+        $this->tags->pushCriteria($criterion);
         $this->tags->setPresenter($this->summaryPresenter);
 
         return $this->tags->all();

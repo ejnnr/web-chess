@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Repositories\GameRepository;
-use App\Filters\VisibleFilter;
+use App\Criteria\VisibleGameCriterion;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
 use App\Entities\Game;
@@ -42,10 +42,10 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(VisibleFilter $filter)
+    public function index(VisibleGameCriterion $criterion)
     {
         $this->games->setPresenter($this->summaryPresenter);
-        $this->games->addFilter($filter);
+        $this->games->pushCriteria($criterion);
 
         return $this->games->all();
     }
