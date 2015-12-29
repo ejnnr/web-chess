@@ -28,7 +28,7 @@ class UserTableSeeder extends Seeder
     {
         \DB::table('users')->delete();
 
-        factory(App\Entities\User::class, 4)->create();
+        factory(App\Entities\User::class, 50)->create();
 
         App\Entities\User::create(['name' => 'root', 'email' => 'root@root.org', 'password' => 'root']);
     }
@@ -40,7 +40,9 @@ class TagTableSeeder extends Seeder
     {
         \DB::table('tags')->delete();
 
-        factory(App\Entities\Tag::class, 4)->create();
+        factory(App\Entities\Tag::class, 20)->create(['public' => 0]);
+        factory(App\Entities\Tag::class, 20)->create(['public' => 1]);
+        factory(App\Entities\Tag::class, 10)->create(['public' => 3]);
     }
 }
 
@@ -61,7 +63,9 @@ class GameTableSeeder extends Seeder
     {
         \DB::table('games')->delete();
 
-        factory(App\Entities\Game::class, 4)->create();
+        factory(App\Entities\Game::class, 20)->create(['public' => 0]);
+        factory(App\Entities\Game::class, 20)->create(['public' => 1]);
+        factory(App\Entities\Game::class, 10)->create(['public' => 3]);
     }
 }
 

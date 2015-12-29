@@ -47,7 +47,7 @@ class GameController extends Controller
         $this->games->setPresenter($this->summaryPresenter);
         $this->games->pushCriteria($criterion);
 
-        return $this->games->all();
+        return $this->games->paginate();
     }
 
     /**

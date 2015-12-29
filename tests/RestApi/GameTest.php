@@ -14,6 +14,18 @@ class GameTest extends \TestCase
     {
         $this->json('GET', 'api/games')
             ->seeJsonStructure([
+                'meta' => [
+                    'pagination' => [
+                        'count',
+                        'total',
+                        'per_page',
+                        'current_page',
+                        'total_pages',
+                        'links' => [
+                            'next',
+                        ],
+                    ],
+                ],
                 'data' => [
                     0 => [
                         'id',
@@ -25,6 +37,31 @@ class GameTest extends \TestCase
         $this->assertResponseOk();
         $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
             json_decode($this->getResponse()->content(), true)['data'][0]['created_at']); // assert that created_at is ISO 8601
+
+        $this->json('GET', json_decode($this->getResponse()->content())->meta->pagination->links->next)
+            ->seeJsonStructure([
+                'meta' => [
+                    'pagination' => [
+                        'count',
+                        'total',
+                        'per_page',
+                        'current_page',
+                        'total_pages',
+                        'links' => [
+                            'next',
+                            'previous',
+                        ],
+                    ],
+                ],
+                'data' => [
+                    0 => [
+                        'id',
+                        'owner_id',
+                        'created_at',
+                    ],
+                ],
+            ]);
+        $this->assertResponseOk();
     }
 
     public function testShowGameUnauthenticated()

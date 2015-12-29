@@ -43,7 +43,7 @@ class UserController extends Controller
     {
         $this->users->setPresenter($this->summaryPresenter);
 
-        return $this->users->all();
+        return $this->users->paginate();
     }
 
     /**

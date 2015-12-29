@@ -45,7 +45,7 @@ class TagController extends Controller
         $this->tags->pushCriteria($criterion);
         $this->tags->setPresenter($this->summaryPresenter);
 
-        return $this->tags->all();
+        return $this->tags->paginate();
     }
 
     /**
