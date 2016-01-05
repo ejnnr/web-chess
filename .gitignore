@@ -6,5 +6,7 @@ Thumbs.db
 .c9/
 /vendor
 /node_modules
+/bower_components
+/public/lib/*
 .env
 resources/assets/vendor

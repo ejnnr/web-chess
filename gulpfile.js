@@ -32,10 +32,7 @@ gulp.task('copy:images', function () {
 
 gulp.task('copy:libraries', function () {
     return gulp
-        .src(['node_modules/angular2/bundles/angular2-polyfills.js',
-            'node_modules/systemjs/dist/system.src.js',
-            'node_modules/rxjs/bundles/Rx.js',
-            'node_modules/angular2/bundles/angular2.dev.js'])
+        .src(['node_modules/**', 'bower_components/**', '!node_modules', '!bower_components'])
         .pipe(gulp.dest('public/lib'));
 });
 

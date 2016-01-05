@@ -1,0 +1,20 @@
+{
+  "name": "web-chess",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jupiter24/web-chess",
+  "authors": [
+    "jupiter24 <jupiter24@users.noreply.github.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~1.2.3",
+    "paper-elements": "~1.0.7"
+  }
+}
