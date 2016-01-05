@@ -14,8 +14,14 @@ gulp.task('compile', function () {
         .src('resources/assets/ts/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(typescript(tscConfig.compilerOptions))
-        .pipe(sourcemaps.write('public/js'))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('public/js'));
+});
+
+gulp.task('copy:componenthtml', function () {
+    return gulp
+        .src('resources/assets/ts/components/**/*.html')
+        .pipe(gulp.dest('public/js/components'));
 });
 
 gulp.task('copy:images', function () {
@@ -24,5 +30,14 @@ gulp.task('copy:images', function () {
         .pipe(gulp.dest('public/img'));
 });
 
-gulp.task('build', ['compile', 'copy:images']);
+gulp.task('copy:libraries', function () {
+    return gulp
+        .src(['node_modules/angular2/bundles/angular2-polyfills.js',
+            'node_modules/systemjs/dist/system.src.js',
+            'node_modules/rxjs/bundles/Rx.js',
+            'node_modules/angular2/bundles/angular2.dev.js'])
+        .pipe(gulp.dest('public/lib'));
+});
+
+gulp.task('build', ['compile', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
 gulp.task('default', ['build']);
