@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const del = require('del');
 const typescript = require('gulp-typescript');
+const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const changed = require('gulp-changed');
 const tscConfig = require('./tsconfig.json');
@@ -10,7 +11,7 @@ gulp.task('clean', function () {
 });
 
 // Typescript compilation
-gulp.task('compile', function () {
+gulp.task('compile:typescript', function () {
     return gulp
         .src('resources/assets/ts/**/*.ts')
         .pipe(changed('public/js', {extension: '.js'}))
@@ -18,6 +19,16 @@ gulp.task('compile', function () {
         .pipe(typescript(tscConfig.compilerOptions))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('public/js'));
+});
+
+gulp.task('compile:sass', function () {
+    return gulp
+        .src('resources/assets/sass/**/*.scss')
+        .pipe(changed('public/css', {extension: '.css'}))
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('copy:componenthtml', function () {
@@ -41,5 +52,5 @@ gulp.task('copy:libraries', function () {
         .pipe(gulp.dest('public/lib'));
 });
 
-gulp.task('build', ['compile', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
+gulp.task('build', ['compile:typescript', 'compile:sass', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
 gulp.task('default', ['build']);
