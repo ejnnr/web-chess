@@ -31,6 +31,16 @@ gulp.task('compile:sass', function () {
         .pipe(gulp.dest('public/css'));
 });
 
+gulp.task('compile:componentsass', function () {
+    return gulp
+        .src('resources/assets/ts/components/**/*.scss')
+        .pipe(changed('public/js/components', {extension: '.css'}))
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('public/js/components'));
+});
+
 gulp.task('copy:componenthtml', function () {
     return gulp
         .src('resources/assets/ts/components/**/*.html')
@@ -52,5 +62,5 @@ gulp.task('copy:libraries', function () {
         .pipe(gulp.dest('public/lib'));
 });
 
-gulp.task('build', ['compile:typescript', 'compile:sass', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
+gulp.task('build', ['compile:typescript', 'compile:sass', 'compile:componentsass', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
 gulp.task('default', ['build']);

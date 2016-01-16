@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "polymer": "~1.2.3",
-    "paper-elements": "~1.0.7"
+    "paper-elements": "~1.0.7",
+    "iron-elements": "~1.0.7"
   }
 }

@@ -1,0 +1,10 @@
+<paper-tabs noink #paperTabs selected="0" (iron-select)="ironPages.select(paperTabs.selected)">
+    <paper-tab *ngFor="#tab of tabs">
+        {{tab.name}}
+        <paper-icon-button icon="close" (click)="closeTab(tab)"></paper-icon-button>
+    </paper-tab>
+</paper-tabs>
+{{paperTabs.innerHtml}}
+<iron-pages #ironPages>
+    <div *ngFor="#tab of tabs" [innerHtml]="tab.content"></div>
+</iron-pages>

@@ -21,6 +21,15 @@
             System.import('js/boot')
                 .then(null, console.error.bind(console));
         </script>
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+
+        <link rel="import" href="lib/paper-button/paper-button.html">
+        <link rel="import" href="lib/paper-toolbar/paper-toolbar.html">
+        <link rel="import" href="lib/paper-icon-button/paper-icon-button.html">
+        <link rel="import" href="lib/iron-icons/iron-icons.html">
+        <link rel="import" href="lib/paper-input/paper-input.html">
+        <link rel="import" href="lib/paper-tabs/paper-tabs.html">
+        <link rel="import" href="lib/iron-pages/iron-pages.html">
 	</head>
 	<body>
         <web-chess>Loading...</web-chess>
