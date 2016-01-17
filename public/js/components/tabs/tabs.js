@@ -22,8 +22,7 @@ System.register(['angular2/core'], function(exports_1) {
                 TabsComponent.prototype.closeTab = function (tab) {
                     var index = this.tabs.indexOf(tab);
                     if (index > -1) {
-                        //this.tabs.splice(index, 1);
-                        delete this.tabs[index];
+                        this.tabs.splice(index, 1);
                     }
                 };
                 __decorate([

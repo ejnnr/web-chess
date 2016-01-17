@@ -3,6 +3,12 @@
 	<head>
 		<title>WebChess</title>
 		<meta charset="UTF8">
+        <!--
+        <script>
+            window.Polymer = window.Polymer || {};
+            window.Polymer.dom = 'shadow';
+        </script>
+        -->
         <script src="lib/angular2/bundles/angular2-polyfills.js"></script>
         <script src="lib/systemjs/dist/system.src.js"></script>
         <script src="lib/rxjs/bundles/Rx.js"></script>
@@ -29,6 +35,8 @@
         <link rel="import" href="lib/iron-icons/iron-icons.html">
         <link rel="import" href="lib/paper-input/paper-input.html">
         <link rel="import" href="lib/paper-tabs/paper-tabs.html">
+        <link rel="import" href="lib/paper-card/paper-card.html">
+        <link rel="import" href="lib/paper-menu/paper-menu.html">
         <link rel="import" href="lib/iron-pages/iron-pages.html">
 	</head>
 	<body>

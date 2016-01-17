@@ -14,7 +14,7 @@ export class TabsComponent
     closeTab(tab: Tab) {
         var index: number = this.tabs.indexOf(tab);
         if (index > -1) {
-            delete this.tabs[index];
+            this.tabs.splice(index, 1);
         }
     }
 }

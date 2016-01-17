@@ -15,17 +15,14 @@ export class AppComponent
 {
     tabList: Tab[] = [
         {
-            "id": 0,
             "name": "Tab 1",
             "content": "<h1>Hello</h1>"
         },
         {
-            "id": 1,
             "name": "Tab 2",
             "content": "<h1>World</h1>"
         },
         {
-            "id": 3,
             "name": "Tab 3",
             "content": "<h1>!</h1>"
         }
