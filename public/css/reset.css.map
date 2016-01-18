@@ -1,1 +1,0 @@
-{"version":3,"file":"reset.css","sources":["reset.scss"],"sourcesContent":["* {\n    margin: 0;\n    padding: 0;\n}\n"],"mappings":"AAAA,CAAC,CAAC;EACE,MAAM,EAAE,CAAE;EACV,OAAO,EAAE,CAAE,GACd","names":[],"sourceRoot":"/source/"}
