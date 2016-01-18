@@ -1,18 +1,21 @@
 import {Component, Input} from 'angular2/core';
+import {TabContentComponent} from '../tab-content/tab-content.component';
 import {Tab} from '../../interfaces/tab';
 import {TabListService} from '../../services/tab-list.service';
-import {TabContentService} from '../../services/tab-content.service';
 
 @Component({
     selector: 'tabs',
     templateUrl: 'js/components/tabs/tabs.html',
-    styleUrls: ['js/components/tabs/tabs.css']
+    styleUrls: ['js/components/tabs/tabs.css'],
+    directives: [
+        TabContentComponent
+    ]
 })
 export class TabsComponent
 {
     private _counter = 0;
 
-    constructor(private _tabListService: TabListService, private _tabContentService: TabContentService) {}
+    constructor(private _tabListService: TabListService) {}
 
     closeTab(tab: Tab) {
         this._tabListService.removeTab(tab);
@@ -27,9 +30,5 @@ export class TabsComponent
             "name": "Tab " + ++this._counter,
             "layout": "greeter"
         });
-    }
-
-    getContent(tab: Tab) {
-        return this._tabContentService.getContent(tab);
     }
 }
