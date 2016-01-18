@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../expandable-search/expandable-search', '../tabs/tabs'], function(exports_1) {
+System.register(['angular2/core', '../expandable-search/expandable-search', '../tabs/tabs', '../../services/tab-list.service', '../../services/tab-content.service'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', '../expandable-search/expandable-search', '../
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, expandable_search_1, tabs_1;
+    var core_1, expandable_search_1, tabs_1, tab_list_service_1, tab_content_service_1;
     var AppComponent;
     return {
         setters:[
@@ -20,24 +20,16 @@ System.register(['angular2/core', '../expandable-search/expandable-search', '../
             },
             function (tabs_1_1) {
                 tabs_1 = tabs_1_1;
+            },
+            function (tab_list_service_1_1) {
+                tab_list_service_1 = tab_list_service_1_1;
+            },
+            function (tab_content_service_1_1) {
+                tab_content_service_1 = tab_content_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
                 function AppComponent() {
-                    this.tabList = [
-                        {
-                            "name": "Tab 1",
-                            "content": "<h1>Hello</h1>"
-                        },
-                        {
-                            "name": "Tab 2",
-                            "content": "<h1>World</h1>"
-                        },
-                        {
-                            "name": "Tab 3",
-                            "content": "<h1>!</h1>"
-                        }
-                    ];
                 }
                 AppComponent = __decorate([
                     core_1.Component({
@@ -46,6 +38,10 @@ System.register(['angular2/core', '../expandable-search/expandable-search', '../
                         directives: [
                             expandable_search_1.ExpandableSearchComponent,
                             tabs_1.TabsComponent
+                        ],
+                        providers: [
+                            tab_list_service_1.TabListService,
+                            tab_content_service_1.TabContentService
                         ]
                     }), 
                     __metadata('design:paramtypes', [])

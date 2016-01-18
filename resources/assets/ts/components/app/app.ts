@@ -2,6 +2,8 @@ import {Component} from 'angular2/core';
 import {ExpandableSearchComponent} from '../expandable-search/expandable-search';
 import {TabsComponent} from '../tabs/tabs';
 import {Tab} from '../../interfaces/tab';
+import {TabListService} from '../../services/tab-list.service';
+import {TabContentService} from '../../services/tab-content.service';
 
 @Component({
     selector: 'web-chess',
@@ -9,22 +11,12 @@ import {Tab} from '../../interfaces/tab';
     directives: [
         ExpandableSearchComponent,
         TabsComponent
+    ],
+    providers: [
+        TabListService,
+        TabContentService
     ]
 })
 export class AppComponent
 {
-    tabList: Tab[] = [
-        {
-            "name": "Tab 1",
-            "content": "<h1>Hello</h1>"
-        },
-        {
-            "name": "Tab 2",
-            "content": "<h1>World</h1>"
-        },
-        {
-            "name": "Tab 3",
-            "content": "<h1>!</h1>"
-        }
-    ];
 }

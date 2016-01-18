@@ -1,14 +1,14 @@
-<style>
-    paper-toolbar {
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
-    }
-</style>
-<paper-toolbar>
-    <paper-icon-button icon="menu"></paper-icon-button>
-    <div class="title">WebChess</div>
-    <expandable-search></expandable-search>
-    <paper-icon-button icon="account-box"></paper-icon-button>
-</paper-toolbar>
-<tabs [tabs]="tabList"></tabs>
+<paper-drawer-panel responsive-width="800px">
+    <div drawer>
+
+    </div>
+    <div main>
+        <paper-toolbar>
+            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+            <div class="title">WebChess</div>
+            <expandable-search></expandable-search>
+            <paper-icon-button icon="account-box"></paper-icon-button>
+        </paper-toolbar>
+        <tabs></tabs>
+    </div>
+</paper-drawer-panel>
