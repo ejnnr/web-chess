@@ -877,20 +877,8 @@ class Position
                 // the rest of this function basically checks if there is any piece between departure and destination because rooks cannot jump
 
                 // get the direction of movement (-1, 0 or 1)
-                if ((getFile($destination) - getFile($departure)) == 0) {
-                    $fileMovement = 0;
-                } elseif ((getFile($destination) - getFile($departure)) > 0) {
-                    $fileMovement = 1;
-                } elseif ((getFile($destination) - getFile($departure)) < 0) {
-                    $fileMovement = -1;
-                }
-                if ((getRank($destination) - getRank($departure)) == 0) {
-                    $rankMovement = 0;
-                } elseif ((getRank($destination) - getRank($departure)) > 0) {
-                    $rankMovement = 1;
-                } elseif ((getRank($destination) - getRank($departure)) < 0) {
-                    $rankMovement = -1;
-                }
+                $fileMovement = getFile($destination) <=> getFile($departure);
+                $rankMovement = getRank($destination) <=> getRank($departure);
 
                 $file = getFile($departure) + $fileMovement;
                 $rank = getRank($departure) + $rankMovement;
@@ -910,20 +898,8 @@ class Position
 
                 // the rest of this function basically checks if there is any piece between departure and destination because bishops cannot jump
 
-                if ((getFile($destination) - getFile($departure)) == 0) {
-                    $fileMovement = 0;
-                } elseif ((getFile($destination) - getFile($departure)) > 0) {
-                    $fileMovement = 1;
-                } elseif ((getFile($destination) - getFile($departure)) < 0) {
-                    $fileMovement = -1;
-                }
-                if ((getRank($destination) - getRank($departure)) == 0) {
-                    $rankMovement = 0;
-                } elseif ((getRank($destination) - getRank($departure)) > 0) {
-                    $rankMovement = 1;
-                } elseif ((getRank($destination) - getRank($departure)) < 0) {
-                    $rankMovement = -1;
-                }
+                $fileMovement = getFile($destination) <=> getFile($departure);
+                $rankMovement = getRank($destination) <=> getRank($departure);
 
                 $file = getFile($departure) + $fileMovement;
                 $rank = getRank($departure) + $rankMovement;
@@ -941,20 +917,8 @@ class Position
 
                 // the rest of this function basically checks if there is any piece between departure and destination because queens cannot jump
 
-                if ((getFile($destination) - getFile($departure)) == 0) {
-                    $fileMovement = 0;
-                } elseif ((getFile($destination) - getFile($departure)) > 0) {
-                    $fileMovement = 1;
-                } elseif ((getFile($destination) - getFile($departure)) < 0) {
-                    $fileMovement = -1;
-                }
-                if ((getRank($destination) - getRank($departure)) == 0) {
-                    $rankMovement = 0;
-                } elseif ((getRank($destination) - getRank($departure)) > 0) {
-                    $rankMovement = 1;
-                } elseif ((getRank($destination) - getRank($departure)) < 0) {
-                    $rankMovement = -1;
-                }
+                $fileMovement = getFile($destination) <=> getFile($departure);
+                $rankMovement = getRank($destination) <=> getRank($departure);
 
                 $file = getFile($departure) + $fileMovement;
                 $rank = getRank($departure) + $rankMovement;
