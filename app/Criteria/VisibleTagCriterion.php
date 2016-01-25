@@ -2,8 +2,10 @@
 
 use Auth;
 use DB;
-use Prettus\Repository\Contracts\CriteriaInterface;
-use Prettus\Repository\Contracts\RepositoryInterface;
+use Prettus\Repository\Contracts\{
+    CriteriaInterface,
+    RepositoryInterface
+};
 
 /**
  * Class VisibleTagCriterion
