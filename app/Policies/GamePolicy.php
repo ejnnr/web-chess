@@ -3,8 +3,10 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use App\Entities\User;
-use App\Entities\Game;
+use App\Entities\{
+    User,
+    Game
+};
 
 class GamePolicy
 {

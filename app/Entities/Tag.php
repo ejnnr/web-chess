@@ -3,8 +3,10 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Presentable;
-use Prettus\Repository\Traits\PresentableTrait;
+use Prettus\Repository\{
+    Contracts\Presentable,
+    Traits\PresentableTrait
+};
 
 class Tag extends Model implements Presentable
 {

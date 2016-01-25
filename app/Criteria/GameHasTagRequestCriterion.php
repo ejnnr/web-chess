@@ -3,8 +3,10 @@
 use Auth;
 use DB;
 use Illuminate\Http\Request;
-use Prettus\Repository\Contracts\CriteriaInterface;
-use Prettus\Repository\Contracts\RepositoryInterface;
+use Prettus\Repository\Contracts\{
+    CriteriaInterface,
+    RepositoryInterface
+};
 
 /**
  * Class GameHasTagRequestCriterion.
