@@ -20,9 +20,9 @@ class TagSummaryTransformer extends TransformerAbstract
     public function transform(Tag $model)
     {
         return array_filter([
-            'id'         => isset($model->id)         ? (int) $model->id                      : null,
-            'name'       => isset($model->name)       ? $model->name                          : null,
-            'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
+            'id'         => $model->id            ?? null,
+            'name'       => $model->name          ?? null,
+            'owner_id'   => $model->owner_id      ?? null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
         ]);
     }

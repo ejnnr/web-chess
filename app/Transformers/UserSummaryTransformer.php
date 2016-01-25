@@ -20,8 +20,8 @@ class UserSummaryTransformer extends TransformerAbstract
     public function transform(User $model)
     {
         return array_filter([
-            'id'         => isset($model->id)         ? (int) $model->id                      : null,
-            'name'       => isset($model->name)       ? $model->name                          : null,
+            'id'         => $model->id             ?? null,
+            'name'       => $model->name           ?? null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
         ]);
     }
