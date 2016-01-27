@@ -260,4 +260,56 @@ class GameTest extends \TestCase
         $game = $game->fresh();
         $this->assertSame(User::first()->id, $game->owner_id);
     }
+
+    public function testGetSharedWith() 
+    {
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+        $game = Game::create(['owner_id' => $user->id, 'public' => 0, 'jcf' => app(BCFGame::class)->doMove(new Move('e2', 'e4'))->getJCF()]);
+        $game->share(User::first()->id, 3);
+
+        // unauthenticated:
+        $this->json('GET', 'api/games/'.$game->id.'/shared_with')
+            ->assertResponseStatus(401);
+        
+        // unauthorized:
+        $this->actingAs($user2)
+            ->json('GET', 'api/games/'.$game->id.'/shared_with')
+            ->assertResponseStatus(403);
+        
+        // valid (user shared with):
+        $this->actingAs(User::first())
+            ->json('GET', 'api/games/'.$game->id.'/shared_with')
+            ->assertResponseOk();
+
+        // valid:
+        $this->actingAs($user)
+            ->json('GET', 'api/games/'.$game->id.'/shared_with')
+            ->assertResponseOk();
+        $this->seeJsonStructure([
+                'meta' => [
+                    'pagination' => [
+                        'count',
+                        'total',
+                        'per_page',
+                        'current_page',
+                        'total_pages',
+                        'links',
+                    ],
+                ],
+                'data' => [
+                    0 => [
+                        'id',
+                        'name',
+                        'access_level',
+                        'created_at',
+                        'attached_at',
+                    ],
+                ],
+            ]);
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data'][0]['created_at']); // assert that created_at is ISO 8601
+        $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
+            json_decode($this->getResponse()->content(), true)['data'][0]['attached_at']); // assert that attached_at is ISO 8601
+    }
 }
