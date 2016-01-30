@@ -16,6 +16,6 @@ class UserPresenter extends ExtendedFractalPresenter
      */
     public function getTransformer()
     {
-        return new UserTransformer();
+        return app(UserTransformer::class);
     }
 }

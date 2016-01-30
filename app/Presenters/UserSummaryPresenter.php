@@ -17,6 +17,6 @@ class UserSummaryPresenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new UserSummaryTransformer();
+        return app(UserSummaryTransformer::class);
     }
 }

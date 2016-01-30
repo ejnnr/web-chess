@@ -5,12 +5,18 @@ namespace App\Transformers;
 use Gate;
 use League\Fractal\TransformerAbstract;
 use App\Entities\Game;
+use App\Services\ResourceUrl;
 
 /**
  * Class GameTransformer.
  */
 class GameTransformer extends TransformerAbstract
 {
+    public function __construct(ResourceUrl $urlGen)
+    {
+        $this->urlGen = $urlGen;
+    }
+
     /**
      * List of resources possible to include.
      *
@@ -32,7 +38,7 @@ class GameTransformer extends TransformerAbstract
     public function transform(Game $model)
     {
         return array_filter([
-            'id'         => isset($model->id)         ? (int) $model->id                      : null,
+            'url'        => $this->urlGen->generate($model),
             'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
             'public'     => isset($model->public)     ? (int) $model->public                  : null,
             'jcf'        => isset($model->game)       ? $model->game->jsonSerialize()         : null,

@@ -28,7 +28,7 @@ class TagTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'owner_id',
                         'created_at',
@@ -56,7 +56,7 @@ class TagTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'owner_id',
                         'created_at',
@@ -81,7 +81,7 @@ class TagTest extends \TestCase
             ->json('GET', 'api/tags/'.$tag->id)
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'owner_id',
                     'name',
                     'public',
@@ -119,7 +119,10 @@ class TagTest extends \TestCase
                 'public' => 0,
         ], ]);
         // check if it was actually created and if owner_id was set:
-        $this->assertSame(User::first()->id, Tag::find(json_decode($this->getResponse()->content(), true)['data']['id'])->owner_id);
+        $data = json_decode($this->getResponse()->content(), true)['data'];
+        $this->json('GET', $data['url'])
+            ->assertResponseOk();
+        $this->assertSame(User::first()->id, $data['owner_id']);
 
         // invalid name:
         $this->json('POST', 'api/tags', [
@@ -213,7 +216,7 @@ class TagTest extends \TestCase
             ], ])
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'public',
                     'owner_id',
                     'name',
@@ -290,7 +293,7 @@ class TagTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'access_level',
                         'created_at',

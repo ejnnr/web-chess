@@ -19,6 +19,6 @@ class TagSharedPresenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new TagSharedTransformer();
+        return app(TagSharedTransformer::class);
     }
 }

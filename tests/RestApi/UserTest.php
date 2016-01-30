@@ -25,7 +25,7 @@ class UserTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'created_at',
                     ],
@@ -52,7 +52,7 @@ class UserTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'created_at',
                     ],
@@ -66,7 +66,7 @@ class UserTest extends \TestCase
         $this->json('GET', 'api/users/1')
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'created_at',
                 ],
@@ -83,7 +83,7 @@ class UserTest extends \TestCase
             ->json('GET', 'api/users/'.$user->id)
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'email',
                     'created_at',
@@ -109,7 +109,7 @@ class UserTest extends \TestCase
             ->json('GET', 'api/user')
             ->seeJsonstructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'email',
                     'created_at',
@@ -131,7 +131,7 @@ class UserTest extends \TestCase
             ])
             ->seeJsonstructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'email',
                     'created_at',
@@ -152,7 +152,7 @@ class UserTest extends \TestCase
             ], ])
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'email',
                     'created_at',
@@ -162,8 +162,8 @@ class UserTest extends \TestCase
         $this->assertResponseStatus(201);
 
         // check if it was actually created:
-        $this->assertSame('test_user_1', Entities\User::findOrFail(json_decode($this->getResponse()->content(), true)['data']['id'])
-            ->name);
+        $this->json('GET', json_decode($this->getResponse()->content(), true)['data']['url'])
+            ->assertResponseOk();
 
         // check name uniqueness:
         $this->json('POST', 'api/users', [
@@ -238,13 +238,7 @@ class UserTest extends \TestCase
 
         // valid:
 
-        $this->json('POST', 'api/users', [
-            'data' => [
-                'name'     => 'test_user_1',
-                'email'    => 'test_user_1@example.org',
-                'password' => 'password',
-            ], ]);
-        $userId = json_decode($this->getResponse()->content(), true)['data']['id'];
+        $userId = factory(User::class)->create()->id;
         $this->actingAs(Entities\User::findOrFail($userId))
             ->json('DELETE', 'api/users/'.$userId);
         $this->assertResponseStatus(204);
@@ -295,7 +289,7 @@ class UserTest extends \TestCase
             ], ])
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'name',
                     'email',
                     'created_at',

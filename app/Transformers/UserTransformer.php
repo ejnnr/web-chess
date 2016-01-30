@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use App\Entities\User;
+use App\Services\ResourceUrl;
 
 /**
  * Class UserTransformer.
@@ -20,6 +21,11 @@ class UserTransformer extends TransformerAbstract
         'games',
     ];
 
+    public function __construct(ResourceUrl $urlGen)
+    {
+        $this->urlGen = $urlGen;
+    }
+
     /**
      * Transform the User entity.
      *
@@ -30,7 +36,7 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $model)
     {
         return array_filter([
-            'id'         => isset($model->id)         ? (int) $model->id                      : null,
+            'url'        => $this->urlGen->generate($model),
             'name'       => isset($model->name)       ? $model->name                          : null,
             'email'      => isset($model->email)      ? $model->email                         : null,
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,

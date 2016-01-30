@@ -19,6 +19,6 @@ class GameSharedPresenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new GameSharedTransformer();
+        return app(GameSharedTransformer::class);
     }
 }

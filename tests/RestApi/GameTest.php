@@ -28,7 +28,7 @@ class GameTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'owner_id',
                         'created_at',
                     ],
@@ -55,7 +55,7 @@ class GameTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'owner_id',
                         'created_at',
                     ],
@@ -79,7 +79,7 @@ class GameTest extends \TestCase
             ->json('GET', 'api/games/'.$game->id)
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'owner_id',
                     'jcf' => [
                         'meta',
@@ -125,7 +125,10 @@ class GameTest extends \TestCase
                 'public' => 0,
         ], ]);
         // check if it was actually created and if owner_id was set:
-        $this->assertSame(User::first()->id, Game::find(json_decode($this->getResponse()->content(), true)['data']['id'])->owner_id);
+        $data = json_decode($this->getResponse()->content(), true)['data'];
+        $this->json('GET', $data['url'])
+            ->assertResponseOk();
+        $this->assertSame(User::first()->id, $data['owner_id']);
 
         // invalid JCF:
         $this->json('POST', 'api/games', [
@@ -214,7 +217,7 @@ class GameTest extends \TestCase
             ], ])
             ->seeJsonStructure([
                 'data' => [
-                    'id',
+                    'url',
                     'public',
                     'owner_id',
                     'jcf',
@@ -299,7 +302,7 @@ class GameTest extends \TestCase
                 ],
                 'data' => [
                     0 => [
-                        'id',
+                        'url',
                         'name',
                         'access_level',
                         'created_at',

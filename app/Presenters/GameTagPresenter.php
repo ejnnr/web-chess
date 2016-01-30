@@ -16,6 +16,6 @@ class GameTagPresenter extends ExtendedFractalPresenter
      */
     public function getTransformer()
     {
-        return new GameTagTransformer();
+        return app(GameTagTransformer::class);
     }
 }

@@ -17,6 +17,6 @@ class GameSummaryPresenter extends FractalPresenter
      */
     public function getTransformer()
     {
-        return new GameSummaryTransformer();
+        return app(GameSummaryTransformer::class);
     }
 }
