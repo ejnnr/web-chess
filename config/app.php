@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'url' => 'http://web-chess.localhost.com',
+    'url' => env('BASE_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
