@@ -43,4 +43,8 @@ Route::group([
     Route::get('games/{games}/shared_with', 'GameSharedController@index');
     Route::post('games/{games}/shared_with', 'GameSharedController@store');
     Route::delete('games/{games}/shared_with/{users}', 'GameSharedController@destroy');
+
+    Route::get('tags/{tags}/shared_with', 'TagSharedController@index');
+    Route::post('tags/{tags}/shared_with', 'TagSharedController@store');
+    Route::delete('tags/{tags}/shared_with/{users}', 'TagSharedController@destroy');
 });
