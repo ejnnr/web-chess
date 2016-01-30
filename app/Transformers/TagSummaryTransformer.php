@@ -28,7 +28,7 @@ class TagSummaryTransformer extends TransformerAbstract
         return array_filter([
             'url'        => $this->urlGen->generate($model),
             'name'       => isset($model->name)       ? $model->name                          : null,
-            'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
+            'owner_url'  => $this->urlGen->generate($model->owner),
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
         ]);
     }

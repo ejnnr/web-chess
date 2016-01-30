@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Config;
 use App\Entities\Game;
 use App\Entities\User;
 use App\Chess\BCFGame;
@@ -29,7 +30,7 @@ class GameTest extends \TestCase
                 'data' => [
                     0 => [
                         'url',
-                        'owner_id',
+                        'owner_url',
                         'created_at',
                     ],
                 ],
@@ -56,7 +57,7 @@ class GameTest extends \TestCase
                 'data' => [
                     0 => [
                         'url',
-                        'owner_id',
+                        'owner_url',
                         'created_at',
                     ],
                 ],
@@ -80,7 +81,7 @@ class GameTest extends \TestCase
             ->seeJsonStructure([
                 'data' => [
                     'url',
-                    'owner_id',
+                    'owner_url',
                     'jcf' => [
                         'meta',
                         'moves' => [
@@ -128,7 +129,7 @@ class GameTest extends \TestCase
         $data = json_decode($this->getResponse()->content(), true)['data'];
         $this->json('GET', $data['url'])
             ->assertResponseOk();
-        $this->assertSame(User::first()->id, $data['owner_id']);
+        $this->assertSame(Config::get('app.url').'/api/users/'.User::first()->id, $data['owner_url']);
 
         // invalid JCF:
         $this->json('POST', 'api/games', [
@@ -219,7 +220,7 @@ class GameTest extends \TestCase
                 'data' => [
                     'url',
                     'public',
-                    'owner_id',
+                    'owner_url',
                     'jcf',
                     'created_at',
                     'updated_at',

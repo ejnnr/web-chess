@@ -41,7 +41,7 @@ class TagTransformer extends TransformerAbstract
             'url'        => $this->urlGen->generate($model),
             'name'       => isset($model->name)       ? $model->name                          : null,
             'public'     => isset($model->public)     ? (int) $model->public                        : null,
-            'owner_id'   => isset($model->owner_id)   ? $model->owner_id                      : null,
+            'owner_url'  => $this->urlGen->generate($model->owner),
             'created_at' => isset($model->created_at) ? $model->created_at->toIso8601String() : null,
             'updated_at' => isset($model->updated_at) ? $model->updated_at->toIso8601String() : null,
         ], function ($v) {

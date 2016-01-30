@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Config;
 use App\Entities\Tag;
 use App\Entities\User;
 
@@ -30,7 +31,7 @@ class TagTest extends \TestCase
                     0 => [
                         'url',
                         'name',
-                        'owner_id',
+                        'owner_url',
                         'created_at',
                     ],
                 ],
@@ -58,7 +59,7 @@ class TagTest extends \TestCase
                     0 => [
                         'url',
                         'name',
-                        'owner_id',
+                        'owner_url',
                         'created_at',
                     ],
                 ],
@@ -82,7 +83,7 @@ class TagTest extends \TestCase
             ->seeJsonStructure([
                 'data' => [
                     'url',
-                    'owner_id',
+                    'owner_url',
                     'name',
                     'public',
                     'created_at',
@@ -122,7 +123,7 @@ class TagTest extends \TestCase
         $data = json_decode($this->getResponse()->content(), true)['data'];
         $this->json('GET', $data['url'])
             ->assertResponseOk();
-        $this->assertSame(User::first()->id, $data['owner_id']);
+        $this->assertSame(Config::get('app.url').'/api/users/'.User::first()->id, $data['owner_url']);
 
         // invalid name:
         $this->json('POST', 'api/tags', [
@@ -218,7 +219,7 @@ class TagTest extends \TestCase
                 'data' => [
                     'url',
                     'public',
-                    'owner_id',
+                    'owner_url',
                     'name',
                     'created_at',
                     'updated_at',
