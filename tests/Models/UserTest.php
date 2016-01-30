@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Entities\User;
+use App\Entities\Game;
+use App\Chess\BCFGame;
+use App\Chess\Move;
 
 class UserTest extends TestCase
 {
@@ -34,5 +38,13 @@ class UserTest extends TestCase
         $user = App\Entities\User::first();
         $user->tags()->create(['name' => 'some random tag', 'owner_id' => $user->id, 'public' => 0]);
         $this->assertInstanceOf(App\Entities\Tag::class, $user->tags()->first());
+    }
+
+    public function testGetGames()
+    {
+        $user = User::first();
+        $jcf = new BCFGame();
+        $user->games()->create(['jcf' => $jcf->doMove(new Move('e2', 'e4'))->getJCF(), 'owner_id' => $user->id, 'public' => 0]);
+        $this->assertInstanceOf(Game::class, $user->games()->first());
     }
 }

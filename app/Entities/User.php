@@ -57,6 +57,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function games()
     {
-        return $this->hasMany('App\Entities\Tag', 'owner_id');
+        return $this->hasMany('App\Entities\Game', 'owner_id');
     }
 }
