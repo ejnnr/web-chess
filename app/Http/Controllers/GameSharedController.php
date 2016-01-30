@@ -56,4 +56,13 @@ class GameSharedController extends Controller
 
         return $game->share((int) $request->json('data')['user_id'], $request->json('data')['access_level']);
     }
+
+    public function destroy($gameId, $userId)
+    {
+        $game = $this->games->skipPresenter()->find($gameId);
+        if ($game->public < 3) {
+            $this->authorize('update', $game); // note that unsharing a game is an update of that game, not destroying it
+        }
+        $game->sharedWith()->detach($userId);
+    }
 }

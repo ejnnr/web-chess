@@ -351,4 +351,18 @@ class GameTest extends \TestCase
         $this->assertEquals([User::first()->id], $game->sharedWith->modelKeys());
         $this->assertEquals(2, $game->sharedWith()->first()->pivot->access_level);
     }
+
+    public function testUnshare()
+    {
+        $user = factory(User::class)->create();
+        $user2 = User::first();
+        $game = factory(Game::class)->create(['public' => 0, 'owner_id' => $user->id]);
+        $game->share(User::first()->id, 3);
+
+        $this->actingAs($user)
+            ->json('DELETE', 'api/games/'.$game->id.'/shared_with/'.$user2->id)
+            ->assertResponseOk();
+        $game->load('sharedWith');
+        $this->assertEquals([], $game->sharedWith->modelKeys());
+    }
 }
