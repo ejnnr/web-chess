@@ -40,13 +40,20 @@ class GameSharedController extends Controller
     public function index($gameId)
     {
         $game = $this->games->with(['sharedWith'])->skipPresenter()->find($gameId);
-        if (!Auth::check()) {
-            if (!$game->public) {
-                abort(401);
-            }
-        } else {
+        if (!$game->public) {
             $this->authorize('show', $game);
         }
         return app($this->summaryPresenter)->present($game->sharedWith()->paginate());
+    }
+
+    public function store(Request $request, $gameId)
+    {
+        $game = $this->games->skipPresenter()->find($gameId);
+
+        if ($game->public < 3) {
+            $this->authorize('update', $game);
+        }
+
+        return $game->share((int) $request->json('data')['user_id'], $request->json('data')['access_level']);
     }
 }

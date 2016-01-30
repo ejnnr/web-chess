@@ -312,4 +312,43 @@ class GameTest extends \TestCase
         $this->assertRegExp('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/',
             json_decode($this->getResponse()->content(), true)['data'][0]['attached_at']); // assert that attached_at is ISO 8601
     }
+
+    public function testShare()
+    {
+        $user = factory(User::class)->create();
+        $game = Game::create(['owner_id' => $user->id, 'public' => 0, 'jcf' => app(BCFGame::class)->doMove(new Move('e2', 'e4'))->getJCF()]);
+
+        // unauthenticated:
+        $this->json('POST', 'api/games/'.$game->id.'/shared_with', [
+            'data' => [
+                'user_id' => 20,
+                'access_level' => 3,
+            ]])
+            ->assertResponseStatus(401);
+        $game->load('sharedWith');
+        $this->assertEquals([], $game->sharedWith->modelKeys());
+
+        $this->actingAs(User::first())
+            ->json('POST', 'api/games/'.$game->id.'/shared_with', [
+                'data' => [
+                    'user_id' => User::first()->id,
+                    'access_level' => 2,
+                ]
+            ])
+            ->assertResponseStatus(403);
+        $game->load('sharedWith');
+        $this->assertEquals([], $game->sharedWith->modelKeys());
+
+        $this->actingAs($user)
+            ->json('POST', 'api/games/'.$game->id.'/shared_with', [
+                'data' => [
+                    'user_id' => User::first()->id,
+                    'access_level' => 2,
+                ]
+            ])
+            ->assertResponseOk();
+        $game->load('sharedWith');
+        $this->assertEquals([User::first()->id], $game->sharedWith->modelKeys());
+        $this->assertEquals(2, $game->sharedWith()->first()->pivot->access_level);
+    }
 }

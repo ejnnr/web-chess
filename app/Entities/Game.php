@@ -33,7 +33,7 @@ class Game extends Model implements Presentable
 
     public function share($userId, $accessLevel)
     {
-        $this->sharedWith()->attach($userId, ['access_level' => $accessLevel]);
+        return $this->sharedWith()->attach($userId, ['access_level' => $accessLevel]);
     }
 
     public function setGameAttribute(BCFGame $game)
