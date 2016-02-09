@@ -4,6 +4,10 @@
   "license": "MIT",
   "dependencies": {
   },
+  "scripts": {
+      "jspm": "jspm",
+      "gulp": "gulp"
+  },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",
     "del": "^2.2.0",
