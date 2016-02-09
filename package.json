@@ -19,14 +19,20 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.10.0",
     "jspm": "^0.16.25",
-    "typescript": "^1.7.3"
+    "typescript": "^1.7.3",
+    "angular2": "2.0.0-beta.3",
+    "es6-promise": "3.0.2",
+    "es6-shim": "0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.11"
   },
   "jspm": {
     "directories": {
       "baseURL": "public"
     },
     "dependencies": {
-      "angular2": "npm:angular2@2.0.0-beta.2",
+      "angular2": "npm:angular2@2.0.0-beta.3",
       "chessground": "github:ornicar/chessground@^3.5.0",
       "es6-shim": "github:es-shims/es6-shim@0.33.3",
       "merge": "github:jupiter24/js.merge@master",
@@ -35,7 +41,7 @@
       "ornicar/mithril.js": "github:ornicar/mithril.js@^1.0.0",
       "reflect-metadata": "npm:reflect-metadata@0.1.2",
       "rxjs": "npm:rxjs@5.0.0-beta.0",
-      "zone.js": "npm:zone.js@0.5.10"
+      "zone.js": "npm:zone.js@0.5.11"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
