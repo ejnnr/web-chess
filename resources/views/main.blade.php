@@ -7,25 +7,19 @@
             window.Polymer = window.Polymer || {};
             window.Polymer.dom = 'shadow';
         </script>
-        <script src="lib/angular2/bundles/angular2-polyfills.js"></script>
-        <script src="lib/systemjs/dist/system.src.js"></script>
-        <script src="lib/rxjs/bundles/Rx.js"></script>
-        <script src="lib/angular2/bundles/angular2.dev.js"></script>
+        <script src="lib/angular2-polyfills.js"></script>
+        <script src="jspm_packages/system.js"></script>
+        <script src="config.js"></script>
         <script src="lib/webcomponentsjs/webcomponents-lite.min.js"></script>
 
         <script>
-            System.config({
-                packages: {        
-                    js: {
-                        format: 'register',
-                        defaultExtension: 'js'
-                    }
-                }
-            });
             System.import('js/boot')
                 .then(null, console.error.bind(console));
         </script>
         <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/base.css">
+        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/desktop.css">
+        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/theme.css">
 
         <link rel="import" href="lib/paper-button/paper-button.html">
         <link rel="import" href="lib/paper-toolbar/paper-toolbar.html">

@@ -3,21 +3,39 @@
   "version": "0.0.0",
   "license": "MIT",
   "dependencies": {
-    "angular2": "2.0.0-beta.1",
-    "systemjs": "0.19.15",
-    "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.3",
-    "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.0",
-    "zone.js": "0.5.10"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2",
     "gulp-changed": "^1.3.0",
     "gulp-sass": "^2.1.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.10.0",
+    "jspm": "^0.16.25",
     "typescript": "^1.7.3"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "public"
+    },
+    "dependencies": {
+      "angular2": "npm:angular2@2.0.0-beta.2",
+      "chessground": "github:ornicar/chessground@^3.5.0",
+      "es6-shim": "github:es-shims/es6-shim@0.33.3",
+      "merge": "npm:merge@^1.2.0",
+      "mithril": "github:ornicar/mithril.js@^1.0.0",
+      "ornicar/chessground": "github:ornicar/chessground@^3.5.0",
+      "ornicar/mithril.js": "github:ornicar/mithril.js@^1.0.0",
+      "reflect-metadata": "npm:reflect-metadata@0.1.2",
+      "rxjs": "npm:rxjs@5.0.0-beta.0",
+      "zone.js": "npm:zone.js@0.5.10"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
   }
 }

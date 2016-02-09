@@ -7,5 +7,5 @@
     <paper-icon-button icon="add" (click)="newTab(); paperTabs.notifyResize()"></paper-icon-button>
 </paper-tabs>
 <iron-pages #ironPages>
-    <div *ngFor="#tab of getTabs()" [innerHtml]="getContent(tab)"></div>
+    <tab-content *ngFor="#tab of getTabs()" [tab]="tab"></tab-content>
 </iron-pages>

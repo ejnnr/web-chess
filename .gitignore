@@ -7,6 +7,5 @@ Thumbs.db
 /vendor
 /node_modules
 /bower_components
-/public/lib/*
 .env
 resources/assets/vendor

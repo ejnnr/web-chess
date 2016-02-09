@@ -28,7 +28,7 @@ export class TabsComponent
     newTab() {
         this._tabListService.addTab({
             "name": "Tab " + ++this._counter,
-            "layout": "greeter"
+            "layoutName": "game"
         });
     }
 }

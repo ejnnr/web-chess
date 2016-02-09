@@ -1,15 +1,16 @@
 import {Injectable} from 'angular2/core';
 import {Tab} from '../interfaces/tab';
+import {Layout} from '../interfaces/layout';
+import {allLayouts} from '../layouts/list';
 
 @Injectable()
 export class TabContentService
 {
-    getContent(tab: Tab): string {
-        switch (tab.layout) {
-            case 'greeter':
-                return 'Hello World!';
-            default:
-                return 'There has been an internal error.';
+    getLayout(tab: Tab): Layout {
+        if (tab.layoutName in allLayouts) {
+            return allLayouts[tab.layoutName];
+        } else {
+            throw "unrecognized layout name: " + tab.layoutName;
         }
     }
 }

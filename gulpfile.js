@@ -4,10 +4,18 @@ const typescript = require('gulp-typescript');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const changed = require('gulp-changed');
+const babel = require('gulp-babel');
 const tscConfig = require('./tsconfig.json');
 
+var vendor = [
+    'node_modules/angular2/bundles/*',
+    '!node_modules/angular2/bundles',
+    'bower_components/**',
+    '!bower_components'
+]
+
 gulp.task('clean', function () {
-    return del(['public/**', '!public', '!public/index.php']);
+    return del(['public/**', '!public', '!public/index.php', '!public/.htacces', '!public/.gitignore']);
 });
 
 // Typescript compilation
@@ -57,10 +65,21 @@ gulp.task('copy:images', function () {
 
 gulp.task('copy:libraries', function () {
     return gulp
-        .src(['node_modules/**', 'bower_components/**', '!node_modules', '!bower_components'])
+        .src(vendor)
         .pipe(changed('public/lib'))
         .pipe(gulp.dest('public/lib'));
 });
 
-gulp.task('build', ['compile:typescript', 'compile:sass', 'compile:componentsass', 'copy:images', 'copy:componenthtml', 'copy:libraries']);
+gulp.task('compile:libraries', function () {
+    return gulp
+        .src(['chess-es6/src'])
+        .pipe(changed('public/lib'))
+        .pipe(sourcemaps.init())
+        .pipe(babel())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('public/lib'));
+});
+
+gulp.task('nolib', ['compile:typescript', 'compile:sass', 'compile:componentsass', 'copy:images', 'copy:componenthtml']);
+gulp.task('build', ['nolib', 'copy:libraries', 'compile:libraries']);
 gulp.task('default', ['build']);

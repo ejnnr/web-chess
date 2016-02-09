@@ -1,5 +1,10 @@
 @import '../../../sass/themes/default';
 
+:host {
+    display: block;
+    height: calc(100% - 64px);
+}
+
 paper-tabs {
     background-color: $primary-color;
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
@@ -13,6 +18,10 @@ paper-icon-button[icon="close"] {
     right: 0;
 }
 
-iron-pages > div {
-    margin-top: 10px;
+iron-pages {
+    height: calc(100% - 48px);
+}
+
+tab-content {
+    height: 100%;
 }

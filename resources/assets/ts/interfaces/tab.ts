@@ -1,5 +1,6 @@
-export interface Tab {
+export interface Tab
+{
     id?: number;
     name: string;
-    layout: string;
+    layoutName: string;
 }
