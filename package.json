@@ -29,7 +29,7 @@
       "angular2": "npm:angular2@2.0.0-beta.2",
       "chessground": "github:ornicar/chessground@^3.5.0",
       "es6-shim": "github:es-shims/es6-shim@0.33.3",
-      "merge": "npm:merge@^1.2.0",
+      "merge": "github:jupiter24/js.merge@master",
       "mithril": "github:ornicar/mithril.js@^1.0.0",
       "ornicar/chessground": "github:ornicar/chessground@^3.5.0",
       "ornicar/mithril.js": "github:ornicar/mithril.js@^1.0.0",
