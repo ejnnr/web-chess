@@ -25,8 +25,9 @@ Setting it up on your local machine
 11. run `php artisan migrate` in your project root
 12. install nodejs (https://nodejs.org/)
 13. run `npm install` in your project root
-14. run `npm run jspm install` to install all required front-end libraries
-15. run `npm run gulp` to build everything
+14. run `npm run jspm install` to install all required javascript libraries
+15. run `npm run bower install` to install the needed Polymer elements
+16. run `npm run gulp` to build everything
 
 WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional database tables or change anything else.
 If you commit such a change, please also leave a notice here where you explain, what other people have to do to perform the same changes on their machines.
