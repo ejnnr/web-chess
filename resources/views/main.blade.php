@@ -10,7 +10,7 @@
         <script src="lib/angular2-polyfills.js"></script>
         <script src="jspm_packages/system.js"></script>
         <script src="config.js"></script>
-        <script src="lib/webcomponentsjs/webcomponents-lite.min.js"></script>
+        <script src="lib/webcomponentsjs/webcomponents.min.js"></script>
 
         <script>
             System.import('js/boot')
