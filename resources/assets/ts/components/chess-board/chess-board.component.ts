@@ -1,4 +1,4 @@
-import {Component, ViewChild} from 'angular2/core';
+import {ChangeDetectorRef, Component, ViewChild} from 'angular2/core';
 import Chess from 'lib/chess-es6/src/chess';
 import Flags from 'lib/chess-es6/src/flags';
 import Move from 'lib/chess-es6/src/move';
@@ -30,7 +30,7 @@ export class ChessBoardComponent
         }
     };
 
-    constructor() {
+    constructor(private _cdRef: ChangeDetectorRef) {
         this.CHESS_COLOR_TO_GROUND_COLOR[Color.WHITE] = 'white';
         this.CHESS_COLOR_TO_GROUND_COLOR[Color.BLACK] = 'black';
 
@@ -41,11 +41,12 @@ export class ChessBoardComponent
         this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.ROOK] = 'rook';
         this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.QUEEN] = 'queen';
         this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.KING] = 'king';
+
+        this.chess = new Chess();
     }
 
     ngAfterViewInit() {
         this.ground = Chessground(this.chessground.nativeElement, this.chessgroundOptions);
-        this.chess = new Chess();
         this._updateBoard();
     }
 
@@ -54,6 +55,7 @@ export class ChessBoardComponent
         this._handleEnPassant(moveContext.move);
         this._handleCastling(moveContext.move);
         this._updateBoard();
+        this._cdRef.detectChanges();
     }
 
     rotateBoard() {
@@ -81,6 +83,8 @@ export class ChessBoardComponent
     getScoresheet() {
         if (this.chess) {
             return this.chess.toPgn();
+        } else {
+            return "";
         }
     }
 
