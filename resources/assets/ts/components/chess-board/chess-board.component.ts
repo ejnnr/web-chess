@@ -48,6 +48,7 @@ export class ChessBoardComponent
     ngAfterViewInit() {
         this.ground = Chessground(this.chessground.nativeElement, this.chessgroundOptions);
         this._updateBoard();
+        this.ground.dump().bounds.clear();
     }
 
     onBoardMove(orig, dest, capturedPiece) {
