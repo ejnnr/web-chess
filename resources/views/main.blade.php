@@ -13,13 +13,13 @@
         <script src="lib/webcomponentsjs/webcomponents.min.js"></script>
 
         <script>
-            System.import('js/boot')
+            System.import('assets/boot')
                 .then(null, console.error.bind(console));
         </script>
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
-        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/base.css">
-        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/desktop.css">
-        <link rel="stylesheet" type="text/css" href="js/components/chess-board/assets/theme.css">
+        <link rel="stylesheet" type="text/css" href="assets/styles/reset.css">
+        <link rel="stylesheet" type="text/css" href="assets/styles/chess-board/base.css">
+        <link rel="stylesheet" type="text/css" href="assets/styles/chess-board/desktop.css">
+        <link rel="stylesheet" type="text/css" href="assets/styles/chess-board/theme.css">
 
         <link rel="import" href="lib/paper-button/paper-button.html">
         <link rel="import" href="lib/paper-toolbar/paper-toolbar.html">

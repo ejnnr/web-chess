@@ -15,52 +15,49 @@ var vendor = [
 ]
 
 gulp.task('clean', function () {
-    return del(['public/**', '!public', '!public/index.php', '!public/.htacces', '!public/.gitignore']);
+    return del(['public/**', '!public', '!public/jspm_packages', '!public/config.js', '!public/index.php', '!public/.htacces', '!public/.gitignore']);
 });
 
 // Typescript compilation
 gulp.task('compile:typescript', function () {
     return gulp
-        .src('resources/assets/ts/**/*.ts')
-        .pipe(changed('public/js', {extension: '.js'}))
+        .src('resources/assets/**/*.ts')
+        .pipe(changed('public/assets', {extension: '.js'}))
         .pipe(sourcemaps.init())
         .pipe(typescript(tscConfig.compilerOptions))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/js'));
+        .pipe(gulp.dest('public/assets'));
 });
 
 gulp.task('compile:sass', function () {
     return gulp
-        .src('resources/assets/sass/**/*.scss')
-        .pipe(changed('public/css', {extension: '.css'}))
+        .src('resources/assets/**/*.scss')
+        .pipe(changed('public/assets', {extension: '.css'}))
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/css'));
+        .pipe(gulp.dest('public/assets'));
 });
 
-gulp.task('compile:componentsass', function () {
+gulp.task('copy:css', function () {
     return gulp
-        .src('resources/assets/ts/components/**/*.scss')
-        .pipe(changed('public/js/components', {extension: '.css'}))
-        .pipe(sourcemaps.init())
-        .pipe(sass())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/js/components'));
+        .src('resources/assets/**/*.css')
+        .pipe(changed('public/assets'))
+        .pipe(gulp.dest('public/assets'));
 });
 
-gulp.task('copy:componenthtml', function () {
+gulp.task('copy:html', function () {
     return gulp
-        .src('resources/assets/ts/components/**/*.html')
-        .pipe(changed('public/js/components'))
-        .pipe(gulp.dest('public/js/components'));
+        .src('resources/assets/**/*.html')
+        .pipe(changed('public/assets'))
+        .pipe(gulp.dest('public/assets'));
 });
 
 gulp.task('copy:images', function () {
     return gulp
-        .src(['resources/assets/img/**', '!resources/assets/img'])
-        .pipe(changed('public/img'))
-        .pipe(gulp.dest('public/img'));
+        .src(['resources/assets/images/**', '!resources/assets/images'])
+        .pipe(changed('public/assets/images'))
+        .pipe(gulp.dest('public/assets/images'));
 });
 
 gulp.task('copy:libraries', function () {
@@ -72,14 +69,14 @@ gulp.task('copy:libraries', function () {
 
 gulp.task('compile:libraries', function () {
     return gulp
-        .src(['chess-es6/src'])
-        .pipe(changed('public/lib'))
+        .src(['chess-es6/src/*.js'])
+        .pipe(changed('public/lib/chess-es6/src'))
         .pipe(sourcemaps.init())
         .pipe(babel())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/lib'));
+        .pipe(gulp.dest('public/lib/chess-es6/src'));
 });
 
-gulp.task('nolib', ['compile:typescript', 'compile:sass', 'compile:componentsass', 'copy:images', 'copy:componenthtml']);
+gulp.task('nolib', ['compile:typescript', 'compile:sass', 'copy:css', 'copy:images', 'copy:html']);
 gulp.task('build', ['nolib', 'copy:libraries', 'compile:libraries']);
 gulp.task('default', ['build']);
