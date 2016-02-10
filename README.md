@@ -11,13 +11,11 @@ A web implementation of a chess database program like SCID.
 Setting it up on your local machine
 ==========================================
 
-You should have Apache, PHP and MySQL installed and running.
-
 0.  Setup Apache, PHP and MySQL if you haven't already
 1.  Make sure you have the xsl php extension enabled
-2.  Clone the repository
+2.  Clone the repository with the `--recursive` flag
 3.  Create a MySQL database for web-chess
-4.  (optional) Create a user called webchess and give it access to the database you just created (you can also use a pre-existing user if you want)
+4.  (optional) Create a new MySQL user and give it access to the database you just created (you can also use a pre-existing user if you want)
 5.  Install composer (http://getcomposer.org)
 6.  run `composer install` in your projects root directory
 7.  make sure apache has writing access to storage/ and vendor/
@@ -26,10 +24,10 @@ You should have Apache, PHP and MySQL installed and running.
 10. run `php artisan migrate:install`
 11. run `php artisan migrate` in your project root
 12. install nodejs (https://nodejs.org/)
-13. run `npm install --global bower` (you might need sudo)
-14. run `npm install --global gulp`
-15. run `bower install` in your project root
-
+13. run `npm install` in your project root
+14. run `npm run jspm install` to install all required javascript libraries
+15. run `npm run bower install` to install the needed Polymer elements
+16. run `npm run gulp` to build everything
 
 WARNING: Since this projects is in an extremely early stage of development, there will often be changes which require you to set up additional database tables or change anything else.
 If you commit such a change, please also leave a notice here where you explain, what other people have to do to perform the same changes on their machines.
@@ -39,8 +37,8 @@ You should also put some kind of note into your commit message.
 The test directory
 ========================
 
-The .gitignore file tells git to ignore everything inside test/ .
-So if you want to test some of the PHP functions in include/, but the frontend to do so isn't implemented yet, please use this directory (of course only if your test file is something temporary, which you are going to delete after performing the test).
+The .gitignore file tells git to ignore everything inside test/.
+However this is NOT were unit tests are supposed to be placed. Use the tests/ directory for that.
 
 UI Concepts
 ==============

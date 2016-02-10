@@ -2,7 +2,9 @@
   "name": "web-chess",
   "version": "0.0.0",
   "homepage": "https://github.com/jupiter24/web-chess",
-  "description": "A web app for storing and analyzing chess games.",
+  "authors": [
+    "jupiter24 <jupiter24@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -12,6 +14,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.4"
+    "polymer": "~1.2.3",
+    "paper-elements": "~1.0.7",
+    "iron-elements": "~1.0.7"
   }
 }
