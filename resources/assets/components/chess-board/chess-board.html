@@ -1,4 +1,13 @@
-<div style="float: left" class="chessground blue cburnett" #chessground [style.width.px]="chessground.scrollHeight"></div>
+<div id="chessgroundContainer" style="float: left">
+    <div class="chessground blue cburnett" #chessground [style.width.px]="chessground.scrollHeight"></div>
+
+    <div id="promotionChoice" *ngIf="_begunPromotion">
+        <div id="promotionRook" [class]="_getFullNotTurnColor()" (click)="_setPromotion('rook')"></div>
+        <div id="promotionBishop" [class]="_getFullNotTurnColor()" (click)="_setPromotion('bishop')"></div>
+        <div id="promotionKnight" [class]="_getFullNotTurnColor()" (click)="_setPromotion('knight')"></div>
+    </div>
+</div>
+
 <div>
     {{getScoresheet()}}
 </div>

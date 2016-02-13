@@ -3,6 +3,7 @@ import Chess from 'lib/chess-es6/src/chess';
 import Flags from 'lib/chess-es6/src/flags';
 import Move from 'lib/chess-es6/src/move';
 import PieceType from 'lib/chess-es6/src/piece_type';
+import Piece from 'lib/chess-es6/src/piece';
 import Color from 'lib/chess-es6/src/color';
 import Chessground from 'chessground';
 
@@ -20,6 +21,9 @@ export class ChessBoardComponent
     chess;
     CHESS_COLOR_TO_GROUND_COLOR = {};
     CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE = {};
+    GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE = {};
+
+    private _begunPromotion = false;
 
     chessgroundOptions = {
         movable: {
@@ -42,6 +46,13 @@ export class ChessBoardComponent
         this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.QUEEN] = 'queen';
         this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.KING] = 'king';
 
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['pawn'] = PieceType.PAWN;
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['knight'] = PieceType.KNIGHT;
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['bishop'] = PieceType.BISHOP;
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['rook'] = PieceType.ROOK;
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['queen'] = PieceType.QUEEN;
+        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['king'] = PieceType.KING;
+
         this.chess = new Chess();
     }
 
@@ -52,9 +63,11 @@ export class ChessBoardComponent
     }
 
     onBoardMove(orig, dest, capturedPiece) {
+        this._begunPromotion = false;
         var moveContext = this.chess.makeMoveFromAlgebraic(orig, dest);
         this._handleEnPassant(moveContext.move);
         this._handleCastling(moveContext.move);
+        this._handlePromotion(moveContext.move);
         this._updateBoard();
         this._cdRef.detectChanges();
     }
@@ -88,7 +101,6 @@ export class ChessBoardComponent
             return "";
         }
     }
-
 
     private _updatePosition() {
         var array = {};
@@ -140,7 +152,6 @@ export class ChessBoardComponent
         }
     }
 
-
     private _whitesTurn(): boolean {
         return this.chess.whoseTurn() == 'w';
     }
@@ -157,6 +168,45 @@ export class ChessBoardComponent
             this.ground.setPieces(array);
         }
 
+    }
+
+    private _handlePromotion(move) {
+        // check if move is a promotion:
+        if (move.flags & Flags.PROMOTION) {
+            var array = {};
+            this._begunPromotion = true; // to render the promotion choice visible
+            array[this._squareToAlgebraic(move.to)] = {
+                color: this._getFullNotTurnColor(),
+                role: "queen" // queen is default
+            };
+            this.ground.setPieces(array);
+        }
+    }
+
+    private _setPromotion(pieceType) {
+        pieceType = this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE[pieceType];
+        if (pieceType === PieceType.QUEEN) {
+            this._begunPromotion = false;
+            // queen is the default and has already been used automatically
+            return;
+        }
+        
+        var oldMove = this.chess.currentGame.currentVariation.undoCurrentMove();
+
+        // redo the altered move:
+        this.chess.makeMoveFromAlgebraic(this._squareToAlgebraic(oldMove.from), this._squareToAlgebraic(oldMove.to), pieceType);
+
+        var array = {};
+        array[this._squareToAlgebraic(oldMove.to)] = {
+            color: this._getFullNotTurnColor(),
+            role: this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[pieceType]
+        };
+        this.ground.setPieces(array);
+
+        // update legal moves (might have changed because the new piece gives check/...
+        this._updateBoard();
+
+        this._begunPromotion = false;
     }
 
     private _handleCastling(move) {

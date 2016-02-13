@@ -6,3 +6,48 @@
 .chessground {
     height: 100%;
 }
+
+#chessgroundContainer {
+    height: 100%;
+    position: relative;
+}
+
+#promotionChoice {
+    width: 50px;
+    position: absolute;
+    right: -50px;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+
+    div {
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+    }
+
+    #promotionQueen.white {
+        background-image: url('assets/images/chess-board/pieces/cburnett/wQ.svg');
+    }
+    #promotionRook.white {
+        background-image: url('assets/images/chess-board/pieces/cburnett/wR.svg');
+    }
+    #promotionBishop.white {
+        background-image: url('assets/images/chess-board/pieces/cburnett/wB.svg');
+    }
+    #promotionKnight.white {
+        background-image: url('assets/images/chess-board/pieces/cburnett/wN.svg');
+    }
+    #promotionQueen.black {
+        background-image: url('assets/images/chess-board/pieces/cburnett/bQ.svg');
+    }
+    #promotionRook.black {
+        background-image: url('assets/images/chess-board/pieces/cburnett/bR.svg');
+    }
+    #promotionBishop.black {
+        background-image: url('assets/images/chess-board/pieces/cburnett/bB.svg');
+    }
+    #promotionKnight.black {
+        background-image: url('assets/images/chess-board/pieces/cburnett/bN.svg');
+    }
+}
