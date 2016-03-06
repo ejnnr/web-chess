@@ -1,4 +1,5 @@
 import {ChangeDetectorRef, Component, ViewChild} from 'angular2/core';
+import {ChessService} from '../../services/chess.service';
 import Chess from 'lib/chess-es6/src/chess';
 import Flags from 'lib/chess-es6/src/flags';
 import Move from 'lib/chess-es6/src/move';
@@ -18,10 +19,6 @@ export class ChessBoardComponent
     chessground;
 
     ground;
-    chess;
-    CHESS_COLOR_TO_GROUND_COLOR = {};
-    CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE = {};
-    GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE = {};
 
     private _begunPromotion = false;
 
@@ -34,26 +31,7 @@ export class ChessBoardComponent
         }
     };
 
-    constructor(private _cdRef: ChangeDetectorRef) {
-        this.CHESS_COLOR_TO_GROUND_COLOR[Color.WHITE] = 'white';
-        this.CHESS_COLOR_TO_GROUND_COLOR[Color.BLACK] = 'black';
-
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.NONE] = null;
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.PAWN] = 'pawn';
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.KNIGHT] = 'knight';
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.BISHOP] = 'bishop';
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.ROOK] = 'rook';
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.QUEEN] = 'queen';
-        this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[PieceType.KING] = 'king';
-
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['pawn'] = PieceType.PAWN;
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['knight'] = PieceType.KNIGHT;
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['bishop'] = PieceType.BISHOP;
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['rook'] = PieceType.ROOK;
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['queen'] = PieceType.QUEEN;
-        this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE['king'] = PieceType.KING;
-
-        this.chess = new Chess();
+    constructor(private _cdRef: ChangeDetectorRef, private _chessService: ChessService) {
     }
 
     ngAfterViewInit() {
@@ -64,7 +42,7 @@ export class ChessBoardComponent
 
     onBoardMove(orig, dest, capturedPiece) {
         this._begunPromotion = false;
-        var moveContext = this.chess.makeMoveFromAlgebraic(orig, dest);
+        var moveContext = this._chessService.chess.makeMoveFromAlgebraic(orig, dest);
         this._handleEnPassant(moveContext.move);
         this._handleCastling(moveContext.move);
         this._handlePromotion(moveContext.move);
@@ -77,7 +55,7 @@ export class ChessBoardComponent
     }
 
     back() {
-        this.chess.prev();
+        this._chessService.chess.prev();
         this._updatePosition();
         this._updateBoard();
         this.ground.set({
@@ -86,7 +64,7 @@ export class ChessBoardComponent
     }
 
     forward() {
-        this.chess.next();
+        this._chessService.chess.next();
         this._updatePosition();
         this._updateBoard();
         this.ground.set({
@@ -95,8 +73,8 @@ export class ChessBoardComponent
     }
 
     getScoresheet() {
-        if (this.chess) {
-            return this.chess.toPgn();
+        if (this._chessService.chess) {
+            return this._chessService.chess.toPgn();
         } else {
             return "";
         }
@@ -105,65 +83,19 @@ export class ChessBoardComponent
     private _updatePosition() {
         var array = {};
         for (var square in Move.SQUARES) {
-            array[square] = this._chessPiece2groundPiece(this.chess.get(square));
+            array[square] = this._chessService.chessPiece2groundPiece(this._chessService.chess.get(square));
         }
         this.ground.setPieces(array);
-    }
-
-    private _chessPiece2groundPiece(chessPiece) {
-        if (chessPiece.type === PieceType.NONE) {
-            return null;
-        }
-        return {
-            color: this.CHESS_COLOR_TO_GROUND_COLOR[chessPiece.color],
-            role: this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[chessPiece.type]
-        };
-    }
-
-    private _getDests() {
-        var dests = this.chess.moves({onlyAlgebraicSquares: true});
-        var splitDests = dests.map((move) => { return move.split('-'); });
-        var ret = {};
-        var move;
-
-        for (move of splitDests) {
-            if (!ret[move[0]]) {
-                ret[move[0]] = [move[1]];
-            } else {
-                ret[move[0]].push(move[1]);
-            }
-        }
-        return ret;
-    }
-
-    private _getFullTurnColor() {
-        if (this.chess.whoseTurn() == Color.WHITE) {
-            return 'white';
-        } else {
-            return 'black';
-        }
-    }
-
-    private _getFullNotTurnColor() {
-        if (this.chess.whoseTurn() == Color.BLACK) {
-            return 'white';
-        } else {
-            return 'black';
-        }
-    }
-
-    private _whitesTurn(): boolean {
-        return this.chess.whoseTurn() == 'w';
     }
 
     private _handleEnPassant(move) {
         // check if move is an en passant capture:
         if (move.flags & Flags.EP_CAPTURE) {
             var array = new Array();
-            if (this._whitesTurn()) {
-                array[this._squareToAlgebraic(move.to - 16)] = null;
+            if (this._chessService.whitesTurn()) {
+                array[this._chessService.squareToAlgebraic(move.to - 16)] = null;
             } else {
-                array[this._squareToAlgebraic(move.to + 16)] = null;
+                array[this._chessService.squareToAlgebraic(move.to + 16)] = null;
             }
             this.ground.setPieces(array);
         }
@@ -175,8 +107,8 @@ export class ChessBoardComponent
         if (move.flags & Flags.PROMOTION) {
             var array = {};
             this._begunPromotion = true; // to render the promotion choice visible
-            array[this._squareToAlgebraic(move.to)] = {
-                color: this._getFullNotTurnColor(),
+            array[this._chessService.squareToAlgebraic(move.to)] = {
+                color: this._chessService.getFullNotTurnColor(),
                 role: "queen" // queen is default
             };
             this.ground.setPieces(array);
@@ -184,22 +116,22 @@ export class ChessBoardComponent
     }
 
     private _setPromotion(pieceType) {
-        pieceType = this.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE[pieceType];
+        pieceType = this._chessService.GROUND_PIECE_TYPE_TO_CHESS_PIECE_TYPE[pieceType];
         if (pieceType === PieceType.QUEEN) {
             this._begunPromotion = false;
             // queen is the default and has already been used automatically
             return;
         }
         
-        var oldMove = this.chess.currentGame.currentVariation.undoCurrentMove();
+        var oldMove = this._chessService.chess.currentGame.currentVariation.undoCurrentMove();
 
         // redo the altered move:
-        this.chess.makeMoveFromAlgebraic(this._squareToAlgebraic(oldMove.from), this._squareToAlgebraic(oldMove.to), pieceType);
+        this._chessService.chess.makeMoveFromAlgebraic(this._chessService.squareToAlgebraic(oldMove.from), this._chessService.squareToAlgebraic(oldMove.to), pieceType);
 
         var array = {};
-        array[this._squareToAlgebraic(oldMove.to)] = {
-            color: this._getFullNotTurnColor(),
-            role: this.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[pieceType]
+        array[this._chessService.squareToAlgebraic(oldMove.to)] = {
+            color: this._chessService.getFullNotTurnColor(),
+            role: this._chessService.CHESS_PIECE_TYPE_TO_GROUND_PIECE_TYPE[pieceType]
         };
         this.ground.setPieces(array);
 
@@ -212,34 +144,30 @@ export class ChessBoardComponent
     private _handleCastling(move) {
         if (move.flags & Flags.KSIDE_CASTLE) {
             var array = new Array();
-            array[this._squareToAlgebraic(move.to + 1)] = null;
-            array[this._squareToAlgebraic(move.to - 1)] = {
-                color: this._getFullNotTurnColor(),
+            array[this._chessService.squareToAlgebraic(move.to + 1)] = null;
+            array[this._chessService.squareToAlgebraic(move.to - 1)] = {
+                color: this._chessService.getFullNotTurnColor(),
                 role: "rook"
             };
             this.ground.setPieces(array);
         }
         if (move.flags & Flags.QSIDE_CASTLE) {
             var array = new Array();
-            array[this._squareToAlgebraic(move.to - 2)] = null;
-            array[this._squareToAlgebraic(move.to + 1)] = {
-                color: this._getFullNotTurnColor(),
+            array[this._chessService.squareToAlgebraic(move.to - 2)] = null;
+            array[this._chessService.squareToAlgebraic(move.to + 1)] = {
+                color: this._chessService.getFullNotTurnColor(),
                 role: "rook"
             };
             this.ground.setPieces(array);
         }
     }
 
-    private _squareToAlgebraic(square: number): string {
-        return Move.SQUARES_LOOKUP[square];
-    }
-
     private _updateBoard() {
         this.ground.set({
-            turnColor: this._getFullTurnColor(),
+            turnColor: this._chessService.getFullTurnColor(),
             movable: {
-                color: this._getFullTurnColor(),
-                dests: this._getDests()
+                color: this._chessService.getFullTurnColor(),
+                dests: this._chessService.getDests()
             }
         });
     }
