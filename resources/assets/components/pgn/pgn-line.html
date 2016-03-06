@@ -1,0 +1,7 @@
+<pgn-move *ngFor="#move of getMoves()" [moveContext]="move">
+    <span *ngFor="#subLine of move.childVariations">
+        (
+        <pgn-line [line]="subLine"></pgn-line>
+        )
+    </span>
+</pgn-move>
