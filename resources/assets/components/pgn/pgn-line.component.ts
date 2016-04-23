@@ -5,7 +5,7 @@ import {PgnMoveComponent} from './pgn-move.component';
     selector: 'pgn-line',
     templateUrl: 'assets/components/pgn/pgn-line.html',
     directives: [
-        PgnMoveComponent
+        PgnMoveComponent,
         PgnLineComponent
     ]
 })
