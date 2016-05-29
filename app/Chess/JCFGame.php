@@ -55,7 +55,7 @@ class JCFGame extends Game implements \JsonSerializable
         $firstChild = reset($this->children);
         $moves = [];
 
-        $moves[] = $this->encodeMove($firstChild->getMove(), $this->startingPosition->isPromotingMove($firstChild->getMove())); // encode the first move
+        $moves[] = $this->encodeJCFMove($firstChild->getMove(), $this->startingPosition->isPromotingMove($firstChild->getMove())); // encode the first move
 
         foreach ($this->children as $child) {
             if ($child === $firstChild) {
@@ -64,12 +64,12 @@ class JCFGame extends Game implements \JsonSerializable
 
             $moves[0]['variations'] = [];
             foreach ($node->getSiblings() as $sibling) {
-                $moves[0]['variations'][] = $this->encodeNodeWithoutSiblings($sibling);
+                $moves[0]['variations'][] = $this->encodeJCFNodeWithoutSiblings($sibling);
             }
         }
 
         if ($firstChild->hasChildren()) {
-            $moves = array_merge($moves, $this->encodeNode($firstChild->getMainlineContinuation()));
+            $moves = array_merge($moves, $this->encodeJCFNode($firstChild->getMainlineContinuation()));
         }
 
         return ['meta' => $this->getHeaders(),
@@ -83,40 +83,40 @@ class JCFGame extends Game implements \JsonSerializable
      *
      * @return string The JCF representation of the node and its children as an array of moves
      */
-    protected function encodeNode(JCFGameNode $node)
+    protected function encodeJCFNode(JCFGameNode $node)
     {
         $ret = [];
         if ($node->isChild()) {
-            $ret[] = $this->encodeMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
+            $ret[] = $this->encodeJCFMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
         } else {
-            $ret[] = $this->encodeMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
+            $ret[] = $this->encodeJCFMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
         }
 
         if ($node->isChild() && $node->hasSiblings()) {
             $ret[0]['variations'] = [];
             foreach ($node->getSiblings() as $sibling) {
-                $ret[0]['variations'][] = $this->encodeNodeWithoutSiblings($sibling);
+                $ret[0]['variations'][] = $this->encodeJCFNodeWithoutSiblings($sibling);
             }
         }
 
         if ($node->hasChildren()) {
-            $ret = array_merge($ret, $this->encodeNode($node->getMainlineContinuation()));
+            $ret = array_merge($ret, $this->encodeJCFNode($node->getMainlineContinuation()));
         }
 
         return $ret;
     }
 
-    protected function encodeNodeWithoutSiblings(JCFGameNode $node)
+    protected function encodeJCFNodeWithoutSiblings(JCFGameNode $node)
     {
         $ret = [];
         if ($node->isChild()) {
-            $ret[] = $this->encodeMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
+            $ret[] = $this->encodeJCFMove($node->getMove(), $node->getParent()->positionAfter($this->startingPosition)->isPromotingMove($node->getMove()));
         } else {
-            $ret[] = $this->encodeMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
+            $ret[] = $this->encodeJCFMove($node->getMove(), $this->startingPosition->isPromotingMove($node->getMove()));
         }
 
         if ($node->hasChildren()) {
-            $ret = array_merge($ret, $this->encodeNode($node->getMainlineContinuation()));
+            $ret = array_merge($ret, $this->encodeJCFNode($node->getMainlineContinuation()));
         }
 
         return $ret;
@@ -130,7 +130,7 @@ class JCFGame extends Game implements \JsonSerializable
      *
      * @return array The move in JCF format
      */
-    public function encodeMove(Move $move, $promotion)
+    public function encodeJCFMove(Move $move, $promotion)
     {
         $moveArray = ['from' => $move->getDeparture(SQUARE_FORMAT_STRING),
                       'to'   => $move->getDestination(SQUARE_FORMAT_STRING), ];
@@ -195,9 +195,9 @@ class JCFGame extends Game implements \JsonSerializable
      *
      * @return Move
      */
-    public function decodeMove($jcf)
+    public function decodeJCFMove($jcf)
     {
-        if (!$this->validateMoveArray($jcf)) throw new JCFGameException('Invalid move');
+        if (!$this->validateMoveArray($jcf)) throw new JCFGameException('Invalid move: "from" and "to" must be algebraic squares');
 
         $promotionPiece = isset($jcf['promotion']) ? $jcf['promotion'] : PROMOTION_QUEEN;
         $NAGs = isset($jcf['NAGs']) ? $jcf['NAGs'] : [];
@@ -235,7 +235,7 @@ class JCFGame extends Game implements \JsonSerializable
      */
     protected function addMoveArray($moveArray)
     {
-        $this->doMove($this->decodeMove($moveArray));
+        $this->doMove($this->decodeJCFMove($moveArray));
 
         if (isset($moveArray['commands'])) {
             foreach ($moveArray['commands'] as $command) {
