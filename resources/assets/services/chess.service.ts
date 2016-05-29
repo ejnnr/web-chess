@@ -1,4 +1,5 @@
-import {Injectable} from 'angular2/core';
+///<reference path="../../../typings/index.d.ts"/>
+import {Injectable} from '@angular/core';
 import Chess from 'lib/chess-es6/src/chess';
 import Flags from 'lib/chess-es6/src/flags';
 import Move from 'lib/chess-es6/src/move';

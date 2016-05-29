@@ -1,4 +1,5 @@
-import {Component} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component} from '@angular/core';
 import {ExpandableSearchComponent} from '../expandable-search/expandable-search';
 import {TabsComponent} from '../tabs/tabs';
 import {Tab} from '../../interfaces/tab';

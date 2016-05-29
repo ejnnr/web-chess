@@ -1,0 +1,12 @@
+@import '../../styles/themes/default';
+
+span.san {
+    cursor: pointer;
+    padding-right: 0.25em;
+    padding-left: 0.25em;
+    border-radius: 0.25em;
+}
+
+span.san:hover {
+    background-color: $very-light-primary-color;
+}

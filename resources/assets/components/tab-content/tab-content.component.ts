@@ -1,4 +1,5 @@
-import {Component, Input, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component, Input, OnInit, ViewChild, ComponentResolver, ViewContainerRef} from '@angular/core';
 import {Tab} from '../../interfaces/tab';
 import {TabContentService} from '../../services/tab-content.service';
 import {ChessBoardComponent} from '../chess-board/chess-board.component';
@@ -13,12 +14,14 @@ export class TabContentComponent implements OnInit
     @Input()
     tab: Tab;
 
+    @ViewChild("componentAnchor", { read: ViewContainerRef })
+    childContainer: ViewContainerRef;
+
     constructor(private _tabContentService: TabContentService,
-                private _dcl: DynamicComponentLoader,
-                private _elRef: ElementRef) {}
+                private _cResolver: ComponentResolver) {}
 
     ngOnInit() {
-        this._dcl.loadIntoLocation(this.getComponent(), this._elRef, 'component');
+        this._cResolver.resolveComponent(this.getComponent()).then(componentFactory => this.childContainer.createComponent(componentFactory));
     }
 
     getComponent() {

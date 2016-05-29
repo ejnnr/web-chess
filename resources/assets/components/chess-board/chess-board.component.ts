@@ -1,4 +1,5 @@
-import {ChangeDetectorRef, Component, ViewChild} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {ChessService} from '../../services/chess.service';
 import Chess from 'lib/chess-es6/src/chess';
 import Flags from 'lib/chess-es6/src/flags';
@@ -38,6 +39,14 @@ export class ChessBoardComponent
         this.ground = Chessground(this.chessground.nativeElement, this.chessgroundOptions);
         this._updateBoard();
         this.ground.dump().bounds.clear();
+    }
+
+    update() {
+        this._updatePosition();
+        this._updateBoard();
+        this.ground.set({
+            lastMove: null
+        });
     }
 
     onBoardMove(orig, dest, capturedPiece) {

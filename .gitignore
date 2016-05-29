@@ -7,5 +7,6 @@ Thumbs.db
 /vendor
 /node_modules
 /bower_components
+/typings
 .env
 resources/assets/vendor

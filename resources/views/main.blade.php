@@ -7,7 +7,9 @@
             window.Polymer = window.Polymer || {};
             window.Polymer.dom = 'shadow';
         </script>
-        <script src="lib/angular2-polyfills.js"></script>
+        <script src="lib/shim.min.js"></script>
+        <script src="lib/zone.js"></script>
+        <script src="lib/Reflect.js"></script>
         <script src="jspm_packages/system.js"></script>
         <script src="config.js"></script>
         <script src="lib/webcomponentsjs/webcomponents.min.js"></script>

@@ -1,4 +1,5 @@
-import {Injectable} from 'angular2/core';
+///<reference path="../../../typings/index.d.ts"/>
+import {Injectable} from '@angular/core';
 import {Tab} from '../interfaces/tab';
 
 @Injectable()

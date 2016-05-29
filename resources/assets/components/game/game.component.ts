@@ -1,4 +1,5 @@
-import {Component} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component} from '@angular/core';
 import {ChessBoardComponent} from '../chess-board/chess-board.component';
 import {PgnComponent} from '../pgn/pgn.component';
 import {ChessService} from '../../services/chess.service';

@@ -8,10 +8,11 @@ const babel = require('gulp-babel');
 const tscConfig = require('./tsconfig.json');
 
 var vendor = [
-    'node_modules/angular2/bundles/*',
-    '!node_modules/angular2/bundles',
     'bower_components/**',
-    '!bower_components'
+    '!bower_components',
+    'node_modules/core-js/client/shim.min.js',
+    'node_modules/zone.js/dist/zone.js',
+    'node_modules/reflect-metadata/Reflect.js'
 ]
 
 gulp.task('clean', function () {

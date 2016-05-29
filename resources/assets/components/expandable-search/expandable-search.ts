@@ -1,4 +1,5 @@
-import {Component} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'expandable-search',

@@ -1,4 +1,5 @@
-import {Component, Input, ViewChild} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component, Input, ViewChild} from '@angular/core';
 import {TabContentComponent} from '../tab-content/tab-content.component';
 import {Tab} from '../../interfaces/tab';
 import {TabListService} from '../../services/tab-list.service';

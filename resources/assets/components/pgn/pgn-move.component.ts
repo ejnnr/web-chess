@@ -1,9 +1,12 @@
-import {Component, Input} from 'angular2/core';
+///<reference path="../../../../typings/index.d.ts"/>
+import {Component, Output, Input, EventEmitter} from '@angular/core';
 import Color from 'lib/chess-es6/src/color';
+import {ChessService} from '../../services/chess.service';
 
 @Component({
     selector: 'pgn-move',
     templateUrl: 'assets/components/pgn/pgn-move.html',
+    styleUrls: ['assets/components/pgn/pgn-move.css'],
     directives: [
     ]
 })
@@ -12,6 +15,15 @@ export class PgnMoveComponent
 {
     @Input()
     moveContext;
+
+    @Input()
+    positionIndex;
+
+    @Output()
+    updatePosition: EventEmitter<any> = new EventEmitter();
+
+    constructor(private _chessService: ChessService) {
+    }
 
     getSAN(): string {
         return this.moveContext.move.san;
@@ -27,5 +39,10 @@ export class PgnMoveComponent
         }
 
         return '';
+    }
+
+    goToPosition() {
+        this._chessService.chess.currentGame.goToPosition(this.positionIndex);
+        this.updatePosition.emit(null);
     }
 }

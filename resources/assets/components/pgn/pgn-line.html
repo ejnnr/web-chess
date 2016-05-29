@@ -1,7 +1,9 @@
-<pgn-move *ngFor="#move of getMoves()" [moveContext]="move">
-    <span *ngFor="#subLine of move.childVariations">
+<pgn-move *ngFor="let move of getMoves(); let i=index" [moveContext]="move" [positionIndex]="basePosition.concat([{'ply': i + 1}])"
+    (updatePosition)="onUpdatePosition()">
+    <span *ngFor="let subLine of move.childVariations; let j=index">
         (
-        <pgn-line [line]="subLine"></pgn-line>
+        <pgn-line [line]="subLine" [basePosition]="basePosition.concat([{'ply': i + 1, 'variation': j}])"
+            (updatePosition)="onUpdatePosition()"></pgn-line>
         )
     </span>
 </pgn-move>

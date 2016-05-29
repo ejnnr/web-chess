@@ -4,4 +4,4 @@
 <paper-icon-button icon="swap-vertical-circle" (click)="chessBoard.rotateBoard()"></paper-icon-button>
 <paper-icon-button icon="arrow-forward" (click)="chessBoard.forward()"></paper-icon-button>
 
-<pgn style="float: right;"></pgn>
+<pgn style="float: right;" (updatePosition)="chessBoard.update()"></pgn>
