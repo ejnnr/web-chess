@@ -217,4 +217,15 @@ class GameNode
 
         return $ret;
     }
+
+    /**
+     * get whether the node has any sibling nodes.
+     *
+     * @return bool
+     */
+    public function hasSiblings()
+    {
+        if ($this->getSiblings() === false) return false;
+        return (count($this->getSiblings()) > 0);
+    }
 }

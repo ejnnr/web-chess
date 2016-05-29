@@ -25,49 +25,51 @@ class JCFGameTest extends \PHPUnit_Framework_TestCase
     			"moves": [
         			{
             			"from": "e2",
-            			"to": "e4",
-            			"children": [
-                			{
-                    			"from": "e7",
-                    			"to": "e5"
-                			},
-                			{
-                    			"from": "c7",
-                    			"to": "c5",
-                    			"children": [
-                        			{
-                            			"from": "g1",
-                            			"to": "f3",
-                            			"children": [
-                                			{
-                                    			"from": "d7",
-                                    			"to": "d6",
-                                    			"children": [
-                                        			{
-                                            			"from": "d2",
-                                            			"to": "d4"
-                                        			}
-                                    			]
-                                			},
+            			"to": "e4"
+                    },
+                	{
+                    	"from": "e7",
+                    	"to": "e5",
+                        "variations": [
+                            [
+                			    {
+                    			    "from": "c7",
+                    			    "to": "c5"
+                                },
+                        		{
+                            		"from": "g1",
+                            		"to": "f3"
+                                },
+                                {
+                                    "from": "d7",
+                                    "to": "d6",
+                                    "variations": [
+                                        [
                                 			{
                                     			"from": "b8",
                                     			"to": "c6"
                                 			}
-                            			]
-                        			}
-                    			]
-                			},
-                			{
-                    			"from": "e7",
-                    			"to": "e6",
-                    			"NAGs": [
-                        			1
-                    			]
-                			}
-            			]
-        			}
-    			]
-			}', json_encode($jcf));
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "from": "d2",
+                                    "to": "d4"
+                                }
+                            ],
+                            [
+                	            {
+                    	            "from": "e7",
+                    	            "to": "e6",
+                    	            "NAGs": [
+                        	            1
+                    	            ]
+                	            }
+                            ]
+                        ]
+                	}
+            	]
+	    }', json_encode($jcf));
     }
 
     public function testLoadJCF()
@@ -87,24 +89,24 @@ class JCFGameTest extends \PHPUnit_Framework_TestCase
                 [
                     'from'     => 'c2',
                     'to'       => 'c4',
-                    'children' => [
-                        [
-                            'from' => 'e7',
-                            'to'   => 'e5',
-                            'NAGs' => [
-                                1,
-                            ],
-                        ],
-                        [
-                            'from' => 'c7',
-                            'to'   => 'c5',
-                        ],
-                    ],
+                    'NAGs' => [
+                        1,
+                    ]
+                ],
+                [
+                    'from' => 'e7',
+                    'to'   => 'e5',
                     'NAGs' => [
                         1,
                     ],
-                ],
-            ],
+                    'variations' => [
+                        [
+                            'from' => 'c7',
+                            'to'   => 'c5',
+                        ]
+                    ]
+                ]
+            ]
         ];
 
         $game = new JCFGame();
