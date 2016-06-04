@@ -1,11 +1,11 @@
 ///<reference path="../../../typings/index.d.ts"/>
 import {Injectable} from '@angular/core';
-import Chess from 'lib/chess-es6/src/chess';
-import Flags from 'lib/chess-es6/src/flags';
-import Move from 'lib/chess-es6/src/move';
-import PieceType from 'lib/chess-es6/src/piece_type';
-import Piece from 'lib/chess-es6/src/piece';
-import Color from 'lib/chess-es6/src/color';
+import Chess from 'chess-es6.js/chess';
+import Flags from 'chess-es6.js/flags';
+import Move from 'chess-es6.js/move';
+import PieceType from 'chess-es6.js/piece_type';
+import Piece from 'chess-es6.js/piece';
+import Color from 'chess-es6.js/color';
 
 @Injectable()
 export class ChessService

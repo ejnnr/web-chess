@@ -68,16 +68,6 @@ gulp.task('copy:libraries', function () {
         .pipe(gulp.dest('public/lib'));
 });
 
-gulp.task('compile:libraries', function () {
-    return gulp
-        .src(['chess-es6/src/*.js'])
-        .pipe(changed('public/lib/chess-es6/src'))
-        .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('public/lib/chess-es6/src'));
-});
-
 gulp.task('nolib', ['compile:typescript', 'compile:sass', 'copy:css', 'copy:images', 'copy:html']);
-gulp.task('build', ['nolib', 'copy:libraries', 'compile:libraries']);
+gulp.task('build', ['nolib', 'copy:libraries']);
 gulp.task('default', ['build']);
