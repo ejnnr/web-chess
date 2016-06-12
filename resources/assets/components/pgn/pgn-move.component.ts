@@ -1,6 +1,6 @@
 ///<reference path="../../../../typings/index.d.ts"/>
 import {Component, Output, Input, EventEmitter} from '@angular/core';
-import Color from 'chess-es6.js/color';
+import {Color} from 'chess-es6.js/color';
 import {ChessService} from '../../services/chess.service';
 
 @Component({
